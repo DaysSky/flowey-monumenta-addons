@@ -1,0 +1,28 @@
+{
+    "schemaVersion": 1,
+    "id": "fma",
+    "version": "${version}",
+    "name": "flowey-monumenta-addons",
+    "description": "",
+    "authors": [],
+    "contact": { "repo": "https://github.com/flowey/flowey-monumenta-addons" },
+    "license": "GPL-3.0",
+    "icon": "assets/fma/icon.png",
+    "environment": "client",
+    "entrypoints": {
+        "client": ["com.floweytf.fma.FMAClient"],
+        "modmenu": ["com.floweytf.fma.FMAConfigMenu"]
+    },
+    "mixins": [
+        "fma.mixins.json"
+    ],
+    "depends": {
+        "fabricloader": ">=${loader_version}",
+        "fabric": "*",
+        "amecs": "*",
+        "modmenu": "*",
+        "cloth-config": "*",
+        "minecraft": "${minecraft_version}"
+    },
+    "accessWidener" : "fma.accesswidener"
+}

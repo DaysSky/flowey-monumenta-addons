@@ -1,0 +1,16 @@
+{
+    "required": true,
+    "minVersion": "0.8",
+    "package": "com.floweytf.fma.mixin",
+    "compatibilityLevel": "JAVA_17",
+    "client": [
+        "ChatScreenMixin",
+        "ClientPacketListenerMixin",
+        "CommandSuggestionsMixin",
+        "EntityRenderDispatcherMixin",
+        "LevelRendererMixin"
+    ],
+    "injectors": {
+        "defaultRequire": 1
+  }
+}
