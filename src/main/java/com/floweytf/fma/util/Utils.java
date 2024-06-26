@@ -123,7 +123,7 @@ public class Utils {
 
     public static <T extends Record> void dumpStats(String translationRoot, T object) {
         try {
-            Utils.send(Component.translatable(translationRoot + "." + "title"));
+            Utils.send(Component.translatable(translationRoot + "." + "title").withStyle(ChatFormatting.UNDERLINE));
             for (final var part : object.getClass().getRecordComponents()) {
                 boolean hasTimestamp = part.getAnnotationsByType(Timestamp.class).length != 0;
                 final var value = part.getAccessor().invoke(object);
@@ -132,7 +132,7 @@ public class Utils {
                     if (hasTimestamp) {
                         Utils.send(Component.translatable(
                             translationRoot + "." + part.getName(),
-                            Component.literal(Utils.timestamp((Integer) value)).withStyle(ChatFormatting.DARK_GREEN)
+                            Component.literal(Utils.timestamp((int) value)).withStyle(ChatFormatting.DARK_GREEN)
                         ));
                     } else {
                         Utils.send(Component.translatable(

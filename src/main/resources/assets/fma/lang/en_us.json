@@ -51,5 +51,6 @@
     "stats.fma.portal.bossSplitTime": "Enter boss split: %s",
     "stats.fma.portal.phase1SplitTime": "Boss phase 1 split: %s",
     "stats.fma.portal.phase2SplitTime": "Boss phase 2 split: %s",
-    "stats.fma.portal.phase3SplitTime": "Boss phase 3 split: %s"
+    "stats.fma.portal.phase3SplitTime": "Boss phase 3 split: %s",
+    "stats.fma.portal.title": "Portal Stats"
 }
