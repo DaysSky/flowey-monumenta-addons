@@ -8,7 +8,6 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.mojang.brigadier.tree.CommandNode;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
@@ -27,9 +26,6 @@ public class Commands {
     private static CommandDispatcher<CommandSourceStack> CLIENT_DISPATCH;
     private static Set<String> COMMAND_INITIATORS = new HashSet<>();
     private static final Set<String> SUGGESTION_INITIATORS = new HashSet<>();
-
-    private static final DynamicCommandExceptionType NO_SUCH_TIMER =
-        new DynamicCommandExceptionType(o -> Component.translatable("commands.fma.no_such_timer", o.toString()));
 
     private static CommandNode<CommandSourceStack> register(LiteralArgumentBuilder<CommandSourceStack> node) {
         COMMAND_INITIATORS.add(node.getLiteral());

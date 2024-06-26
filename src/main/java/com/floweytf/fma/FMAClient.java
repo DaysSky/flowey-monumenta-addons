@@ -88,7 +88,7 @@ public class FMAClient implements ClientModInitializer {
         AttackBlockCallback.EVENT.register((player, world, hand, pos, direction) -> {
             if (blockDebug && !player.isSpectator()) {
                 Utils.send(Component.literal("Block Info Dump").withStyle(ChatFormatting.BOLD));
-                Utils.send("x = %d, y = %d, z = %d".formatted(pos.getX(), pos.getY(), pos.getZ()));
+                Utils.send("x = %d, y = %d, z = %d" .formatted(pos.getX(), pos.getY(), pos.getZ()));
                 Utils.send("direction = " + direction);
                 Utils.send("blockState = " + world.getBlockState(pos));
             }
@@ -109,7 +109,7 @@ public class FMAClient implements ClientModInitializer {
             Utils.send("  " + armorSlot.toString() + armorSlot.getTag());
         }
         Utils.send("}");
-        Utils.send("x = %f, y = %f, z = %f".formatted(entity.getX(), entity.getY(), entity.getZ()));
+        Utils.send("x = %f, y = %f, z = %f" .formatted(entity.getX(), entity.getY(), entity.getZ()));
         Utils.send("tags = " + entity.getTags());
     }
 

@@ -109,7 +109,7 @@ public class ChatChannelManager implements DebugInfoExporter {
         setChannel(channel);
     }
 
-    private void renderComponents() {
+    private void renderPrompt() {
         var current = Component.empty().append("[");
 
         for (int i = 0; i < BUILTIN_CHANNELS.size(); i++) {
@@ -172,7 +172,7 @@ public class ChatChannelManager implements DebugInfoExporter {
 
     public void setChannel(ChatChannel channel) {
         this.currentChannel = channel;
-        renderComponents();
+        renderPrompt();
     }
 
     public @NotNull ChatChannel getChannel() {

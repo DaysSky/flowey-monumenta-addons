@@ -26,37 +26,57 @@ public class FMAConfig implements Options {
     @Category("misc")
     public boolean enableIotaFix = true;
 
-    @Category("hp_indicator")
+    @Category("hpIndicator")
     public boolean enableGlowingPlayer = true;
 
-    @Category("hp_indicator")
+    @Category("hpIndicator")
     public boolean enableHitboxColoring = true;
 
-    @Category("hp_indicator")
+    @Category("hpIndicator")
     public boolean countAbsorptionAsHp = true;
 
-    @Category("hp_indicator")
+    @Category("hpIndicator")
     @Color
     public int goodHpColor = 0x33ef2f;
-    @Category("hp_indicator")
+    @Category("hpIndicator")
     @FloatSlider(min = 0, max = 100, step = 5)
     public float goodHpPercent = 60;
 
-    @Category("hp_indicator")
+    @Category("hpIndicator")
     @Color
     public int mediumHpColor = 0xd9ef2f;
-    @Category("hp_indicator")
+    @Category("hpIndicator")
     @FloatSlider(min = 0, max = 100, step = 5)
     public float mediumHpPercent = 30;
 
-    @Category("hp_indicator")
+    @Category("hpIndicator")
     @Color
     public int lowHpColor = 0xefa22f;
-    @Category("hp_indicator")
+    @Category("hpIndicator")
     @FloatSlider(min = 0, max = 100, step = 5)
     public float lowHpPercent = 10;
 
-    @Category("hp_indicator")
+    @Category("hpIndicator")
     @Color
     public int criticalHpColor = 0xef472d;
+
+    @Category("chatAppearance")
+    @Color
+    public int bracketColor = 0xb7bdf8;
+
+    @Category("chatAppearance")
+    @Color
+    public int tagColor = 0xc6a0f6;
+
+    @Category("chatAppearance")
+    @Color
+    public String tagText = "MAID";
+
+    @Category("chatAppearance")
+    @Color
+    public int textColor = 0xf4dbd6;
+
+    @Category("chatAppearance")
+    @Color
+    public int numericColor = 0xf38ba8;
 }

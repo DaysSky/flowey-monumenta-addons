@@ -4,15 +4,15 @@ import com.floweytf.fma.FMAClient;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Objects;
-import java.util.function.Supplier;
 
 public class Utils {
-    public static Component join(Component... components) {
+    public static MutableComponent join(Component... components) {
         var inst = Component.empty();
         for (final var component : components) {
             inst.append(component);
@@ -20,14 +20,27 @@ public class Utils {
         return inst;
     }
 
+    public static MutableComponent withColor(MutableComponent component, int color) {
+        return component.withStyle(s -> s.withColor(color));
+    }
+
+
+    public static MutableComponent withColor(String component, int color) {
+        return withColor(Component.literal(component), color);
+    }
+
+    public static MutableComponent colored(int color) {
+        return withColor(Component.empty(), color);
+    }
+
+    /*#b7bdf8*/
     public static void send(Component... message) {
-        player().sendSystemMessage(
-            Component.empty()
-                .append("[")
-                .append(Component.literal("MAID").withStyle(ChatFormatting.DARK_GREEN, ChatFormatting.BOLD))
-                .append("] ")
-                .append(Utils.join(message))
-        );
+        player().sendSystemMessage(join(
+            withColor("[", FMAClient.CONFIG.bracketColor),
+            withColor(FMAClient.CONFIG.tagText, FMAClient.CONFIG.tagColor).withStyle(ChatFormatting.BOLD),
+            withColor("] ", FMAClient.CONFIG.bracketColor),
+            colored(FMAClient.CONFIG.textColor).append(join(message))
+        ));
     }
 
     public static void send(String message) {
@@ -63,6 +76,10 @@ public class Utils {
         );
     }
 
+    public static MutableComponent timestampComponent(int ticks) {
+        return withColor(timestamp(ticks), FMAClient.CONFIG.numericColor);
+    }
+
     public static Player player() {
         return Objects.requireNonNull(Minecraft.getInstance().player);
     }
@@ -73,25 +90,6 @@ public class Utils {
         }
         FMAClient.LOGGER.info("running command as client: {}", command);
         Objects.requireNonNull(Minecraft.getInstance().getConnection()).sendCommand(command);
-    }
-
-    public static <T> Supplier<T> lazy(Supplier<T> eager) {
-        return new Supplier<>() {
-            private T inst = null;
-
-            @Override
-            public T get() {
-                if (inst == null) {
-                    inst = eager.get();
-                }
-                return inst;
-            }
-        };
-    }
-
-    @SuppressWarnings("unchecked")
-    public static <T> T c(Object o) {
-        return (T) o;
     }
 
     public static int computeEntityHealthColor(LivingEntity entity) {
@@ -123,22 +121,26 @@ public class Utils {
 
     public static <T extends Record> void dumpStats(String translationRoot, T object) {
         try {
-            Utils.send(Component.translatable(translationRoot + "." + "title").withStyle(ChatFormatting.UNDERLINE));
+            send(Component.translatable(translationRoot + "." + "title").withStyle(ChatFormatting.UNDERLINE));
             for (final var part : object.getClass().getRecordComponents()) {
                 boolean hasTimestamp = part.getAnnotationsByType(Timestamp.class).length != 0;
                 final var value = part.getAccessor().invoke(object);
 
                 if (part.getType() == int.class) {
                     if (hasTimestamp) {
-                        Utils.send(Component.translatable(
-                            translationRoot + "." + part.getName(),
-                            Component.literal(Utils.timestamp((int) value)).withStyle(ChatFormatting.DARK_GREEN)
-                        ));
+                        send(
+                            Component.translatable(
+                                translationRoot + "." + part.getName(),
+                                timestampComponent((int) value)
+                            )
+                        );
                     } else {
-                        Utils.send(Component.translatable(
-                            translationRoot + "." + part.getName(),
-                            Component.literal(value.toString()).withStyle(ChatFormatting.DARK_GREEN)
-                        ));
+                        send(
+                            Component.translatable(
+                                translationRoot + "." + part.getName(),
+                                withColor(value.toString(), FMAClient.CONFIG.numericColor)
+                            )
+                        );
                     }
                 } else {
                     throw new IllegalStateException("idk");

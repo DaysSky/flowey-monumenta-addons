@@ -29,8 +29,8 @@ public class SplitTiming {
 
         Utils.send(Component.translatable(
             translationKey,
-            Component.literal(Utils.timestamp(value)).withStyle(ChatFormatting.DARK_GREEN),
-            Component.literal(Utils.timestamp(totalStopwatch.time())).withStyle(ChatFormatting.GRAY)
+            Utils.timestampComponent(value),
+            Utils.timestampComponent(totalStopwatch.time()).withStyle(ChatFormatting.GRAY)
         ));
     }
 
