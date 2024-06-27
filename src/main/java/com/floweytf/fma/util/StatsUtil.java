@@ -73,16 +73,15 @@ public class StatsUtil {
                 MutableComponent text;
 
                 if (part.getType() == int.class) {
-                    if (isTimestamp) {
-                        text = Component.translatable(
-                            translationRoot + "." + part.getName(),
-                            timestamp((int) value)
-                        );
+                    final int intValue = (int) value;
+                    final var key = translationRoot + "." + part.getName();
+
+                    if (intValue == -1) {
+                        text = Component.translatable(key, numeric("N/A"));
+                    } else if (isTimestamp) {
+                        text = Component.translatable(key, timestamp(intValue));
                     } else {
-                        text = Component.translatable(
-                            translationRoot + "." + part.getName(),
-                            numeric(value.toString())
-                        );
+                        text = Component.translatable(key, numeric(intValue));
                     }
                 } else {
                     throw new IllegalStateException("idk");
