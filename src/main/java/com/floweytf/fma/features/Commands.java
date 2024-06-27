@@ -1,6 +1,7 @@
 package com.floweytf.fma.features;
 
 import com.floweytf.fma.FMAClient;
+import com.floweytf.fma.FMAConfig;
 import com.floweytf.fma.chat.ChatChannel;
 import com.floweytf.fma.chat.ChatChannelManager;
 import com.floweytf.fma.debug.Debug;
@@ -16,6 +17,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.InteractionResult;
 
 import java.util.HashSet;
 import java.util.List;
@@ -69,17 +71,18 @@ public class Commands {
         ));
     }
 
-    private static <T> T debug(T arg) {
-        if (FMAClient.CONFIG.get().features.enableDebug) {
+    private static <T> T opt(T arg, boolean flag) {
+        if (flag) {
             return arg;
         }
 
         return null;
     }
 
-    public static void init() {
+    private static void registerCommands(FMAConfig config) {
         CLIENT_DISPATCH = new CommandDispatcher<>();
         COMMAND_INITIATORS = new HashSet<>();
+        final var debug = config.features.enableDebug;
 
         final var fma = register(lit(
             "fma",
@@ -87,32 +90,32 @@ public class Commands {
                 Debug.runDebug();
                 return 0;
             }),
-            debug(lit("debug_test", ignored -> {
+            opt(lit("debug_test", ignored -> {
                 ChatUtil.send(":3");
                 return 0;
-            })),
-            debug(lit("debug_reload", ignored -> {
-                init();
+            }), debug),
+            opt(lit("debug_reload", ignored -> {
+                registerCommands(FMAClient.CONFIG.get());
                 return 0;
-            })),
-            debug(lit("debug_e", ignored -> {
+            }), debug),
+            opt(lit("debug_e", ignored -> {
                 Debug.entityDebug = !Debug.entityDebug;
                 ChatUtil.send("Entity Debug: " + Debug.entityDebug);
                 return 0;
-            })),
-            debug(lit("debug_b", ignored -> {
+            }), debug),
+            opt(lit("debug_b", ignored -> {
                 Debug.blockDebug = !Debug.blockDebug;
                 ChatUtil.send("Block Debug: " + Debug.entityDebug);
                 return 0;
-            })),
-            debug(lit("dump_e", context -> {
+            }), debug),
+            opt(lit("dump_e", context -> {
                 FMAClient.level().entitiesForRendering().forEach(e -> {
                     if (e.getEyePosition().distanceTo(FMAClient.player().getEyePosition()) < 10) {
                         Debug.dumpEntityInfo(e);
                     }
                 });
                 return 0;
-            })),
+            }), debug),
             lit("help", ignored -> {
                 ChatUtil.send(Component.literal("Command Help").withStyle(ChatFormatting.BOLD));
 
@@ -184,6 +187,14 @@ public class Commands {
 
         register(mcLit("lb").redirect(fma.getChild("lb")));
         alias("lbp", "lb Portal");
+    }
+
+    public static void init() {
+        registerCommands(FMAClient.CONFIG.getConfig());
+        FMAClient.CONFIG.registerLoadListener((configHolder, fmaConfig) -> {
+            registerCommands(fmaConfig);
+            return InteractionResult.PASS;
+        });
     }
 
     public static CommandDispatcher<CommandSourceStack> getDispatcher() {
