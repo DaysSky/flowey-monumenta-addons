@@ -27,7 +27,6 @@ public class ClientPacketListenerMixin {
     private void onRecvTitle(ClientboundSetTitleTextPacket packet, CallbackInfo ci) {
         FMAClient.LOGGER.debug("Recv title: {}", packet.getText());
         if (ClientSetTitleEvent.TITLE.invoker().onSetTitle(packet.getText()) != EventResult.CONTINUE) {
-            FMAClient.LOGGER.info("event cancelled");
             ci.cancel();
         }
     }

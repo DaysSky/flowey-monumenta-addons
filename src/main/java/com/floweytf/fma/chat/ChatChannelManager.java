@@ -1,7 +1,8 @@
 package com.floweytf.fma.chat;
 
-import com.floweytf.fma.DebugInfoExporter;
-import com.floweytf.fma.util.Utils;
+import com.floweytf.fma.debug.DebugInfoExporter;
+import com.floweytf.fma.util.ChatUtil;
+import com.floweytf.fma.util.FormatUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.ChatScreen;
@@ -189,16 +190,16 @@ public class ChatChannelManager implements DebugInfoExporter {
 
     @Override
     public void exportDebugInfo() {
-        Utils.send(Component.literal("ChatChannelManager").withStyle(ChatFormatting.UNDERLINE));
-        Utils.send(Utils.join(
+        ChatUtil.send(Component.literal("ChatChannelManager").withStyle(ChatFormatting.UNDERLINE));
+        ChatUtil.send(FormatUtil.join(
             Component.literal("cachePromptText = "),
             cachePromptText
         ));
-        Utils.send("cachePromptWidth = " + cachePromptWidth);
-        Utils.send("currentChannel = " + currentChannel);
-        Utils.send("builtinIndex = " + builtinIndex);
-        Utils.send("dmIndex = " + dmIndex);
-        Utils.send("currentEnabledChannels = " + currentEnabledChannels);
-        Utils.send("dmChannels = " + dmChannels);
+        ChatUtil.send("cachePromptWidth = " + cachePromptWidth);
+        ChatUtil.send("currentChannel = " + currentChannel);
+        ChatUtil.send("builtinIndex = " + builtinIndex);
+        ChatUtil.send("dmIndex = " + dmIndex);
+        ChatUtil.send("currentEnabledChannels = " + currentEnabledChannels);
+        ChatUtil.send("dmChannels = " + dmChannels);
     }
 }

@@ -1,22 +1,20 @@
 package com.floweytf.fma.gamestate;
 
-import com.floweytf.fma.util.SplitTiming;
-import com.floweytf.fma.util.Stopwatch;
-import com.floweytf.fma.util.Timestamp;
-import com.floweytf.fma.util.Utils;
-import net.minecraft.network.chat.Component;
-
 public class RuinStateTracker implements StateTracker {
+    @Override
+    public void exportDebugInfo() {
+
+    }/*
     public record Data(
         int chestCount,
-        @Timestamp int totalTime,
-        @Timestamp int mobsTime,
-        @Timestamp int bossSplitTime,
-        @Timestamp int daggersSplitTime,
-        @Timestamp int dps1SplitTime
+        @Time int totalTime,
+        @Time int mobsTime,
+        @Time int bossSplitTime,
+        @Time int daggersSplitTime,
+        @Time int dps1SplitTime
     ) {
         public void send() {
-            Utils.dumpStats("stats.fma.ruin", this);
+            // FormatUtil.dumpStats("stats.fma.ruin", this);
         }
     }
 
@@ -69,5 +67,5 @@ public class RuinStateTracker implements StateTracker {
 
     @Override
     public void exportDebugInfo() {
-    }
+    }*/
 }

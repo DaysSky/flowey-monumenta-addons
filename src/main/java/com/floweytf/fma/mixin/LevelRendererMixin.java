@@ -1,7 +1,7 @@
 package com.floweytf.fma.mixin;
 
 import com.floweytf.fma.FMAClient;
-import com.floweytf.fma.util.Utils;
+import com.floweytf.fma.features.HpIndicator;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.client.renderer.LevelRenderer;
@@ -20,7 +20,11 @@ public class LevelRendererMixin {
         )
     )
     private boolean modifyPlayerGlowingStatus(boolean original, @Local Entity entity) {
-        if (!FMAClient.CONFIG.enableGlowingPlayer) {
+        if (!FMAClient.CONFIG.get().features.enableHpIndicators) {
+            return original;
+        }
+
+        if (!FMAClient.CONFIG.get().hpIndicator.enableGlowingPlayer) {
             return original;
         }
 
@@ -39,12 +43,16 @@ public class LevelRendererMixin {
         )
     )
     private int modifyPlayerGlowingColor(int original, @Local Entity entity) {
-        if (!FMAClient.CONFIG.enableGlowingPlayer) {
+        if (!FMAClient.CONFIG.get().features.enableHpIndicators) {
+            return original;
+        }
+
+        if (!FMAClient.CONFIG.get().hpIndicator.enableGlowingPlayer) {
             return original;
         }
 
         if (entity instanceof Player player) {
-            return Utils.computeEntityHealthColor(player);
+            return HpIndicator.computeEntityHealthColor(player);
         }
 
         return original;

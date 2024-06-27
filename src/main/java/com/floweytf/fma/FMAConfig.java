@@ -1,82 +1,87 @@
 package com.floweytf.fma;
 
-import ch.njol.minecraft.config.fma.Options;
-import ch.njol.minecraft.config.fma.annotations.Category;
-import ch.njol.minecraft.config.fma.annotations.Color;
-import ch.njol.minecraft.config.fma.annotations.FloatSlider;
-import com.floweytf.fma.registry.Commands;
+import com.floweytf.fma.features.Commands;
+import me.shedaniel.autoconfig.ConfigData;
+import me.shedaniel.autoconfig.annotation.Config;
+import me.shedaniel.autoconfig.annotation.ConfigEntry;
 import net.minecraft.SharedConstants;
 
-public class FMAConfig implements Options {
-    @Override
-    public void onUpdate() {
-        FMAClient.saveConfig();
-        Commands.load();
+@Config(name = "fma")
+public class FMAConfig implements ConfigData {
+    public static class FeatureToggles {
+        public boolean enableChatChannels = true;
+        public boolean enableHpIndicators = true;
+        public boolean enableTimerAndStats = true;
+        public boolean enableDebug = SharedConstants.IS_RUNNING_IN_IDE;
+
+        @ConfigEntry.Gui.PrefixText
+        public boolean enableIotaFix = true;
+        public boolean enablePortalButtonIndicator = true;
     }
 
-    @Category("chat")
-    public boolean enableChatChannels = true;
+    public static class ChatAppearance {
+        @ConfigEntry.ColorPicker
+        public int bracketColor = 0xb7bdf8;
+        @ConfigEntry.ColorPicker
+        public int tagColor = 0xc6a0f6;
 
-    @Category("timers")
-    public boolean enableTimers = true;
+        public String tagText = "MAID";
 
-    @Category("misc")
-    public boolean enableDebug = SharedConstants.IS_RUNNING_IN_IDE;
+        @ConfigEntry.ColorPicker
+        public int textColor = 0xf4dbd6;
+        @ConfigEntry.ColorPicker
+        public int numericColor = 0xf38ba8;
+        @ConfigEntry.ColorPicker
+        public int detailColor = 0x6c6f85;
+        @ConfigEntry.ColorPicker
+        public int playerNameColor = 0xef9f76;
+        @ConfigEntry.ColorPicker
+        public int altTextColor = 0xb4befe;
+    }
 
-    @Category("misc")
-    public boolean enableIotaFix = true;
+    public static class HpIndicator {
+        public boolean enableGlowingPlayer = true;
+        public boolean enableHitboxColoring = true;
+        public boolean countAbsorptionAsHp = true;
 
-    @Category("hpIndicator")
-    public boolean enableGlowingPlayer = true;
+        @ConfigEntry.BoundedDiscrete(max = 100)
+        public int goodHpPercent = 70;
+        @ConfigEntry.BoundedDiscrete(max = 100)
+        public int mediumHpPercent = 50;
+        @ConfigEntry.BoundedDiscrete(max = 100)
+        public int lowHpPercent = 25;
 
-    @Category("hpIndicator")
-    public boolean enableHitboxColoring = true;
+        @ConfigEntry.ColorPicker
+        public int goodHpColor = 0x33ef2f;
+        @ConfigEntry.ColorPicker
+        public int mediumHpColor = 0xd9ef2f;
+        @ConfigEntry.ColorPicker
+        public int lowHpColor = 0xefa22f;
+        @ConfigEntry.ColorPicker
+        public int criticalHpColor = 0xef472d;
+    }
 
-    @Category("hpIndicator")
-    public boolean countAbsorptionAsHp = true;
+    @ConfigEntry.Category("features")
+    @ConfigEntry.Gui.TransitiveObject
+    public FeatureToggles features = new FeatureToggles();
 
-    @Category("hpIndicator")
-    @Color
-    public int goodHpColor = 0x33ef2f;
-    @Category("hpIndicator")
-    @FloatSlider(min = 0, max = 100, step = 5)
-    public float goodHpPercent = 60;
+    @ConfigEntry.Category("chatAppearance")
+    @ConfigEntry.Gui.TransitiveObject
+    public ChatAppearance chatAppearance = new ChatAppearance();
 
-    @Category("hpIndicator")
-    @Color
-    public int mediumHpColor = 0xd9ef2f;
-    @Category("hpIndicator")
-    @FloatSlider(min = 0, max = 100, step = 5)
-    public float mediumHpPercent = 30;
+    @ConfigEntry.Category("hpIndicator")
+    @ConfigEntry.Gui.TransitiveObject
+    public HpIndicator hpIndicator = new HpIndicator();
 
-    @Category("hpIndicator")
-    @Color
-    public int lowHpColor = 0xefa22f;
-    @Category("hpIndicator")
-    @FloatSlider(min = 0, max = 100, step = 5)
-    public float lowHpPercent = 10;
+    @Override
+    public void validatePostLoad() throws ValidationException {
+        if (hpIndicator.mediumHpPercent > hpIndicator.goodHpPercent)
+            hpIndicator.mediumHpPercent = hpIndicator.goodHpPercent;
 
-    @Category("hpIndicator")
-    @Color
-    public int criticalHpColor = 0xef472d;
+        if (hpIndicator.lowHpPercent > hpIndicator.mediumHpPercent)
+            hpIndicator.lowHpPercent = hpIndicator.mediumHpPercent;
 
-    @Category("chatAppearance")
-    @Color
-    public int bracketColor = 0xb7bdf8;
-
-    @Category("chatAppearance")
-    @Color
-    public int tagColor = 0xc6a0f6;
-
-    @Category("chatAppearance")
-    @Color
-    public String tagText = "MAID";
-
-    @Category("chatAppearance")
-    @Color
-    public int textColor = 0xf4dbd6;
-
-    @Category("chatAppearance")
-    @Color
-    public int numericColor = 0xf38ba8;
+        // re-init command dispatcher
+        Commands.init();
+    }
 }

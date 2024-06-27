@@ -1,7 +1,7 @@
 package com.floweytf.fma.mixin;
 
 import com.floweytf.fma.FMAClient;
-import com.floweytf.fma.util.Utils;
+import com.floweytf.fma.features.HpIndicator;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.util.FastColor;
@@ -25,12 +25,16 @@ public class EntityRenderDispatcherMixin {
         )
     )
     private static void modifyHitboxColor(Args args, @Local(argsOnly = true) Entity entity) {
-        if (!FMAClient.CONFIG.enableHitboxColoring) {
+        if (!FMAClient.CONFIG.get().features.enableHpIndicators) {
+            return;
+        }
+
+        if (!FMAClient.CONFIG.get().hpIndicator.enableHitboxColoring) {
             return;
         }
 
         if (entity instanceof LivingEntity livingEntity) {
-            final var color = Utils.computeEntityHealthColor(livingEntity);
+            final var color = HpIndicator.computeEntityHealthColor(livingEntity);
             args.set(3, FastColor.ARGB32.red(color) / 255f);
             args.set(4, FastColor.ARGB32.green(color) / 255f);
             args.set(5, FastColor.ARGB32.blue(color) / 255f);

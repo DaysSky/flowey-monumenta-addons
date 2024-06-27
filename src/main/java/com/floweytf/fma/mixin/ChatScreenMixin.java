@@ -2,8 +2,8 @@ package com.floweytf.fma.mixin;
 
 import com.floweytf.fma.FMAClient;
 import com.floweytf.fma.chat.ChatChannelManager;
-import com.floweytf.fma.registry.Commands;
-import com.floweytf.fma.util.Utils;
+import com.floweytf.fma.features.Commands;
+import com.floweytf.fma.util.ChatUtil;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.client.gui.screens.ChatScreen;
@@ -45,7 +45,7 @@ public class ChatScreenMixin extends Screen {
         )
     )
     private void sendWithChatChannel(ClientPacketListener instance, String message, Operation<Void> original) {
-        Utils.sendCommand(ChatChannelManager.getInstance().getChannel().buildSendCommand(message));
+        ChatUtil.sendCommand(ChatChannelManager.getInstance().getChannel().buildSendCommand(message));
     }
 
     @ModifyArg(
@@ -57,7 +57,7 @@ public class ChatScreenMixin extends Screen {
         index = 1
     )
     private int renderChannelBg(int x) {
-        if (!FMAClient.CONFIG.enableChatChannels) {
+        if (!FMAClient.CONFIG.get().features.enableChatChannels) {
             return x;
         }
 
@@ -69,7 +69,7 @@ public class ChatScreenMixin extends Screen {
         constant = @Constant(intValue = 4)
     )
     private int moveEditBox(int original) {
-        if (!FMAClient.CONFIG.enableChatChannels) {
+        if (!FMAClient.CONFIG.get().features.enableChatChannels) {
             return original;
         }
 

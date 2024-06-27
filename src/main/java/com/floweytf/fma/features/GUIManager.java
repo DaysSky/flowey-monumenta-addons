@@ -1,5 +1,6 @@
-package com.floweytf.fma;
+package com.floweytf.fma.features;
 
+import com.floweytf.fma.FMAClient;
 import com.floweytf.fma.chat.ChatChannelManager;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
@@ -9,7 +10,7 @@ public class GUIManager {
     private final Minecraft minecraft = Minecraft.getInstance();
 
     private void renderChatChannelHud(PoseStack stack, float partialTicks) {
-        if (!FMAClient.CONFIG.enableChatChannels) {
+        if (!FMAClient.CONFIG.get().features.enableChatChannels) {
             return;
         }
 

@@ -1,4 +1,4 @@
-package com.floweytf.fma;
+package com.floweytf.fma.features;
 
 import com.floweytf.fma.events.ClientSetTitleEvent;
 import com.floweytf.fma.events.EventResult;

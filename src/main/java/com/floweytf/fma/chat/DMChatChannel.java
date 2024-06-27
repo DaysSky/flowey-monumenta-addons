@@ -1,6 +1,6 @@
 package com.floweytf.fma.chat;
 
-import com.floweytf.fma.util.Utils;
+import com.floweytf.fma.util.FormatUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 
@@ -8,7 +8,7 @@ public class DMChatChannel extends ChatChannel {
     private final String playerName;
 
     public DMChatChannel(String playerName) {
-        super(Utils.join(
+        super(FormatUtil.join(
             Component.literal("@"),
             Component.literal(playerName).withStyle(ChatFormatting.GRAY)
         ));

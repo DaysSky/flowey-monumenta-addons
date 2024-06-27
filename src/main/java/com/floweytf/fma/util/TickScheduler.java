@@ -1,6 +1,6 @@
 package com.floweytf.fma.util;
 
-import com.floweytf.fma.DebugInfoExporter;
+import com.floweytf.fma.debug.DebugInfoExporter;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
@@ -46,8 +46,8 @@ public class TickScheduler implements DebugInfoExporter {
 
     @Override
     public void exportDebugInfo() {
-        Utils.send(Component.literal("TickScheduler").withStyle(ChatFormatting.UNDERLINE));
-        Utils.send("queueSize = " + taskQueue.size());
-        Utils.send("tick = " + tick);
+        ChatUtil.send(Component.literal("TickScheduler").withStyle(ChatFormatting.UNDERLINE));
+        ChatUtil.send("queueSize = " + taskQueue.size());
+        ChatUtil.send("tick = " + tick);
     }
 }

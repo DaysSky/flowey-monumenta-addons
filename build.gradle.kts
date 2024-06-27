@@ -67,6 +67,10 @@ tasks {
                 )
             )
         }
+
+        filesMatching("en_us.json") {
+            filter { line -> line.replace(Regex("//.+"), "") }
+        }
     }
 
     jar {

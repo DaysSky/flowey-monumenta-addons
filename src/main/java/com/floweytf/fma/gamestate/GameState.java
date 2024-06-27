@@ -1,10 +1,10 @@
 package com.floweytf.fma.gamestate;
 
-import com.floweytf.fma.DebugInfoExporter;
+import com.floweytf.fma.debug.DebugInfoExporter;
 import com.floweytf.fma.events.ClientReceiveSystemChatEvent;
 import com.floweytf.fma.events.ClientSetTitleEvent;
 import com.floweytf.fma.events.EventResult;
-import com.floweytf.fma.util.Utils;
+import com.floweytf.fma.util.ChatUtil;
 import it.unimi.dsi.fastutil.Pair;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientLoginConnectionEvents;
@@ -22,7 +22,8 @@ import java.util.function.Supplier;
 public class GameState implements DebugInfoExporter {
     private static final List<Pair<String, Supplier<StateTracker>>> GAME_STATE_BY_DIMENSION = List.of(
         Pair.of("monumenta:portal", PortalStateTracker::new),
-        Pair.of("monumenta:ruin", RuinStateTracker::new)
+        Pair.of("monumenta:ruin", RuinStateTracker::new),
+        Pair.of("minecraft:overworld", PortalStateTracker::new)// TODO: debug, remove
     );
 
     private String dimensionName = null;
@@ -45,7 +46,7 @@ public class GameState implements DebugInfoExporter {
             .findFirst();
 
         if (worldFilterRes.isEmpty()) {
-            Utils.sendDebug("unknown dimension '" + newDimensionName + "'");
+            ChatUtil.sendDebug("unknown dimension '" + newDimensionName + "'");
             return;
         }
 
@@ -117,12 +118,12 @@ public class GameState implements DebugInfoExporter {
 
     @Override
     public void exportDebugInfo() {
-        Utils.send(Component.literal("GameState").withStyle(ChatFormatting.UNDERLINE));
-        Utils.send("dimensionName = " + dimensionName);
+        ChatUtil.send(Component.literal("GameState").withStyle(ChatFormatting.UNDERLINE));
+        ChatUtil.send("dimensionName = " + dimensionName);
         if (currentStateTracker != null) {
             currentStateTracker.exportDebugInfo();
         } else {
-            Utils.send("currentStateTracker = null");
+            ChatUtil.send("currentStateTracker = null");
         }
     }
 }

@@ -1,6 +1,6 @@
 package com.floweytf.fma.mixin;
 
-import com.floweytf.fma.registry.Commands;
+import com.floweytf.fma.features.Commands;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.mojang.brigadier.CommandDispatcher;
 import net.minecraft.client.gui.components.CommandSuggestions;

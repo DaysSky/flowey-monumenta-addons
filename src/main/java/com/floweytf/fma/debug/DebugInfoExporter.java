@@ -1,4 +1,4 @@
-package com.floweytf.fma;
+package com.floweytf.fma.debug;
 
 @FunctionalInterface
 public interface DebugInfoExporter {

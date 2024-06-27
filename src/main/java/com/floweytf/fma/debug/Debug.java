@@ -1,0 +1,74 @@
+package com.floweytf.fma.debug;
+
+import com.floweytf.fma.FMAClient;
+import com.floweytf.fma.chat.ChatChannelManager;
+import com.floweytf.fma.util.ChatUtil;
+import net.fabricmc.fabric.api.event.player.AttackBlockCallback;
+import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.Entity;
+
+import java.util.List;
+
+public class Debug {
+    public static final List<DebugInfoExporter> DEBUG = List.of(
+        FMAClient.SCHEDULER,
+        FMAClient.LEADERBOARD,
+        FMAClient.GAME_STATE
+    );
+
+    public static boolean entityDebug = false;
+    public static boolean blockDebug = false;
+
+    private Debug() {
+    }
+
+    public static void init() {
+        AttackEntityCallback.EVENT.register((player, world, hand, entity, hitResult) -> {
+            if (entityDebug && !player.isSpectator()) {
+                dumpEntityInfo(entity);
+            }
+
+            return InteractionResult.PASS;
+        });
+
+        AttackBlockCallback.EVENT.register((player, world, hand, pos, direction) -> {
+            if (blockDebug && !player.isSpectator()) {
+                ChatUtil.send(Component.literal("Block Info Dump").withStyle(ChatFormatting.BOLD));
+                ChatUtil.send("x = %d, y = %d, z = %d".formatted(pos.getX(), pos.getY(), pos.getZ()));
+                ChatUtil.send("direction = " + direction);
+                ChatUtil.send("blockState = " + world.getBlockState(pos));
+            }
+
+            return InteractionResult.PASS;
+        });
+    }
+
+
+    public static void dumpEntityInfo(Entity entity) {
+        ChatUtil.send(Component.literal("Entity Info Dump").withStyle(ChatFormatting.BOLD));
+        ChatUtil.send(Component.literal("getName = "), entity.getName());
+        ChatUtil.send("type = " + BuiltInRegistries.ENTITY_TYPE.getKey(entity.getType()));
+        if (entity.getCustomName() != null) {
+            ChatUtil.send(Component.literal("getCustomName = "), entity.getCustomName());
+        }
+        ChatUtil.send("slots = {");
+        for (final var armorSlot : entity.getArmorSlots()) {
+            ChatUtil.send("  " + armorSlot.toString() + armorSlot.getTag());
+        }
+        ChatUtil.send("}");
+        ChatUtil.send("x = %f, y = %f, z = %f".formatted(entity.getX(), entity.getY(), entity.getZ()));
+        ChatUtil.send("tags = " + entity.getTags());
+    }
+
+    public static void runDebug() {
+        ChatUtil.send(Component.literal("Debug State Dump").withStyle(ChatFormatting.BOLD));
+        ChatChannelManager.getInstance().exportDebugInfo();
+        for (var exporter : DEBUG) {
+            exporter.exportDebugInfo();
+        }
+    }
+}

@@ -1,9 +1,11 @@
-package com.floweytf.fma.registry;
+package com.floweytf.fma.features;
 
 import com.floweytf.fma.FMAClient;
 import com.floweytf.fma.chat.ChatChannel;
 import com.floweytf.fma.chat.ChatChannelManager;
-import com.floweytf.fma.util.Utils;
+import com.floweytf.fma.debug.Debug;
+import com.floweytf.fma.util.ChatUtil;
+import com.floweytf.fma.util.FormatUtil;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
@@ -11,7 +13,6 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.tree.CommandNode;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.network.chat.Component;
@@ -47,7 +48,7 @@ public class Commands {
             },
             arg("text", StringArgumentType.greedyString(), context -> {
                 final var arg = StringArgumentType.getString(context, "text");
-                Utils.sendCommand(String.format("%s %s", name, arg));
+                ChatUtil.sendCommand(String.format("%s %s", name, arg));
                 return 0;
             })
         ));
@@ -60,7 +61,7 @@ public class Commands {
                 if (parseAccepts(target)) {
                     run(target);
                 } else {
-                    Utils.sendCommand(target);
+                    ChatUtil.sendCommand(target);
                 }
 
                 return 0;
@@ -69,76 +70,68 @@ public class Commands {
     }
 
     private static <T> T debug(T arg) {
-        if (FMAClient.CONFIG.enableDebug) {
+        if (FMAClient.CONFIG.get().features.enableDebug) {
             return arg;
         }
+
         return null;
     }
 
-    public static void load() {
+    public static void init() {
         CLIENT_DISPATCH = new CommandDispatcher<>();
         COMMAND_INITIATORS = new HashSet<>();
 
         final var fma = register(lit(
             "fma",
             lit("debug", ignored -> {
-                FMAClient.runDebug();
+                Debug.runDebug();
                 return 0;
             }),
             debug(lit("debug_test", ignored -> {
-                Utils.send(":3");
+                ChatUtil.send(":3");
                 return 0;
             })),
             debug(lit("debug_reload", ignored -> {
-                load();
+                init();
                 return 0;
             })),
             debug(lit("debug_e", ignored -> {
-                FMAClient.entityDebug = !FMAClient.entityDebug;
-                Utils.send(
-                    Component.literal("Entity Debug: "),
-                    Utils.formatEnable(FMAClient.entityDebug)
-                );
+                Debug.entityDebug = !Debug.entityDebug;
+                ChatUtil.send("Entity Debug: " + Debug.entityDebug);
                 return 0;
             })),
             debug(lit("debug_b", ignored -> {
-                FMAClient.blockDebug = !FMAClient.blockDebug;
-                Utils.send(
-                    Component.literal("Block Debug: "),
-                    Utils.formatEnable(FMAClient.blockDebug)
-                );
+                Debug.blockDebug = !Debug.blockDebug;
+                ChatUtil.send("Block Debug: " + Debug.entityDebug);
                 return 0;
             })),
             debug(lit("dump_e", context -> {
-                ((ClientLevel) Utils.player().getLevel()).entitiesForRendering().forEach(e -> {
-                    if (e.getEyePosition().distanceTo(Utils.player().getEyePosition()) < 10) {
-                        FMAClient.dumpEntityInfo(e);
+                FMAClient.level().entitiesForRendering().forEach(e -> {
+                    if (e.getEyePosition().distanceTo(FMAClient.player().getEyePosition()) < 10) {
+                        Debug.dumpEntityInfo(e);
                     }
                 });
                 return 0;
             })),
             lit("help", ignored -> {
-                Utils.send(Component.literal("Command Help").withStyle(ChatFormatting.BOLD));
+                ChatUtil.send(Component.literal("Command Help").withStyle(ChatFormatting.BOLD));
 
-                Utils.send("/cc - clear chat");
-                Utils.send("/fma debug - dumps internal state, don't use this unless something breaks");
-                Utils.send("/fma lb [leaderboard] - show your leaderboard position");
+                ChatUtil.send("/cc - clear chat");
+                ChatUtil.send("/fma debug - dumps internal state, don't use this unless something breaks");
+                ChatUtil.send("/fma lb [leaderboard] - show your leaderboard position");
                 return 0;
             }),
             lit("lb",
                 mcArg("lb_name", StringArgumentType.word(), context -> {
                     final var lbName = StringArgumentType.getString(context, "lb_name");
                     FMAClient.LEADERBOARD.beginListen(lbName, (position, count) -> {
-                        Utils.send(
-                            Component.literal(lbName).withStyle(ChatFormatting.BOLD, ChatFormatting.BLUE),
-                            Component.literal(": "),
-                            Component.literal("" + position).withStyle(ChatFormatting.DARK_GREEN),
-                            Component.literal(". "),
-                            Component.literal(Utils.player().getScoreboardName())
-                                .withStyle(ChatFormatting.BOLD, ChatFormatting.GOLD),
-                            Component.literal(" - "),
-                            Component.literal("" + count).withStyle(ChatFormatting.DARK_GREEN)
-                        );
+                        ChatUtil.send(Component.translatable(
+                            "commands.fma.leaderboard",
+                            FormatUtil.altText(lbName),
+                            FormatUtil.numeric(position),
+                            FormatUtil.playerNameText(FMAClient.playerName()),
+                            FormatUtil.numeric(count)
+                        ));
                     });
 
                     return 0;
@@ -163,12 +156,12 @@ public class Commands {
         register(lit("omw",
             // forward
             context -> {
-                Utils.sendCommand("lfg omw");
+                ChatUtil.sendCommand("lfg omw");
                 return 0;
             },
             arg("text", StringArgumentType.greedyString(), context -> {
                 final var arg = StringArgumentType.getString(context, "text");
-                Utils.sendCommand(String.format("lfg omw %s", arg));
+                ChatUtil.sendCommand(String.format("lfg omw %s", arg));
                 return 0;
             })
         ));
@@ -183,7 +176,7 @@ public class Commands {
             arg("text", StringArgumentType.greedyString(), context -> {
                 final var player = StringArgumentType.getString(context, "player");
                 final var arg = StringArgumentType.getString(context, "text");
-                Utils.sendCommand(String.format("tell %s %s", player, arg));
+                ChatUtil.sendCommand(String.format("tell %s %s", player, arg));
                 ChatChannelManager.getInstance().openDm(player);
                 return 0;
             })
@@ -213,9 +206,9 @@ public class Commands {
 
     public static void run(String str) {
         try {
-            CLIENT_DISPATCH.execute(str, Utils.player().createCommandSourceStack());
+            CLIENT_DISPATCH.execute(str, FMAClient.player().createCommandSourceStack());
         } catch (CommandSyntaxException e) {
-            Utils.sendWarn(e.getMessage());
+            ChatUtil.sendWarn(e.getMessage());
         }
     }
 }

@@ -1,6 +1,6 @@
 package com.floweytf.fma.gamestate;
 
-import com.floweytf.fma.DebugInfoExporter;
+import com.floweytf.fma.debug.DebugInfoExporter;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderContext;
 import net.minecraft.network.chat.Component;
 

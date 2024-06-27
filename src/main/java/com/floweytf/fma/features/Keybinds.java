@@ -1,7 +1,7 @@
-package com.floweytf.fma.registry;
+package com.floweytf.fma.features;
 
 import com.floweytf.fma.chat.ChatChannelManager;
-import com.floweytf.fma.util.Utils;
+import com.floweytf.fma.util.ChatUtil;
 import com.mojang.blaze3d.platform.InputConstants;
 import de.siphalor.amecs.api.AmecsKeyBinding;
 import de.siphalor.amecs.api.KeyModifiers;
@@ -97,13 +97,13 @@ public class Keybinds {
         KeyBindingHelper.registerKeyBinding(new AmecsKeyBinding(
             "key.fma.meow",
             InputConstants.Type.KEYSYM,
-            GLFW.GLFW_KEY_E,
+            GLFW.GLFW_KEY_UNKNOWN,
             "category.fma",
-            new KeyModifiers(false, true, false)
+            new KeyModifiers(false, false, false)
         ) {
             @Override
             public void onPressed() {
-                Utils.sendCommand("g meow");
+                ChatUtil.sendCommand("g meow");
             }
         });
     }

@@ -1,8 +1,10 @@
-package com.floweytf.fma;
+package com.floweytf.fma.features;
 
+import com.floweytf.fma.FMAClient;
+import com.floweytf.fma.debug.DebugInfoExporter;
 import com.floweytf.fma.events.ClientReceiveSystemChatEvent;
 import com.floweytf.fma.events.EventResult;
-import com.floweytf.fma.util.Utils;
+import com.floweytf.fma.util.ChatUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.Nullable;
@@ -46,7 +48,7 @@ public class LeaderboardUtils implements DebugInfoExporter {
                     }
                 } else if (raw.equals(" Leaderboard - " + currLeaderboard)) {
                     if (state != State.WAIT_START) {
-                        Utils.sendDebug("illegal state (" + state + ", START_TOKEN)");
+                        ChatUtil.sendDebug("illegal state (" + state + ", START_TOKEN)");
                         state = State.WAIT_END;
                     } else {
                         state = State.WAIT_PLAYER;
@@ -54,14 +56,14 @@ public class LeaderboardUtils implements DebugInfoExporter {
                 } else if (raw.startsWith("--==--") && raw.endsWith("--==--")) {
                     switch (state) {
                     case WAIT_PLAYER:
-                        Utils.sendWarn("unknown/empty leaderboard " + currLeaderboard);
+                        ChatUtil.sendWarn("unknown/empty leaderboard " + currLeaderboard);
                         state = State.WAIT_REAL_END;
                         break;
                     case WAIT_END:
                         state = State.WAIT_REAL_END;
                         break;
                     case WAIT_START:
-                        Utils.sendDebug("illegal state (WAIT_START, END_TOKEN)");
+                        ChatUtil.sendDebug("illegal state (WAIT_START, END_TOKEN)");
                         reset();
                         break;
                     }
@@ -69,19 +71,19 @@ public class LeaderboardUtils implements DebugInfoExporter {
                     final var parts = raw.split("\\s*-\\s*");
 
                     if (parts.length == 3) {
-                        if (parts[1].equals(Utils.player().getScoreboardName())) {
+                        if (parts[1].equals(FMAClient.playerName())) {
                             leaderboardConsumer.accept(Integer.parseInt(parts[0]), Integer.parseInt(parts[2]));
                             state = State.WAIT_END;
                         }
                     } else if (parts.length > 3) {
-                        Utils.sendDebug("too many parts?");
+                        ChatUtil.sendDebug("too many parts?");
                     }
                 }
 
                 return EventResult.CANCEL_CONTINUE;
             } catch (Exception e) {
                 reset();
-                Utils.sendDebug("parsing failed, check logs");
+                ChatUtil.sendDebug("parsing failed, check logs");
                 FMAClient.LOGGER.error("parse fail '{}': {}", raw, e);
             }
 
@@ -91,14 +93,14 @@ public class LeaderboardUtils implements DebugInfoExporter {
 
     public void beginListen(String leaderboard, BiConsumer<Integer, Integer> handler) {
         if (currLeaderboard != null) {
-            Utils.sendWarn("leaderboard read is current ongoing, (executed commands too fast)");
+            ChatUtil.sendWarn("leaderboard read is current ongoing, (executed commands too fast)");
         }
 
         currLeaderboard = leaderboard;
         leaderboardConsumer = handler;
         state = State.WAIT_START;
 
-        Utils.sendCommand(String.format("leaderboard %s %s true 1", Utils.player().getScoreboardName(), leaderboard));
+        ChatUtil.sendCommand(String.format("leaderboard %s %s true 1", FMAClient.playerName(), leaderboard));
 
         // 20 ticks = 1s
         FMAClient.SCHEDULER.schedule(20, minecraft -> {
@@ -110,7 +112,7 @@ public class LeaderboardUtils implements DebugInfoExporter {
                 return;
             }
 
-            Utils.sendWarn("server is lagging, leaderboard command did not respond (bug? " + state + ")");
+            ChatUtil.sendWarn("server is lagging, leaderboard command did not respond (bug? " + state + ")");
             currLeaderboard = null;
             leaderboardConsumer = null;
         });
@@ -118,9 +120,9 @@ public class LeaderboardUtils implements DebugInfoExporter {
 
     @Override
     public void exportDebugInfo() {
-        Utils.send(Component.literal("LeaderboardUtils").withStyle(ChatFormatting.UNDERLINE));
-        Utils.send("currLeaderboard = " + currLeaderboard);
-        Utils.send("leaderboardConsumer = " + leaderboardConsumer);
-        Utils.send("state = " + state);
+        ChatUtil.send(Component.literal("LeaderboardUtils").withStyle(ChatFormatting.UNDERLINE));
+        ChatUtil.send("currLeaderboard = " + currLeaderboard);
+        ChatUtil.send("leaderboardConsumer = " + leaderboardConsumer);
+        ChatUtil.send("state = " + state);
     }
 }
