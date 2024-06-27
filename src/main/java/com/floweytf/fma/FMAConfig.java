@@ -74,14 +74,11 @@ public class FMAConfig implements ConfigData {
     public HpIndicator hpIndicator = new HpIndicator();
 
     @Override
-    public void validatePostLoad() throws ValidationException {
+    public void validatePostLoad() {
         if (hpIndicator.mediumHpPercent > hpIndicator.goodHpPercent)
             hpIndicator.mediumHpPercent = hpIndicator.goodHpPercent;
 
         if (hpIndicator.lowHpPercent > hpIndicator.mediumHpPercent)
             hpIndicator.lowHpPercent = hpIndicator.mediumHpPercent;
-
-        // re-init command dispatcher
-        Commands.init();
     }
 }
