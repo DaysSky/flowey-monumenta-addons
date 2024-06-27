@@ -33,7 +33,7 @@ public class FMAClient implements ClientModInitializer {
     }
 
     public static ClientLevel level() {
-        return (ClientLevel) player().level;
+        return (ClientLevel) player().level();
     }
 
     public static String playerName() {

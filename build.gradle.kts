@@ -9,6 +9,7 @@ val archives_base_name: String by project
 val minecraft_version: String by project
 val loader_version: String by project
 val fabric_version: String by project
+val minecraft_version_target: String by project
 
 base {
     archivesName = archives_base_name
@@ -36,17 +37,17 @@ loom {
 }
 dependencies {
     // To change the versions see the gradle.properties file
-    minecraft("com.mojang:minecraft:${minecraft_version}")
+    minecraft("com.mojang:minecraft:${minecraft_version_target}")
     mappings(loom.layered {
         officialMojangMappings()
         parchment("org.parchmentmc.data:parchment-1.19.4:2023.06.26@zip")
     })
     modImplementation("net.fabricmc:fabric-loader:${loader_version}")
     modImplementation("net.fabricmc.fabric-api:fabric-api:${fabric_version}")
-    modApi("de.siphalor:amecsapi-1.19:1.5.2+mc1.19.4")
+    modApi("de.siphalor:amecsapi-1.20:1.3.9+mc1.20-pre1")
 
-    modApi("com.terraformersmc:modmenu:6.2.1")
-    modApi("me.shedaniel.cloth:cloth-config-fabric:10.1.117") {
+    modApi("com.terraformersmc:modmenu:7.2.2")
+    modApi("me.shedaniel.cloth:cloth-config-fabric:11.1.118") {
         exclude(group = "net.fabricmc.fabric-api")
     }
 }

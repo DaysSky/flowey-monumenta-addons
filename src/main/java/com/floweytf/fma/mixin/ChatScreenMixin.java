@@ -52,7 +52,7 @@ public class ChatScreenMixin extends Screen {
         method = "render",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/client/gui/screens/ChatScreen;fill(Lcom/mojang/blaze3d/vertex/PoseStack;IIIII)V"
+            target = "Lnet/minecraft/client/gui/GuiGraphics;fill(IIIII)V"
         ),
         index = 1
     )

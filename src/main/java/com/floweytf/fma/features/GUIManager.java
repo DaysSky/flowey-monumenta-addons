@@ -2,29 +2,26 @@ package com.floweytf.fma.features;
 
 import com.floweytf.fma.FMAClient;
 import com.floweytf.fma.chat.ChatChannelManager;
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.gui.GuiGraphics;
 
 public class GUIManager {
     private final Minecraft minecraft = Minecraft.getInstance();
 
-    private void renderChatChannelHud(PoseStack stack, float partialTicks) {
+    private void renderChatChannelHud(GuiGraphics graphics) {
         if (!FMAClient.CONFIG.get().features.enableChatChannels) {
             return;
         }
 
         final var height = minecraft.getWindow().getGuiScaledHeight();
 
-        GuiComponent.fill(
-            stack,
+        graphics.fill(
             2, height - 14,
             2 + ChatChannelManager.getInstance().promptTextWidth(), height - 2,
             this.minecraft.options.getBackgroundColor(Integer.MIN_VALUE)
         );
 
-        GuiComponent.drawString(
-            stack,
+        graphics.drawString(
             minecraft.fontFilterFishy,
             ChatChannelManager.getInstance().promptText(),
             4,
@@ -33,7 +30,7 @@ public class GUIManager {
         );
     }
 
-    public void render(PoseStack stack, float partialTicks) {
-        renderChatChannelHud(stack, partialTicks);
+    public void render(GuiGraphics graphics, float partialTicks) {
+        renderChatChannelHud(graphics);
     }
 }
