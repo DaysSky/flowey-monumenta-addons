@@ -22,8 +22,7 @@ import java.util.function.Supplier;
 public class GameState implements DebugInfoExporter {
     private static final List<Pair<String, Supplier<StateTracker>>> GAME_STATE_BY_DIMENSION = List.of(
         Pair.of("monumenta:portal", PortalStateTracker::new),
-        Pair.of("monumenta:ruin", RuinStateTracker::new),
-        Pair.of("minecraft:overworld", PortalStateTracker::new)// TODO: debug, remove
+        Pair.of("monumenta:ruin", RuinStateTracker::new)
     );
 
     private String dimensionName = null;
@@ -35,8 +34,16 @@ public class GameState implements DebugInfoExporter {
             return;
 
         final var newDimensionName = level.dimension().location().toString();
+
+        // Edge-triggered
         if (Objects.equals(dimensionName, newDimensionName)) {
             return;
+        }
+
+        // Trigger leave event...
+        if (currentStateTracker != null) {
+            currentStateTracker.onLeave();
+            currentStateTracker = null;
         }
 
         dimensionName = newDimensionName;
@@ -48,10 +55,6 @@ public class GameState implements DebugInfoExporter {
         if (worldFilterRes.isEmpty()) {
             ChatUtil.sendDebug("unknown dimension '" + newDimensionName + "'");
             return;
-        }
-
-        if (currentStateTracker != null) {
-            currentStateTracker.onLeave();
         }
 
         currentStateTracker = worldFilterRes.get().second().get();
@@ -113,6 +116,8 @@ public class GameState implements DebugInfoExporter {
             if (currentStateTracker != null) {
                 currentStateTracker.onLeave();
             }
+
+            currentStateTracker = null;
         });
     }
 

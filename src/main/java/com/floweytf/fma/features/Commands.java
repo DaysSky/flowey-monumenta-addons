@@ -12,6 +12,7 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.tree.CommandNode;
+import me.shedaniel.autoconfig.AutoConfig;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.commands.CommandSourceStack;
@@ -120,8 +121,12 @@ public class Commands {
                 ChatUtil.send(Component.literal("Command Help").withStyle(ChatFormatting.BOLD));
 
                 ChatUtil.send("/cc - clear chat");
+                ChatUtil.send("/omw - shorthand for /lfg omw");
                 ChatUtil.send("/fma debug - dumps internal state, don't use this unless something breaks");
                 ChatUtil.send("/fma lb [leaderboard] - show your leaderboard position");
+                ChatUtil.send("/fma config - opens the config");
+                ChatUtil.send("/fma help - prints this message");
+                ChatUtil.send("/lb -> /fma lb");
                 return 0;
             }),
             lit("lb",
@@ -141,20 +146,18 @@ public class Commands {
                 }).suggests((context, builder) -> SharedSuggestionProvider.suggest(List.of(
                     "Portal"
                 ), builder))
-            )
+            ),
+            lit("config", context -> {
+                FMAClient.SCHEDULER.schedule(0,
+                    minecraft -> minecraft.setScreen(AutoConfig.getConfigScreen(FMAConfig.class, minecraft.screen).get()));
+                return 0;
+            })
         ));
 
         register(lit("cc", ignored -> {
             Minecraft.getInstance().gui.getChat().clearMessages(false);
             return 0;
         }));
-
-        chatWrapper("wc", ChatChannelManager.WORLD_CHAT);
-        chatWrapper("gc", ChatChannelManager.GUILD);
-        chatWrapper("g", ChatChannelManager.GLOBAL);
-        chatWrapper("l", ChatChannelManager.LOCAL);
-        chatWrapper("lfg", ChatChannelManager.LFG);
-        chatWrapper("tr", ChatChannelManager.TR);
 
         register(lit("omw",
             // forward
@@ -187,11 +190,25 @@ public class Commands {
 
         register(mcLit("lb").redirect(fma.getChild("lb")));
         alias("lbp", "lb Portal");
+
+        // register the commands
+        for (int i = 0; i < config.chatChannels.channels.size(); i++) {
+            final var channel = config.chatChannels.channels.get(i);
+            if (channel.shorthandCommand.isEmpty())
+                return;
+
+            final var manager = ChatChannelManager.getInstance();
+            int index = i + 1;
+            registerHidden(mcLit(channel.shorthandCommand, context -> {
+                manager.setChannel(manager.getSystemChannels().get(index));
+                return 0;
+            }));
+        }
     }
 
     public static void init() {
         registerCommands(FMAClient.CONFIG.getConfig());
-        FMAClient.CONFIG.registerLoadListener((configHolder, fmaConfig) -> {
+        FMAClient.CONFIG.registerSaveListener((configHolder, fmaConfig) -> {
             registerCommands(fmaConfig);
             return InteractionResult.PASS;
         });

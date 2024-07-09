@@ -1,5 +1,5 @@
 {
-    // Keybind stuff
+    // Keybindings
     "category.fma": "Flowey Monumenta Addons",
     "key.fma.cycle_chat_builtin": "Cycle builtin chat channels",
     "key.fma.cycle_chat_dm": "Cycle DM chat channels",
@@ -11,19 +11,27 @@
     "key.fma.set_channel_lfg": "Join 'lfg' channel",
     "key.fma.set_channel_gr": "Join 'gr' channel",
     "key.fma.set_channel_wc": "Join 'wc' channel",
-    // Command stuff
+
+    // Command feedback
     "commands.fma.leaderboard": "%s: #%s %s - %s",
-    // Config: "features" tab
+
+    "text.autoconfig.fma.title": "Flowey's Monumenta Addons Config",
+
+    // Categories
     "text.autoconfig.fma.category.features": "Features",
+    "text.autoconfig.fma.category.chatAppearance": "Chat Appearance",
+    "text.autoconfig.fma.category.hpIndicator": "HP Indicator",
+    "text.autoconfig.fma.category.chatChannels": "Chat Channels",
+    "text.autoconfig.fma.category.strikes": "Strikes",
+
+    // Feature toggles
     "text.autoconfig.fma.option.features.enableChatChannels": "Chat channel prompt",
     "text.autoconfig.fma.option.features.enableHpIndicators": "HP indicator",
-    "text.autoconfig.fma.option.features.enableTimersAndStats": "Timers & statistics",
+    "text.autoconfig.fma.option.features.enableTimerAndStats": "Timers & statistics",
     "text.autoconfig.fma.option.features.enableDebug": "Debugging mode",
-    "text.autoconfig.fma.option.features.enableIotaFix.@PrefixText": "Misc portal stuff",
-    "text.autoconfig.fma.option.features.enableIotaFix": "Iota fix",
-    "text.autoconfig.fma.option.features.enablePortalButtonIndicator": "Portal button/cube indicator",
-    // Config: "chat appearance" tab
-    "text.autoconfig.fma.category.chatAppearance": "Chat Appearance",
+    "text.autoconfig.fma.option.features.suppressDebugWarning": "Silence debugging warnings",
+
+    // Chat appearance
     "text.autoconfig.fma.option.chatAppearance.bracketColor": "Tag bracket color",
     "text.autoconfig.fma.option.chatAppearance.tagColor": "Tag text color",
     "text.autoconfig.fma.option.chatAppearance.tagText": "Tag text",
@@ -32,8 +40,8 @@
     "text.autoconfig.fma.option.chatAppearance.detailColor": "Detail color",
     "text.autoconfig.fma.option.chatAppearance.playerNameColor": "Player name color",
     "text.autoconfig.fma.option.chatAppearance.altTextColor": "Alternate text color",
-    // Config: "hp indicator" tab
-    "text.autoconfig.fma.category.hpIndicator": "HP Indicator",
+
+    // HP indicators
     "text.autoconfig.fma.option.hpIndicator.enableGlowingPlayer": "Glowing by HP color (players)",
     "text.autoconfig.fma.option.hpIndicator.enableHitboxColoring": "Hitbox by HP color (entities)",
     "text.autoconfig.fma.option.hpIndicator.countAbsorptionAsHp": "Consider absorption as HP",
@@ -44,7 +52,28 @@
     "text.autoconfig.fma.option.hpIndicator.mediumHpColor": "Medium HP color",
     "text.autoconfig.fma.option.hpIndicator.lowHpColor": "Low HP color",
     "text.autoconfig.fma.option.hpIndicator.criticalHpColor": "Critical HP color",
+
+    // Chat Channels
+    "text.autoconfig.fma.option.chatChannels.meowingChannel": "Meow macro channel",
+    "text.autoconfig.fma.option.chatChannels.channels": "Chat Channels",
+    "text.autoconfig.fma.option.chatChannels.channels.entry": "Entry",
+    "text.autoconfig.fma.option.chatChannels.channels.type": "Type",
+    "text.autoconfig.fma.option.chatChannels.channels.shorthand": "Shorthand",
+    "text.autoconfig.fma.option.chatChannels.channels.name": "ID/Name",
+    "text.autoconfig.fma.option.chatChannels.channels.prettyName": "Display Name",
+    "text.autoconfig.fma.option.chatChannels.channels.color": "Color",
+
     // Portal strike
+    "text.autoconfig.fma.option.portal": "Portal Strike",
+    "text.autoconfig.fma.option.portal.enableIotaFix": "Iota fix",
+    "text.autoconfig.fma.option.portal.enablePortalButtonIndicator": "Portal button/cube indicator",
+    "text.autoconfig.fma.option.portal.nodeSplit": "Send nodes split message",
+    "text.autoconfig.fma.option.portal.soulsSplit": "Send souls split message",
+    "text.autoconfig.fma.option.portal.startBossSplit": "Send activate boss split message",
+    "text.autoconfig.fma.option.portal.phase1Split": "Send phase 1 split message",
+    "text.autoconfig.fma.option.portal.phase2Split": "Send phase 2 split message",
+    "text.autoconfig.fma.option.portal.phase3Split": "Send phase 3 split message",
+    "text.autoconfig.fma.option.portal.bossSplit": "Send boss split message",
     "timer.fma.portal.nodes": "Activate nodes took %s -- %s",
     "timer.fma.portal.startBoss": "Boss activation took %s -- %s",
     "timer.fma.portal.boss": "Boss took %s -- %s",
@@ -52,11 +81,10 @@
     "timer.fma.portal.boss.1": "Boss phase 2 took %s",
     "timer.fma.portal.boss.2": "Boss phase 3 took %s",
     "timer.fma.portal.souls": "Soul farming took %s -- %s",
-    // stats
+    "stat.fma.portal.fail": "Portal failed...",
     "stat.fma.portal.title": "Portal Strike Stats",
     "stat.fma.portal.chestCount": "Chest count: %s",
     "stat.fma.portal.totalTime": "Time: %s",
-    // detail
     "stat.fma.portal.soulCount": "Soul count: %s",
     "stat.fma.portal.soulTime": "Soul farming took %s",
     "stat.fma.portal.nodesSplit": "Activate nodes took %s",
@@ -64,5 +92,9 @@
     "stat.fma.portal.bossSplit": "Kill boss took %s",
     "stat.fma.portal.phase1Split": "Boss phase 1 took %s",
     "stat.fma.portal.phase2Split": "Boss phase 2 took %s",
-    "stat.fma.portal.phase3Split": "Boss phase 3 took %s"
+    "stat.fma.portal.phase3Split": "Boss phase 3 took %s",
+
+    // Error mesage
+    "error.fma.no_empty_string": "Empty string not allowed here",
+    "error.fma.duplicate_shorthand": "Duplicate shorthands"
 }

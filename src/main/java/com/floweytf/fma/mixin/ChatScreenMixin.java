@@ -45,6 +45,11 @@ public class ChatScreenMixin extends Screen {
         )
     )
     private void sendWithChatChannel(ClientPacketListener instance, String message, Operation<Void> original) {
+        if(!FMAClient.CONFIG.get().features.enableChatChannels) {
+            original.call(instance, message);
+            return;
+        }
+
         ChatUtil.sendCommand(ChatChannelManager.getInstance().getChannel().buildSendCommand(message));
     }
 

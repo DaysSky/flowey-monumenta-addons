@@ -1,5 +1,7 @@
 package com.floweytf.fma.features;
 
+import com.floweytf.fma.FMAClient;
+import com.floweytf.fma.FMAConfig;
 import com.floweytf.fma.chat.ChatChannelManager;
 import com.floweytf.fma.util.ChatUtil;
 import com.mojang.blaze3d.platform.InputConstants;
@@ -82,18 +84,6 @@ public class Keybinds {
             () -> ChatChannelManager.getInstance().cycleDm()
         );
 
-        ChatChannelManager.BUILTIN_CHANNELS.forEach(systemChatChannel -> {
-            // unbound by default
-            new ChatChannelControlKeybind(
-                "key.fma.set_channel_" + systemChatChannel.command(),
-                InputConstants.Type.KEYSYM,
-                GLFW.GLFW_KEY_UNKNOWN,
-                "category.fma",
-                new KeyModifiers(false, false, false),
-                () -> ChatChannelManager.getInstance().setChannel(systemChatChannel)
-            );
-        });
-
         KeyBindingHelper.registerKeyBinding(new AmecsKeyBinding(
             "key.fma.meow",
             InputConstants.Type.KEYSYM,
@@ -103,7 +93,7 @@ public class Keybinds {
         ) {
             @Override
             public void onPressed() {
-                ChatUtil.sendCommand("g meow");
+                ChatUtil.sendCommand(String.format("chat say %s meow", FMAClient.CONFIG.get().chatChannels.meowingChannel));
             }
         });
     }

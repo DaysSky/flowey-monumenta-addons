@@ -7,9 +7,7 @@ import com.floweytf.fma.features.Keybinds;
 import com.floweytf.fma.features.LeaderboardUtils;
 import com.floweytf.fma.gamestate.GameState;
 import com.floweytf.fma.util.TickScheduler;
-import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.ConfigHolder;
-import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.Minecraft;
@@ -42,8 +40,8 @@ public class FMAClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        AutoConfig.register(FMAConfig.class, GsonConfigSerializer::new);
-        CONFIG = AutoConfig.getConfigHolder(FMAConfig.class);
+        CONFIG = FMAConfig.register();
+
         HudRenderCallback.EVENT.register(GUI::render);
 
         Commands.init();

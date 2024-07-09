@@ -1,5 +1,7 @@
 package com.floweytf.fma.chat;
 
+import com.floweytf.fma.FMAClient;
+import com.floweytf.fma.FMAConfig;
 import com.floweytf.fma.debug.DebugInfoExporter;
 import com.floweytf.fma.util.ChatUtil;
 import com.floweytf.fma.util.FormatUtil;
@@ -7,10 +9,11 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.ChatScreen;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.InteractionResult;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.BitSet;
+import java.util.Collections;
 import java.util.List;
 
 public class ChatChannelManager implements DebugInfoExporter {
@@ -18,60 +21,17 @@ public class ChatChannelManager implements DebugInfoExporter {
 
     public static ChatChannelManager getInstance() {
         if (INSTANCE == null) {
-            INSTANCE = new ChatChannelManager();
+            INSTANCE = new ChatChannelManager(FMAClient.CONFIG.getConfig());
+            FMAClient.CONFIG.registerSaveListener((configHolder, config) -> {
+                INSTANCE.reload(config);
+                return InteractionResult.PASS;
+            });
         }
 
         return INSTANCE;
     }
 
-    public static final SystemChatChannel GLOBAL = new SystemChatChannel(
-        "g",
-        ChatFormatting.WHITE,
-        Component.literal("g").withStyle(ChatFormatting.BOLD, ChatFormatting.UNDERLINE),
-        Component.literal("lobal")
-    );
-
-    public static final SystemChatChannel WORLD_CHAT = new SystemChatChannel(
-        "wc",
-        ChatFormatting.BLUE,
-        Component.literal("w").withStyle(ChatFormatting.BOLD, ChatFormatting.UNDERLINE),
-        Component.literal("orld-"),
-        Component.literal("c").withStyle(ChatFormatting.BOLD, ChatFormatting.UNDERLINE),
-        Component.literal("hat")
-    );
-
-    public static final SystemChatChannel LOCAL = new SystemChatChannel(
-        "l",
-        ChatFormatting.YELLOW,
-        Component.literal("l").withStyle(ChatFormatting.BOLD, ChatFormatting.UNDERLINE),
-        Component.literal("ocal")
-    );
-
-    public static final SystemChatChannel GUILD = new SystemChatChannel(
-        "gc",
-        style -> style.withColor(0xbe74fb),
-        Component.literal("MAID")
-    );
-
-    public static final SystemChatChannel LFG = new SystemChatChannel(
-        "lfg",
-        ChatFormatting.GOLD,
-        Component.literal("l").withStyle(ChatFormatting.BOLD, ChatFormatting.UNDERLINE),
-        Component.literal("ooking-"),
-        Component.literal("f").withStyle(ChatFormatting.BOLD, ChatFormatting.UNDERLINE),
-        Component.literal("or-"),
-        Component.literal("g").withStyle(ChatFormatting.BOLD, ChatFormatting.UNDERLINE),
-        Component.literal("roup")
-    );
-
-    public static final SystemChatChannel TR = new SystemChatChannel(
-        "tr",
-        ChatFormatting.DARK_GREEN,
-        Component.literal("tr").withStyle(ChatFormatting.BOLD, ChatFormatting.UNDERLINE),
-        Component.literal("ading")
-    );
-
-    public static final List<SystemChatChannel> BUILTIN_CHANNELS = List.of(GLOBAL, LOCAL, WORLD_CHAT, GUILD, LFG, TR);
+    public static final SystemChatChannel GLOBAL = new SystemChatChannel("g", "global", ChatFormatting.WHITE);
 
     // cache info
     private Component cachePromptText;
@@ -82,7 +42,7 @@ public class ChatChannelManager implements DebugInfoExporter {
     private ChatChannel currentChannel;
     private int builtinIndex = 0;
     private int dmIndex = 0;
-    private final BitSet currentEnabledChannels = new BitSet(BUILTIN_CHANNELS.size());
+    private List<SystemChatChannel> systemChannels = List.of(GLOBAL);
     private final List<DMChatChannel> dmChannels = new ArrayList<>();
 
     private void setPrompt(Component text) {
@@ -111,27 +71,23 @@ public class ChatChannelManager implements DebugInfoExporter {
     }
 
     private void renderPrompt() {
-        var current = Component.empty().append("[");
-
-        for (int i = 0; i < BUILTIN_CHANNELS.size(); i++) {
-            if (currentEnabledChannels.get(i)) {
-                current = current.append(BUILTIN_CHANNELS.get(i).shorthand());
-            } else {
-                current = current.append(" ".repeat(BUILTIN_CHANNELS.get(i).command().length()));
-            }
-        }
-
-        setPrompt(current
-            .append("] ")
-            .append(getChannel().getPromptText())
-            .append(" >> "));
+        setPrompt(FormatUtil.join(
+            getChannel().getPromptText(),
+            Component.literal(" >> ")
+        ));
     }
 
-    private ChatChannelManager() {
-        for (int i = 0; i < BUILTIN_CHANNELS.size(); i++) {
-            currentEnabledChannels.set(i);
-        }
+    private void reload(FMAConfig config) {
+        final var list = new ArrayList<SystemChatChannel>();
+        list.add(GLOBAL);
+        config.chatChannels.channels.forEach(ent -> list.add(ent.build()));
+        systemChannels = list;
         setChannel(GLOBAL);
+        builtinIndex = 0;
+    }
+
+    private ChatChannelManager(FMAConfig config) {
+        reload(config);
     }
 
     public boolean isDm() {
@@ -139,14 +95,14 @@ public class ChatChannelManager implements DebugInfoExporter {
     }
 
     public void cycleBuiltins() {
-        final var index = BUILTIN_CHANNELS.indexOf(currentChannel);
+        final var index = systemChannels.indexOf(currentChannel);
 
         if (index != -1 && isDm()) {
             builtinIndex = index - 1;
         }
 
-        builtinIndex = (builtinIndex + 1) % BUILTIN_CHANNELS.size();
-        setChannel(BUILTIN_CHANNELS.get(builtinIndex));
+        builtinIndex = (builtinIndex + 1) % systemChannels.size();
+        setChannel(systemChannels.get(builtinIndex));
     }
 
     public void cycleDm() {
@@ -165,7 +121,7 @@ public class ChatChannelManager implements DebugInfoExporter {
 
     public void toggleDmBuiltin() {
         if (isDm()) {
-            setChannel(BUILTIN_CHANNELS.get(builtinIndex));
+            setChannel(systemChannels.get(builtinIndex));
         } else if (!dmChannels.isEmpty()) {
             setChannel(dmChannels.get(dmIndex));
         }
@@ -174,6 +130,10 @@ public class ChatChannelManager implements DebugInfoExporter {
     public void setChannel(ChatChannel channel) {
         this.currentChannel = channel;
         renderPrompt();
+    }
+
+    public List<SystemChatChannel> getSystemChannels() {
+        return Collections.unmodifiableList(systemChannels);
     }
 
     public @NotNull ChatChannel getChannel() {
@@ -191,15 +151,12 @@ public class ChatChannelManager implements DebugInfoExporter {
     @Override
     public void exportDebugInfo() {
         ChatUtil.send(Component.literal("ChatChannelManager").withStyle(ChatFormatting.UNDERLINE));
-        ChatUtil.send(FormatUtil.join(
-            Component.literal("cachePromptText = "),
-            cachePromptText
-        ));
+        ChatUtil.send(FormatUtil.join(Component.literal("cachePromptText = "), cachePromptText));
         ChatUtil.send("cachePromptWidth = " + cachePromptWidth);
         ChatUtil.send("currentChannel = " + currentChannel);
         ChatUtil.send("builtinIndex = " + builtinIndex);
         ChatUtil.send("dmIndex = " + dmIndex);
-        ChatUtil.send("currentEnabledChannels = " + currentEnabledChannels);
+        ChatUtil.send("currentEnabledChannels = " + systemChannels);
         ChatUtil.send("dmChannels = " + dmChannels);
     }
 }
