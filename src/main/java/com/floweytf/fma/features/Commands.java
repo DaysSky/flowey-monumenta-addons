@@ -3,7 +3,6 @@ package com.floweytf.fma.features;
 import com.floweytf.fma.FMAClient;
 import com.floweytf.fma.FMAConfig;
 import com.floweytf.fma.chat.ChatChannel;
-import com.floweytf.fma.chat.ChatChannelManager;
 import com.floweytf.fma.debug.Debug;
 import com.floweytf.fma.util.ChatUtil;
 import com.floweytf.fma.util.FormatUtil;
@@ -18,7 +17,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.InteractionResult;
 
 import java.util.HashSet;
 import java.util.List;
@@ -27,37 +25,37 @@ import java.util.Set;
 import static com.floweytf.fma.util.CommandUtil.*;
 
 public class Commands {
-    private static CommandDispatcher<CommandSourceStack> CLIENT_DISPATCH;
-    private static Set<String> COMMAND_INITIATORS = new HashSet<>();
-    private static final Set<String> SUGGESTION_INITIATORS = new HashSet<>();
+    private final CommandDispatcher<CommandSourceStack> clientDispatch = new CommandDispatcher<>();
+    private final Set<String> commandInitiators = new HashSet<>();
+    private final Set<String> suggestionInitiators = new HashSet<>();
 
-    private static CommandNode<CommandSourceStack> register(LiteralArgumentBuilder<CommandSourceStack> node) {
-        COMMAND_INITIATORS.add(node.getLiteral());
-        SUGGESTION_INITIATORS.add(node.getLiteral());
-        return CLIENT_DISPATCH.register(node);
+    private CommandNode<CommandSourceStack> register(LiteralArgumentBuilder<CommandSourceStack> node) {
+        commandInitiators.add(node.getLiteral());
+        suggestionInitiators.add(node.getLiteral());
+        return clientDispatch.register(node);
     }
 
-    private static CommandNode<CommandSourceStack> registerHidden(LiteralArgumentBuilder<CommandSourceStack> node) {
-        COMMAND_INITIATORS.add(node.getLiteral());
-        return CLIENT_DISPATCH.register(node);
+    private CommandNode<CommandSourceStack> registerHidden(LiteralArgumentBuilder<CommandSourceStack> node) {
+        commandInitiators.add(node.getLiteral());
+        return clientDispatch.register(node);
     }
 
-    private static void chatWrapper(String name, ChatChannel channel) {
+    private void chatWrapper(String name, ChatChannel channel) {
         registerHidden(lit(name,
             // forward
             context -> {
-                ChatChannelManager.getInstance().setChannel(channel);
+                FMAClient.CHAT_CHANNELS.setChannel(channel);
                 return 0;
             },
             arg("text", StringArgumentType.greedyString(), context -> {
                 final var arg = StringArgumentType.getString(context, "text");
-                ChatUtil.sendCommand(String.format("%s %s", name, arg));
+                ChatUtil.sendCommand(channel.buildSendCommand(arg));
                 return 0;
             })
         ));
     }
 
-    private static void alias(String name, String target) {
+    private void alias(String name, String target) {
         register(lit(name,
             // forward
             context -> {
@@ -80,9 +78,7 @@ public class Commands {
         return null;
     }
 
-    private static void registerCommands(FMAConfig config) {
-        CLIENT_DISPATCH = new CommandDispatcher<>();
-        COMMAND_INITIATORS = new HashSet<>();
+    public Commands(FMAConfig config) {
         final var debug = config.features.enableDebug;
 
         final var fma = register(lit(
@@ -96,7 +92,7 @@ public class Commands {
                 return 0;
             }), debug),
             opt(lit("debug_reload", ignored -> {
-                registerCommands(FMAClient.CONFIG.get());
+                FMAClient.reload();
                 return 0;
             }), debug),
             opt(lit("debug_e", ignored -> {
@@ -176,14 +172,14 @@ public class Commands {
             // forward
             context -> {
                 final var player = StringArgumentType.getString(context, "player");
-                ChatChannelManager.getInstance().openDm(player);
+                FMAClient.CHAT_CHANNELS.openDm(player);
                 return 0;
             },
             arg("text", StringArgumentType.greedyString(), context -> {
                 final var player = StringArgumentType.getString(context, "player");
                 final var arg = StringArgumentType.getString(context, "text");
                 ChatUtil.sendCommand(String.format("tell %s %s", player, arg));
-                ChatChannelManager.getInstance().openDm(player);
+                FMAClient.CHAT_CHANNELS.openDm(player);
                 return 0;
             })
         )));
@@ -192,49 +188,40 @@ public class Commands {
         alias("lbp", "lb Portal");
 
         // register the commands
-        for (int i = 0; i < config.chatChannels.channels.size(); i++) {
-            final var channel = config.chatChannels.channels.get(i);
-            if (channel.shorthandCommand.isEmpty())
-                return;
+        if (config.features.enableChatChannels) {
+            for (int i = 0; i < config.chatChannels.channels.size(); i++) {
+                final var channel = config.chatChannels.channels.get(i);
+                if (channel.shorthandCommand.isEmpty())
+                    return;
 
-            final var manager = ChatChannelManager.getInstance();
-            int index = i + 1;
-            registerHidden(mcLit(channel.shorthandCommand, context -> {
-                manager.setChannel(manager.getSystemChannels().get(index));
-                return 0;
-            }));
+                final var manager = FMAClient.CHAT_CHANNELS;
+                int index = i + 1;
+                chatWrapper(channel.shorthandCommand, manager.getSystemChannels().get(index));
+            }
         }
     }
 
-    public static void init() {
-        registerCommands(FMAClient.CONFIG.getConfig());
-        FMAClient.CONFIG.registerSaveListener((configHolder, fmaConfig) -> {
-            registerCommands(fmaConfig);
-            return InteractionResult.PASS;
-        });
+    public CommandDispatcher<CommandSourceStack> getDispatcher() {
+        return clientDispatch;
     }
 
-    public static CommandDispatcher<CommandSourceStack> getDispatcher() {
-        return CLIENT_DISPATCH;
-    }
-
-    public static boolean parseAccepts(String str) {
+    public boolean parseAccepts(String str) {
         final var parts = str.split("\\s");
         if (parts.length == 0)
             return false;
-        return COMMAND_INITIATORS.contains(parts[0]);
+        return commandInitiators.contains(parts[0]);
     }
 
-    public static boolean suggestAccepts(String str) {
+    public boolean suggestAccepts(String str) {
         final var parts = str.split("\\s");
         if (parts.length == 0)
             return false;
-        return SUGGESTION_INITIATORS.contains(parts[0]);
+        return suggestionInitiators.contains(parts[0]);
     }
 
-    public static void run(String str) {
+    public void run(String str) {
         try {
-            CLIENT_DISPATCH.execute(str, FMAClient.player().createCommandSourceStack());
+            clientDispatch.execute(str, FMAClient.player().createCommandSourceStack());
         } catch (CommandSyntaxException e) {
             ChatUtil.sendWarn(e.getMessage());
         }

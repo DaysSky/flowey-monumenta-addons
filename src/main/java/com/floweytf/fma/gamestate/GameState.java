@@ -1,7 +1,9 @@
 package com.floweytf.fma.gamestate;
 
+import com.floweytf.fma.FMAClient;
 import com.floweytf.fma.debug.DebugInfoExporter;
 import com.floweytf.fma.events.ClientReceiveSystemChatEvent;
+import com.floweytf.fma.events.ClientReceiveTabListCustomizationEvent;
 import com.floweytf.fma.events.ClientSetTitleEvent;
 import com.floweytf.fma.events.EventResult;
 import com.floweytf.fma.util.ChatUtil;

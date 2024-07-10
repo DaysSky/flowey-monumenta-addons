@@ -50,7 +50,7 @@ public class Keybinds {
             "category.fma",
             new KeyModifiers(false, true, false),
             () -> {
-                final var manager = ChatChannelManager.getInstance();
+                final var manager = FMAClient.CHAT_CHANNELS;
                 if (manager.isDm()) {
                     manager.toggleDmBuiltin();
                 } else {
@@ -66,7 +66,7 @@ public class Keybinds {
             "category.fma",
             new KeyModifiers(false, true, true),
             () -> {
-                final var manager = ChatChannelManager.getInstance();
+                final var manager = FMAClient.CHAT_CHANNELS;
                 if (!manager.isDm()) {
                     manager.toggleDmBuiltin();
                 } else {
@@ -81,7 +81,7 @@ public class Keybinds {
             GLFW.GLFW_KEY_UNKNOWN,
             "category.fma",
             new KeyModifiers(false, false, false),
-            () -> ChatChannelManager.getInstance().cycleDm()
+            () -> FMAClient.CHAT_CHANNELS.cycleDm()
         );
 
         KeyBindingHelper.registerKeyBinding(new AmecsKeyBinding(
@@ -93,7 +93,7 @@ public class Keybinds {
         ) {
             @Override
             public void onPressed() {
-                ChatUtil.sendCommand(String.format("chat say %s meow", FMAClient.CONFIG.get().chatChannels.meowingChannel));
+                ChatUtil.sendCommand(String.format("chat say %s meow", FMAClient.config().chatChannels.meowingChannel));
             }
         });
     }

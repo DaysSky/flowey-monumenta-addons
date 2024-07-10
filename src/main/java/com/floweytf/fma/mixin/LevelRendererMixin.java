@@ -20,11 +20,11 @@ public class LevelRendererMixin {
         )
     )
     private boolean modifyPlayerGlowingStatus(boolean original, @Local Entity entity) {
-        if (!FMAClient.CONFIG.get().features.enableHpIndicators) {
+        if (!FMAClient.features().enableHpIndicators) {
             return original;
         }
 
-        if (!FMAClient.CONFIG.get().hpIndicator.enableGlowingPlayer) {
+        if (!FMAClient.config().hpIndicator.enableGlowingPlayer) {
             return original;
         }
 
@@ -43,11 +43,11 @@ public class LevelRendererMixin {
         )
     )
     private int modifyPlayerGlowingColor(int original, @Local Entity entity) {
-        if (!FMAClient.CONFIG.get().features.enableHpIndicators) {
+        if (!FMAClient.features().enableHpIndicators) {
             return original;
         }
 
-        if (!FMAClient.CONFIG.get().hpIndicator.enableGlowingPlayer) {
+        if (!FMAClient.config().hpIndicator.enableGlowingPlayer) {
             return original;
         }
 

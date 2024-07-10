@@ -6,7 +6,7 @@ import net.minecraft.world.entity.LivingEntity;
 public class HpIndicator {
     public static int computeEntityHealthColor(LivingEntity entity) {
         var hp = entity.getHealth();
-        final var config = FMAClient.CONFIG.get().hpIndicator;
+        final var config = FMAClient.config().hpIndicator;
 
         if (config.countAbsorptionAsHp) {
             hp += entity.getAbsorptionAmount();

@@ -8,15 +8,18 @@ import java.util.List;
 
 public class FormatUtil {
     public static MutableComponent join(Component... components) {
-        var inst = Component.empty();
+        return join(Component.empty(), List.of(components));
+    }
+
+    public static MutableComponent join(MutableComponent root, Iterable<Component> components) {
         for (final var component : components) {
-            inst.append(component);
+            root.append(component);
         }
-        return inst;
+        return root;
     }
 
     public static MutableComponent buildTooltip(List<? extends Component> components) {
-        var inst = FormatUtil.colored(FMAClient.CONFIG.get().chatAppearance.textColor);
+        var inst = FormatUtil.colored(FMAClient.appearance().textColor);
         for (int i = 0; i < components.size(); i++) {
             var component = components.get(i);
             inst.append(component);
@@ -61,22 +64,22 @@ public class FormatUtil {
     }
 
     public static MutableComponent timestamp(long ticks) {
-        return withColor(formatTimestamp(ticks), FMAClient.CONFIG.get().chatAppearance.numericColor);
+        return withColor(formatTimestamp(ticks), FMAClient.appearance().numericColor);
     }
 
     public static MutableComponent timestampAlt(long ticks) {
-        return withColor(formatTimestamp(ticks), FMAClient.CONFIG.get().chatAppearance.detailColor);
+        return withColor(formatTimestamp(ticks), FMAClient.appearance().detailColor);
     }
 
     public static MutableComponent numeric(Object value) {
-        return withColor(String.valueOf(value), FMAClient.CONFIG.get().chatAppearance.numericColor);
+        return withColor(String.valueOf(value), FMAClient.appearance().numericColor);
     }
 
     public static MutableComponent altText(String text) {
-        return withColor(text, FMAClient.CONFIG.get().chatAppearance.altTextColor);
+        return withColor(text, FMAClient.appearance().altTextColor);
     }
 
     public static MutableComponent playerNameText(String text) {
-        return withColor(text, FMAClient.CONFIG.get().chatAppearance.playerNameColor);
+        return withColor(text, FMAClient.appearance().playerNameColor);
     }
 }

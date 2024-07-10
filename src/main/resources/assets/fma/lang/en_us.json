@@ -19,27 +19,30 @@
 
     // Categories
     "text.autoconfig.fma.category.features": "Features",
-    "text.autoconfig.fma.category.chatAppearance": "Chat Appearance",
+    "text.autoconfig.fma.category.appearance": "Appearance",
     "text.autoconfig.fma.category.hpIndicator": "HP Indicator",
     "text.autoconfig.fma.category.chatChannels": "Chat Channels",
     "text.autoconfig.fma.category.strikes": "Strikes",
 
     // Feature toggles
-    "text.autoconfig.fma.option.features.enableChatChannels": "Chat channel prompt",
+    "text.autoconfig.fma.option.features.enableChatChannels": "Chat channel prompt (experimental)",
     "text.autoconfig.fma.option.features.enableHpIndicators": "HP indicator",
     "text.autoconfig.fma.option.features.enableTimerAndStats": "Timers & statistics",
+    "text.autoconfig.fma.option.features.enableSideBar": "Custom HUD (replaces scoreboard)",
     "text.autoconfig.fma.option.features.enableDebug": "Debugging mode",
     "text.autoconfig.fma.option.features.suppressDebugWarning": "Silence debugging warnings",
 
     // Chat appearance
-    "text.autoconfig.fma.option.chatAppearance.bracketColor": "Tag bracket color",
-    "text.autoconfig.fma.option.chatAppearance.tagColor": "Tag text color",
-    "text.autoconfig.fma.option.chatAppearance.tagText": "Tag text",
-    "text.autoconfig.fma.option.chatAppearance.textColor": "Default text color",
-    "text.autoconfig.fma.option.chatAppearance.numericColor": "Numeric/time statistic text color",
-    "text.autoconfig.fma.option.chatAppearance.detailColor": "Detail color",
-    "text.autoconfig.fma.option.chatAppearance.playerNameColor": "Player name color",
-    "text.autoconfig.fma.option.chatAppearance.altTextColor": "Alternate text color",
+    "text.autoconfig.fma.option.appearance.bracketColor": "Tag bracket color",
+    "text.autoconfig.fma.option.appearance.tagColor": "Tag text color",
+    "text.autoconfig.fma.option.appearance.tagText": "Tag text",
+    "text.autoconfig.fma.option.appearance.textColor": "Default text color",
+    "text.autoconfig.fma.option.appearance.numericColor": "Numeric/time statistic text color",
+    "text.autoconfig.fma.option.appearance.detailColor": "Detail color",
+    "text.autoconfig.fma.option.appearance.playerNameColor": "Player name color",
+    "text.autoconfig.fma.option.appearance.altTextColor": "Alternate text color",
+    "text.autoconfig.fma.option.appearance.warningColor": "Warning color",
+    "text.autoconfig.fma.option.appearance.errorColor": "Error color",
 
     // HP indicators
     "text.autoconfig.fma.option.hpIndicator.enableGlowingPlayer": "Glowing by HP color (players)",
@@ -55,7 +58,7 @@
 
     // Chat Channels
     "text.autoconfig.fma.option.chatChannels.meowingChannel": "Meow macro channel",
-    "text.autoconfig.fma.option.chatChannels.channels": "Chat Channels",
+    "text.autoconfig.fma.option.chatChannels.channels": "Chat Channels (experimental)",
     "text.autoconfig.fma.option.chatChannels.channels.entry": "Entry",
     "text.autoconfig.fma.option.chatChannels.channels.type": "Type",
     "text.autoconfig.fma.option.chatChannels.channels.shorthand": "Shorthand",
@@ -93,8 +96,13 @@
     "stat.fma.portal.phase1Split": "Boss phase 1 took %s",
     "stat.fma.portal.phase2Split": "Boss phase 2 took %s",
     "stat.fma.portal.phase3Split": "Boss phase 3 took %s",
+    "sidebar.fma.portal.souls": "Souls %s",
+    "sidebar.fma.portal.chests": "Chests %s/41",
 
-    // Error mesage
+    // Error message
     "error.fma.no_empty_string": "Empty string not allowed here",
-    "error.fma.duplicate_shorthand": "Duplicate shorthands"
+    "error.fma.duplicate_shorthand": "Duplicate shorthands",
+
+    // Generic sidebar
+    "sidebar.fma.timer": "Timer %s"
 }

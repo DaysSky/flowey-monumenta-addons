@@ -21,7 +21,7 @@ public class SystemChatChannel extends ChatChannel {
 
     @Override
     public String buildSendCommand(String text) {
-        return String.format("/chat say %s %s", channelId, text);
+        return String.format("chat say %s %s", channelId, text);
     }
 
     @Override

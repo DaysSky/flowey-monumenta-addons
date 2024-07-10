@@ -3,3 +3,5 @@ accessible field net/minecraft/client/gui/screens/ChatScreen input Lnet/minecraf
 accessible field net/minecraft/client/gui/screens/ChatScreen initial Ljava/lang/String;
 accessible method net/minecraft/client/gui/GuiComponent hLine (Lcom/mojang/blaze3d/vertex/PoseStack;IIII)V
 accessible method net/minecraft/client/gui/GuiComponent vLine (Lcom/mojang/blaze3d/vertex/PoseStack;IIII)V
+accessible field net/minecraft/client/gui/components/PlayerTabOverlay footer Lnet/minecraft/network/chat/Component;
+accessible field net/minecraft/client/gui/components/PlayerTabOverlay header Lnet/minecraft/network/chat/Component;

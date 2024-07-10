@@ -9,7 +9,6 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.ChatScreen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.InteractionResult;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -17,20 +16,6 @@ import java.util.Collections;
 import java.util.List;
 
 public class ChatChannelManager implements DebugInfoExporter {
-    private static ChatChannelManager INSTANCE;
-
-    public static ChatChannelManager getInstance() {
-        if (INSTANCE == null) {
-            INSTANCE = new ChatChannelManager(FMAClient.CONFIG.getConfig());
-            FMAClient.CONFIG.registerSaveListener((configHolder, config) -> {
-                INSTANCE.reload(config);
-                return InteractionResult.PASS;
-            });
-        }
-
-        return INSTANCE;
-    }
-
     public static final SystemChatChannel GLOBAL = new SystemChatChannel("g", "global", ChatFormatting.WHITE);
 
     // cache info
@@ -42,7 +27,7 @@ public class ChatChannelManager implements DebugInfoExporter {
     private ChatChannel currentChannel;
     private int builtinIndex = 0;
     private int dmIndex = 0;
-    private List<SystemChatChannel> systemChannels = List.of(GLOBAL);
+    private final List<SystemChatChannel> systemChannels = new ArrayList<>();
     private final List<DMChatChannel> dmChannels = new ArrayList<>();
 
     private void setPrompt(Component text) {
@@ -77,17 +62,11 @@ public class ChatChannelManager implements DebugInfoExporter {
         ));
     }
 
-    private void reload(FMAConfig config) {
-        final var list = new ArrayList<SystemChatChannel>();
-        list.add(GLOBAL);
-        config.chatChannels.channels.forEach(ent -> list.add(ent.build()));
-        systemChannels = list;
+    public ChatChannelManager(FMAConfig config) {
+        systemChannels.add(GLOBAL);
+        config.chatChannels.channels.forEach(ent -> systemChannels.add(ent.build()));
         setChannel(GLOBAL);
         builtinIndex = 0;
-    }
-
-    private ChatChannelManager(FMAConfig config) {
-        reload(config);
     }
 
     public boolean isDm() {

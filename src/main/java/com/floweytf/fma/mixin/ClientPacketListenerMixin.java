@@ -2,13 +2,11 @@ package com.floweytf.fma.mixin;
 
 import com.floweytf.fma.FMAClient;
 import com.floweytf.fma.events.ClientReceiveSystemChatEvent;
+import com.floweytf.fma.events.ClientReceiveTabListCustomizationEvent;
 import com.floweytf.fma.events.ClientSetTitleEvent;
 import com.floweytf.fma.events.EventResult;
 import net.minecraft.client.multiplayer.ClientPacketListener;
-import net.minecraft.network.protocol.game.ClientboundSetActionBarTextPacket;
-import net.minecraft.network.protocol.game.ClientboundSetSubtitleTextPacket;
-import net.minecraft.network.protocol.game.ClientboundSetTitleTextPacket;
-import net.minecraft.network.protocol.game.ClientboundSystemChatPacket;
+import net.minecraft.network.protocol.game.*;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -27,6 +25,26 @@ public class ClientPacketListenerMixin {
     private void onRecvTitle(ClientboundSetTitleTextPacket packet, CallbackInfo ci) {
         FMAClient.LOGGER.debug("Recv title: {}", packet.getText());
         if (ClientSetTitleEvent.TITLE.invoker().onSetTitle(packet.getText()) != EventResult.CONTINUE) {
+            ci.cancel();
+        }
+    }
+
+    @Inject(
+        method = "handleTabListCustomisation",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/network/protocol/PacketUtils;ensureRunningOnSameThread" +
+                "(Lnet/minecraft/network/protocol/Packet;Lnet/minecraft/network/PacketListener;" +
+                "Lnet/minecraft/util/thread/BlockableEventLoop;)V",
+            shift = At.Shift.AFTER
+        ),
+        cancellable = true
+    )
+    private void onSetTabCustomization(ClientboundTabListPacket packet, CallbackInfo ci) {
+        if(ClientReceiveTabListCustomizationEvent.EVENT.invoker().onEvent(
+            packet.getHeader().getString().isEmpty() ? null : packet.getHeader(),
+            packet.getFooter().getString().isEmpty() ? null : packet.getFooter()
+        ) != EventResult.CONTINUE) {
             ci.cancel();
         }
     }

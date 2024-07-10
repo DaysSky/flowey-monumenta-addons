@@ -66,7 +66,7 @@ public class Debug {
 
     public static void runDebug() {
         ChatUtil.send(Component.literal("Debug State Dump").withStyle(ChatFormatting.BOLD));
-        ChatChannelManager.getInstance().exportDebugInfo();
+        FMAClient.CHAT_CHANNELS.exportDebugInfo();
         for (var exporter : DEBUG) {
             exporter.exportDebugInfo();
         }

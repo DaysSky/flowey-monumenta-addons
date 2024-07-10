@@ -2,6 +2,7 @@ package com.floweytf.fma.gamestate;
 
 import com.floweytf.fma.FMAClient;
 import com.floweytf.fma.util.ChatUtil;
+import com.floweytf.fma.util.FormatUtil;
 import com.floweytf.fma.util.StatsUtil;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderContext;
 import net.minecraft.ChatFormatting;
@@ -12,6 +13,8 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.item.Items;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import static com.floweytf.fma.util.Util.now;
@@ -19,8 +22,8 @@ import static com.floweytf.fma.util.Util.now;
 public class PortalStateTracker implements StateTracker {
     public static class Data {
         @StatsUtil.Detail
-        public int soulCount = -1;
-        public int chestCount = -1;
+        public int soulCount = 0;
+        public int chestCount = 0;
 
         @StatsUtil.Time
         public int totalTime = -1;
@@ -80,13 +83,22 @@ public class PortalStateTracker implements StateTracker {
         return StatsUtil.logTime("timer.fma.portal." + key, send, start, deltaBegin, deltaEnd, entries);
     }
 
+    private void render() {
+        final var parts = new ArrayList<Component>();
+
+        parts.add(Component.translatable("sidebar.fma.timer", FormatUtil.timestamp(now() - startTime)));
+        parts.add(Component.translatable("sidebar.fma.portal.chests", FormatUtil.numeric(data.chestCount)));
+        parts.add(Component.translatable("sidebar.fma.portal.souls", FormatUtil.numeric(data.soulCount)));
+        FMAClient.SIDEBAR.setAdditionalText(parts);
+    }
+
     @Override
     public void onChatMessage(Component message) {
-        if (!FMAClient.CONFIG.get().features.enableTimerAndStats) {
+        if (!FMAClient.features().enableTimerAndStats) {
             return;
         }
 
-        final var portalCfg = FMAClient.CONFIG.get().portal;
+        final var portalCfg = FMAClient.config().portal;
 
         final var raw = message.getString();
 
@@ -133,9 +145,11 @@ public class PortalStateTracker implements StateTracker {
 
     @Override
     public void onLeave() {
-        if (!FMAClient.CONFIG.get().features.enableTimerAndStats) {
+        if (!FMAClient.features().enableTimerAndStats) {
             return;
         }
+
+        FMAClient.SIDEBAR.setAdditionalText(List.of());
 
         if (!hasWon) {
             ChatUtil.send(Component.translatable("stat.fma.portal.fail"));
@@ -145,7 +159,7 @@ public class PortalStateTracker implements StateTracker {
 
     @Override
     public void onActionBar(Component message) {
-        if (!FMAClient.CONFIG.get().features.enableTimerAndStats) {
+        if (!FMAClient.features().enableTimerAndStats) {
             return;
         }
 
@@ -169,7 +183,7 @@ public class PortalStateTracker implements StateTracker {
             if (data.soulCount >= 350 && data.soulTime == -1) {
                 data.soulTime = logTime(
                     "souls",
-                    FMAClient.CONFIG.get().portal.soulsSplit,
+                    FMAClient.config().portal.soulsSplit,
                     startTime,
                     startTime,
                     now()
@@ -187,6 +201,8 @@ public class PortalStateTracker implements StateTracker {
 
     @Override
     public void onTick() {
+        render();
+
         if (!enteredBoss) {
             return;
         }
@@ -196,7 +212,7 @@ public class PortalStateTracker implements StateTracker {
         // Stupid IOTA bug!
         // I'm sure this code will work perfectly fine, right?!
         FMAClient.level().entitiesForRendering().forEach(entity -> {
-            if (FMAClient.CONFIG.get().portal.enableIotaFix &&
+            if (FMAClient.config().portal.enableIotaFix &&
                 entity.getName().getString().contains("Iota") &&
                 !entity.isInvisible() &&
                 entity.getPosition(0).y < 88
@@ -224,7 +240,7 @@ public class PortalStateTracker implements StateTracker {
     // Render a box around buttons
     @Override
     public void onRender(WorldRenderContext context) {
-        if (!FMAClient.CONFIG.get().portal.enablePortalButtonIndicator) {
+        if (!FMAClient.config().portal.enablePortalButtonIndicator) {
             return;
         }
 

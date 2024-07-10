@@ -28,19 +28,16 @@ import java.util.stream.Stream;
 
 @Config(name = "fma")
 public class FMAConfig implements ConfigData {
-    public @interface ValidateHP {
-
-    }
-
     public static class FeatureToggles {
-        public boolean enableChatChannels = true;
+        public boolean enableChatChannels = false;
         public boolean enableHpIndicators = true;
         public boolean enableTimerAndStats = true;
+        public boolean enableSideBar = true;
         public boolean enableDebug = SharedConstants.IS_RUNNING_IN_IDE;
-        public boolean suppressDebugWarning = SharedConstants.IS_RUNNING_IN_IDE;
+        public boolean suppressDebugWarning = !SharedConstants.IS_RUNNING_IN_IDE;
     }
 
-    public static class ChatAppearance {
+    public static class Appearance {
         @ConfigEntry.ColorPicker
         public int bracketColor = 0xb7bdf8;
         @ConfigEntry.ColorPicker
@@ -58,9 +55,13 @@ public class FMAConfig implements ConfigData {
         public int playerNameColor = 0xef9f76;
         @ConfigEntry.ColorPicker
         public int altTextColor = 0xb4befe;
+
+        @ConfigEntry.ColorPicker
+        public int errorColor = 0xe64553;
+        @ConfigEntry.ColorPicker
+        public int warningColor = 0xdf8e1d;
     }
 
-    @ValidateHP
     public static class HpIndicator {
         public boolean enableGlowingPlayer = true;
         public boolean enableHitboxColoring = true;
@@ -159,7 +160,6 @@ public class FMAConfig implements ConfigData {
                 return Optional.empty();
             };
 
-
             if (type == ChatChannelType.CUSTOM) {
                 list.add(
                     builder.startStrField(Component.translatable(key + ".name"), name)
@@ -194,7 +194,6 @@ public class FMAConfig implements ConfigData {
     }
 
     public static class ChatChannels {
-
         public String meowingChannel = "wc";
 
         public List<ChatChannelEntry> channels = new ArrayList<>(List.of(
@@ -209,9 +208,9 @@ public class FMAConfig implements ConfigData {
     @ConfigEntry.Gui.TransitiveObject
     public FeatureToggles features = new FeatureToggles();
 
-    @ConfigEntry.Category("chatAppearance")
+    @ConfigEntry.Category("appearance")
     @ConfigEntry.Gui.TransitiveObject
-    public ChatAppearance chatAppearance = new ChatAppearance();
+    public Appearance appearance = new Appearance();
 
     @ConfigEntry.Category("hpIndicator")
     @ConfigEntry.Gui.TransitiveObject
@@ -292,6 +291,7 @@ public class FMAConfig implements ConfigData {
 
         holder.registerSaveListener((configHolder, config) -> {
             config.validatePostLoad();
+            FMAClient.reload();
             return InteractionResult.PASS;
         });
 
