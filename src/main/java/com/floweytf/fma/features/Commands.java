@@ -192,10 +192,12 @@ public class Commands {
         register(mcLit("lb").redirect(fma.getChild("lb")));
         alias("lbp", "lb Portal");
 
+        alias("gg", "/g " + FMAClient.config().chat.ggText);
+
         // register the commands
         if (config.features.enableChatChannels) {
-            for (int i = 0; i < config.chatChannels.channels.size(); i++) {
-                final var channel = config.chatChannels.channels.get(i);
+            for (int i = 0; i < config.chat.channels.size(); i++) {
+                final var channel = config.chat.channels.get(i);
                 if (channel.shorthandCommand.isEmpty())
                     return;
 

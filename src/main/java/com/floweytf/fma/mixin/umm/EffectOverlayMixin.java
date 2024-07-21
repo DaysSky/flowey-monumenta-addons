@@ -84,14 +84,15 @@ public abstract class EffectOverlayMixin extends HudElement {
 
         for (final var activeEffect : player.getActiveEffects()) {
             final var nameText = activeEffect.getEffect().getDisplayName();
-            final var levelText = Component.literal(Integer.toString(activeEffect.getAmplifier()));
+            final var amp = activeEffect.getAmplifier();
+            final var levelText = Component.literal(amp == 0 ? "" : amp + " ");
             final var timeText = MobEffectUtil.formatDuration(activeEffect, 1f);
             final var color = BAD_EFFECTS.contains(activeEffect.getEffect()) ? ChatFormatting.RED :
                 ChatFormatting.GREEN;
 
             final var effectText = join(nameText, space, levelText).withStyle(color);
 
-            final var text = rAlign ? join(effectText, space, timeText) : join(timeText, space, effectText);
+            final var text = rAlign ? join(effectText, timeText) : join(timeText, space, effectText);
 
             fma$renderLine(font, matrices, text, rAlign, width, currentY);
         }

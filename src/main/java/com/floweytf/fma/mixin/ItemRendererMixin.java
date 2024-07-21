@@ -33,10 +33,10 @@ public abstract class ItemRendererMixin {
 
         final var data = res.get();
         final var durability = data.firstInt();
-        final var maxDurability = data.firstInt();
+        final var maxDurability = data.secondInt();
 
         RenderSystem.disableDepthTest();
-        int width = Math.round((durability * 13.0f) / data.secondInt());
+        int width = Math.round((durability * 13.0f) / maxDurability);
         int color = Mth.hsvToRgb(
             durability / (maxDurability * 3.0f),
             1.0f,

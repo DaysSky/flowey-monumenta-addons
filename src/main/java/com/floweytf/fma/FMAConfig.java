@@ -195,8 +195,10 @@ public class FMAConfig implements ConfigData {
         }
     }
 
-    public static class ChatChannels {
+    public static class Chat {
         public String meowingChannel = "wc";
+        public String meowingText = "meow";
+        public String ggText = "gg";
 
         public List<ChatChannelEntry> channels = new ArrayList<>(List.of(
             ChatChannelEntry.of(ChatChannelType.LOCAL, "l"),
@@ -220,7 +222,7 @@ public class FMAConfig implements ConfigData {
 
     @ConfigEntry.Category("chatChannels")
     @ConfigEntry.Gui.TransitiveObject
-    public ChatChannels chatChannels = new ChatChannels();
+    public Chat chat = new Chat();
 
     @ConfigEntry.Category("strikes")
     @ConfigEntry.Gui.CollapsibleObject
@@ -236,7 +238,7 @@ public class FMAConfig implements ConfigData {
 
         final var seen = EnumSet.noneOf(ChatChannelType.class);
 
-        chatChannels.channels.removeIf(entry -> {
+        chat.channels.removeIf(entry -> {
             if (entry.type == ChatChannelType.CUSTOM) {
                 return entry.name.isEmpty() || entry.prettyName.isEmpty();
             }
@@ -247,7 +249,7 @@ public class FMAConfig implements ConfigData {
         });
 
         final var seenShorthands = new HashSet<String>();
-        chatChannels.channels.forEach(entry -> {
+        chat.channels.forEach(entry -> {
             if (seenShorthands.contains(entry.shorthandCommand)) {
                 entry.shorthandCommand = "";
             }

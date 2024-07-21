@@ -91,7 +91,11 @@ public class Keybinds {
         ) {
             @Override
             public void onPressed() {
-                ChatUtil.sendCommand(String.format("chat say %s meow", FMAClient.config().chatChannels.meowingChannel));
+                ChatUtil.sendCommand(String.format(
+                    "chat say %s %s",
+                    FMAClient.config().chat.meowingChannel,
+                    FMAClient.config().chat.meowingText
+                ));
             }
         });
     }

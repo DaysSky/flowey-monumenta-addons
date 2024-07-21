@@ -63,7 +63,7 @@ public class ChatChannelManager implements DebugInfoExporter {
 
     public ChatChannelManager(FMAConfig config) {
         systemChannels.add(GLOBAL);
-        config.chatChannels.channels.forEach(ent -> systemChannels.add(ent.build()));
+        config.chat.channels.forEach(ent -> systemChannels.add(ent.build()));
         setChannel(GLOBAL);
         builtinIndex = 0;
     }
