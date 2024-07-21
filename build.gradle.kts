@@ -53,7 +53,7 @@ dependencies {
     }
 
     // Optional dependency, take care to never classload
-    modApi("maven.modrinth:unofficial-monumenta-mod:1.9.9.2-fabric,1.19.4")
+    modImplementation("maven.modrinth:unofficial-monumenta-mod:1.9.9.2-fabric,1.19.4")
     // Janky, obtained from UMM jar
     modApi(files("libs/MCUIFramework-mc1.19.4-SNAPSHOT.jar"))
 }

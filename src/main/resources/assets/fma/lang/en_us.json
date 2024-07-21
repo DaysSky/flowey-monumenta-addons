@@ -19,6 +19,8 @@
     "text.autoconfig.fma.option.features.enableHpIndicators": "HP indicator",
     "text.autoconfig.fma.option.features.enableTimerAndStats": "Timers & statistics",
     "text.autoconfig.fma.option.features.enableSideBar": "Custom HUD (replaces scoreboard)",
+    "text.autoconfig.fma.option.features.enableVanillaEffectInUMMHud": "Vanilla effects in UMM HUD (requires UMM)",
+    "text.autoconfig.fma.option.features.enableVanityDurability": "Enable durability bar on unbreakable vanities",
     "text.autoconfig.fma.option.features.enableDebug": "Debugging mode",
     "text.autoconfig.fma.option.features.suppressDebugWarning": "Silence debugging warnings",
     // Chat appearance
