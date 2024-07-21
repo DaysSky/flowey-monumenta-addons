@@ -1,8 +1,6 @@
 package com.floweytf.fma.mixin;
 
 import com.floweytf.fma.FMAClient;
-import com.floweytf.fma.chat.ChatChannelManager;
-import com.floweytf.fma.features.Commands;
 import com.floweytf.fma.util.ChatUtil;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
@@ -45,7 +43,7 @@ public class ChatScreenMixin extends Screen {
         )
     )
     private void sendWithChatChannel(ClientPacketListener instance, String message, Operation<Void> original) {
-        if(!FMAClient.features().enableChatChannels) {
+        if (!FMAClient.features().enableChatChannels) {
             original.call(instance, message);
             return;
         }

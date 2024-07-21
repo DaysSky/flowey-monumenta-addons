@@ -1,7 +1,6 @@
 package com.floweytf.fma.debug;
 
 import com.floweytf.fma.FMAClient;
-import com.floweytf.fma.chat.ChatChannelManager;
 import com.floweytf.fma.util.ChatUtil;
 import net.fabricmc.fabric.api.event.player.AttackBlockCallback;
 import net.fabricmc.fabric.api.event.player.AttackEntityCallback;

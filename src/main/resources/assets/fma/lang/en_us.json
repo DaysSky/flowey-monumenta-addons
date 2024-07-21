@@ -5,25 +5,15 @@
     "key.fma.cycle_chat_dm": "Cycle DM chat channels",
     "key.fma.toggle_dm_builtin": "Toggle DM/builtin channels",
     "key.fma.meow": "Meow :3",
-    "key.fma.set_channel_g": "Join 'g' channel",
-    "key.fma.set_channel_gc": "Join 'gc' channel",
-    "key.fma.set_channel_l": "Join 'l' channel",
-    "key.fma.set_channel_lfg": "Join 'lfg' channel",
-    "key.fma.set_channel_gr": "Join 'gr' channel",
-    "key.fma.set_channel_wc": "Join 'wc' channel",
-
     // Command feedback
     "commands.fma.leaderboard": "%s: #%s %s - %s",
-
     "text.autoconfig.fma.title": "Flowey's Monumenta Addons Config",
-
     // Categories
     "text.autoconfig.fma.category.features": "Features",
     "text.autoconfig.fma.category.appearance": "Appearance",
     "text.autoconfig.fma.category.hpIndicator": "HP Indicator",
     "text.autoconfig.fma.category.chatChannels": "Chat Channels",
     "text.autoconfig.fma.category.strikes": "Strikes",
-
     // Feature toggles
     "text.autoconfig.fma.option.features.enableChatChannels": "Chat channel prompt (experimental)",
     "text.autoconfig.fma.option.features.enableHpIndicators": "HP indicator",
@@ -31,7 +21,6 @@
     "text.autoconfig.fma.option.features.enableSideBar": "Custom HUD (replaces scoreboard)",
     "text.autoconfig.fma.option.features.enableDebug": "Debugging mode",
     "text.autoconfig.fma.option.features.suppressDebugWarning": "Silence debugging warnings",
-
     // Chat appearance
     "text.autoconfig.fma.option.appearance.bracketColor": "Tag bracket color",
     "text.autoconfig.fma.option.appearance.tagColor": "Tag text color",
@@ -43,7 +32,6 @@
     "text.autoconfig.fma.option.appearance.altTextColor": "Alternate text color",
     "text.autoconfig.fma.option.appearance.warningColor": "Warning color",
     "text.autoconfig.fma.option.appearance.errorColor": "Error color",
-
     // HP indicators
     "text.autoconfig.fma.option.hpIndicator.enableGlowingPlayer": "Glowing by HP color (players)",
     "text.autoconfig.fma.option.hpIndicator.enableHitboxColoring": "Hitbox by HP color (entities)",
@@ -55,7 +43,6 @@
     "text.autoconfig.fma.option.hpIndicator.mediumHpColor": "Medium HP color",
     "text.autoconfig.fma.option.hpIndicator.lowHpColor": "Low HP color",
     "text.autoconfig.fma.option.hpIndicator.criticalHpColor": "Critical HP color",
-
     // Chat Channels
     "text.autoconfig.fma.option.chatChannels.meowingChannel": "Meow macro channel",
     "text.autoconfig.fma.option.chatChannels.channels": "Chat Channels (experimental)",
@@ -65,7 +52,6 @@
     "text.autoconfig.fma.option.chatChannels.channels.name": "ID/Name",
     "text.autoconfig.fma.option.chatChannels.channels.prettyName": "Display Name",
     "text.autoconfig.fma.option.chatChannels.channels.color": "Color",
-
     // Portal strike
     "text.autoconfig.fma.option.portal": "Portal Strike",
     "text.autoconfig.fma.option.portal.enableIotaFix": "Iota fix",
@@ -96,13 +82,15 @@
     "stat.fma.portal.phase1Split": "Boss phase 1 took %s",
     "stat.fma.portal.phase2Split": "Boss phase 2 took %s",
     "stat.fma.portal.phase3Split": "Boss phase 3 took %s",
-    "sidebar.fma.portal.souls": "Souls %s",
-    "sidebar.fma.portal.chests": "Chests %s/41",
-
+    "hud.fma.sidebar.portal.souls": "Souls %s/350",
+    "hud.fma.sidebar.portal.chests": "Chests %s/41",
     // Error message
     "error.fma.no_empty_string": "Empty string not allowed here",
     "error.fma.duplicate_shorthand": "Duplicate shorthands",
 
-    // Generic sidebar
-    "sidebar.fma.timer": "Timer %s"
+    // HUD
+    "hud.fma.sidebar.timer": "Timer %s",
+    "hud.fma.sidebar.shard": "Shard %s",
+    "hud.fma.ummEffects.vanillaCategory": "Vanilla Effects",
+    "hud.fma.ummEffects.monumentaCategory": "Monumenta Effects"
 }

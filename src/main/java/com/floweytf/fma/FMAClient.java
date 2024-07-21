@@ -2,10 +2,7 @@ package com.floweytf.fma;
 
 import com.floweytf.fma.chat.ChatChannelManager;
 import com.floweytf.fma.debug.Debug;
-import com.floweytf.fma.features.Commands;
-import com.floweytf.fma.features.GUIManager;
-import com.floweytf.fma.features.Keybinds;
-import com.floweytf.fma.features.LeaderboardUtils;
+import com.floweytf.fma.features.*;
 import com.floweytf.fma.gamestate.GameState;
 import com.floweytf.fma.util.TickScheduler;
 import me.shedaniel.autoconfig.ConfigHolder;
@@ -13,6 +10,8 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
+import net.fabricmc.loader.api.FabricLoader;
+import net.fabricmc.loader.api.ModContainer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.world.entity.player.Player;
@@ -30,6 +29,7 @@ public class FMAClient implements ClientModInitializer {
     public static ChatChannelManager CHAT_CHANNELS;
     public static Commands COMMANDS;
     public static SideBarManager SIDEBAR;
+    public final static ModContainer MOD = FabricLoader.getInstance().getModContainer("fma").orElseThrow();
 
     public static ConfigHolder<FMAConfig> CONFIG;
 

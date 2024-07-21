@@ -37,7 +37,7 @@ public class ChatUtil {
     }
 
     public static void sendDebug(String message) {
-        if(!FMAClient.features().suppressDebugWarning) {
+        if (!FMAClient.features().suppressDebugWarning) {
             sendWarn("(debug/possible bug) " + message);
         } else {
             FMAClient.LOGGER.warn(message);

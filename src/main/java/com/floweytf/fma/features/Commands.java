@@ -122,7 +122,12 @@ public class Commands {
                 ChatUtil.send("/fma lb [leaderboard] - show your leaderboard position");
                 ChatUtil.send("/fma config - opens the config");
                 ChatUtil.send("/fma help - prints this message");
+                ChatUtil.send("/fma version - displays version info");
                 ChatUtil.send("/lb -> /fma lb");
+                return 0;
+            }),
+            lit("version", ignored -> {
+                ChatUtil.send(FMAClient.MOD.getMetadata().getVersion().getFriendlyString());
                 return 0;
             }),
             lit("lb",

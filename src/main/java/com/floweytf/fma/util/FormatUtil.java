@@ -1,6 +1,7 @@
 package com.floweytf.fma.util;
 
 import com.floweytf.fma.FMAClient;
+import java.time.Duration;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 
@@ -81,5 +82,17 @@ public class FormatUtil {
 
     public static MutableComponent playerNameText(String text) {
         return withColor(text, FMAClient.appearance().playerNameColor);
+    }
+
+    public static Component formatEffectTime(int time, float tickDelta) {
+        Duration duration = Duration.ofMillis(time + (int) (tickDelta * 50.0F));
+        long seconds = duration.getSeconds();
+        if (seconds >= 3600L) {
+            return Component.literal("**:**");
+        } else {
+            long MM = seconds % 3600L / 60L;
+            long SS = seconds % 60L;
+            return Component.literal(String.format("%02d:%02d", MM, SS));
+        }
     }
 }

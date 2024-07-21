@@ -1,5 +1,6 @@
-package com.floweytf.fma;
+package com.floweytf.fma.features;
 
+import com.floweytf.fma.FMAConfig;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
@@ -7,7 +8,6 @@ import net.minecraft.client.gui.Gui;
 import net.minecraft.network.chat.Component;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -43,10 +43,10 @@ public class SideBarManager {
         final var start = raw.indexOf("<");
         final var end = raw.indexOf(">");
         if (start == -1 || end == -1) {
-            shardLine = join(Component.literal("Shard "), withColor("unknown (bug)", errorColor));
+            shardLine = Component.translatable("hud.fma.sidebar.shard", withColor("unknown (bug)", errorColor));
         } else {
             final var shard = raw.substring(start + 1, end);
-            shardLine = join(Component.literal("Shard "), withColor(shard, altColor));
+            shardLine = Component.translatable("hud.fma.sidebar.shard", withColor(shard, altColor));
         }
     }
 

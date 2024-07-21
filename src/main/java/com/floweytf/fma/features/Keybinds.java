@@ -1,8 +1,6 @@
 package com.floweytf.fma.features;
 
 import com.floweytf.fma.FMAClient;
-import com.floweytf.fma.FMAConfig;
-import com.floweytf.fma.chat.ChatChannelManager;
 import com.floweytf.fma.util.ChatUtil;
 import com.mojang.blaze3d.platform.InputConstants;
 import de.siphalor.amecs.api.AmecsKeyBinding;

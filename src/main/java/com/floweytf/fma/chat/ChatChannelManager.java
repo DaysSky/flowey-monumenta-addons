@@ -1,6 +1,5 @@
 package com.floweytf.fma.chat;
 
-import com.floweytf.fma.FMAClient;
 import com.floweytf.fma.FMAConfig;
 import com.floweytf.fma.debug.DebugInfoExporter;
 import com.floweytf.fma.util.ChatUtil;

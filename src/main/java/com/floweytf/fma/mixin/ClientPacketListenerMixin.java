@@ -41,7 +41,7 @@ public class ClientPacketListenerMixin {
         cancellable = true
     )
     private void onSetTabCustomization(ClientboundTabListPacket packet, CallbackInfo ci) {
-        if(ClientReceiveTabListCustomizationEvent.EVENT.invoker().onEvent(
+        if (ClientReceiveTabListCustomizationEvent.EVENT.invoker().onEvent(
             packet.getHeader().getString().isEmpty() ? null : packet.getHeader(),
             packet.getFooter().getString().isEmpty() ? null : packet.getFooter()
         ) != EventResult.CONTINUE) {

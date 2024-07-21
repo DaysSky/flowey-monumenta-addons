@@ -86,9 +86,9 @@ public class PortalStateTracker implements StateTracker {
     private void render() {
         final var parts = new ArrayList<Component>();
 
-        parts.add(Component.translatable("sidebar.fma.timer", FormatUtil.timestamp(now() - startTime)));
-        parts.add(Component.translatable("sidebar.fma.portal.chests", FormatUtil.numeric(data.chestCount)));
-        parts.add(Component.translatable("sidebar.fma.portal.souls", FormatUtil.numeric(data.soulCount)));
+        parts.add(Component.translatable("hud.fma.sidebar.timer", FormatUtil.timestamp(now() - startTime)));
+        parts.add(Component.translatable("hud.fma.sidebar.portal.chests", FormatUtil.numeric(data.chestCount)));
+        parts.add(Component.translatable("hud.fma.sidebar.portal.souls", FormatUtil.numeric(data.soulCount)));
         FMAClient.SIDEBAR.setAdditionalText(parts);
     }
 

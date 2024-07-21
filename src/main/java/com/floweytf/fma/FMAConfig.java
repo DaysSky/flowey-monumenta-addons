@@ -33,6 +33,7 @@ public class FMAConfig implements ConfigData {
         public boolean enableHpIndicators = true;
         public boolean enableTimerAndStats = true;
         public boolean enableSideBar = true;
+        public boolean enableVanillaEffectInUMMHud = false;
         public boolean enableDebug = SharedConstants.IS_RUNNING_IN_IDE;
         public boolean suppressDebugWarning = !SharedConstants.IS_RUNNING_IN_IDE;
     }

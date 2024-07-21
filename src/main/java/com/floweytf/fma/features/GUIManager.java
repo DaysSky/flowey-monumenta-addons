@@ -1,7 +1,6 @@
 package com.floweytf.fma.features;
 
 import com.floweytf.fma.FMAClient;
-import com.floweytf.fma.chat.ChatChannelManager;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
