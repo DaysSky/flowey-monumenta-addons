@@ -17,6 +17,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectUtil;
 import net.minecraft.world.effect.MobEffects;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -84,7 +85,7 @@ public abstract class EffectOverlayMixin extends HudElement {
         for (final var activeEffect : player.getActiveEffects()) {
             final var nameText = activeEffect.getEffect().getDisplayName();
             final var levelText = Component.literal(Integer.toString(activeEffect.getAmplifier()));
-            final var timeText = FormatUtil.formatEffectTime(activeEffect.getDuration(), tickDelta);
+            final var timeText = MobEffectUtil.formatDuration(activeEffect, 1f);
             final var color = BAD_EFFECTS.contains(activeEffect.getEffect()) ? ChatFormatting.RED :
                 ChatFormatting.GREEN;
 
