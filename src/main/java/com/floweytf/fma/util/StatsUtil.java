@@ -1,20 +1,18 @@
 package com.floweytf.fma.util;
 
-import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.HoverEvent;
-import net.minecraft.network.chat.MutableComponent;
-
+import static com.floweytf.fma.util.ChatUtil.send;
+import static com.floweytf.fma.util.FormatUtil.numeric;
+import static com.floweytf.fma.util.FormatUtil.timestamp;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.floweytf.fma.util.ChatUtil.send;
-import static com.floweytf.fma.util.FormatUtil.numeric;
-import static com.floweytf.fma.util.FormatUtil.timestamp;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.HoverEvent;
+import net.minecraft.network.chat.MutableComponent;
 
 public class StatsUtil {
     @Target(ElementType.FIELD)

@@ -9,6 +9,7 @@ import de.siphalor.amecs.api.PriorityKeyBinding;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.ChatScreen;
+import net.minecraft.world.entity.player.Player;
 import org.lwjgl.glfw.GLFW;
 
 public class Keybinds {
@@ -96,6 +97,22 @@ public class Keybinds {
                     FMAClient.config().chat.meowingChannel,
                     FMAClient.config().chat.meowingText
                 ));
+            }
+        });
+
+        KeyBindingHelper.registerKeyBinding(new AmecsKeyBinding(
+            "key.fma.playerstats",
+            InputConstants.Type.MOUSE,
+            GLFW.GLFW_MOUSE_BUTTON_MIDDLE,
+            "category.fma",
+            new KeyModifiers(false, false, false)
+        ) {
+            @Override
+            public void onPressed() {
+                final var entity = Minecraft.getInstance().crosshairPickEntity;
+                if (entity instanceof Player player) {
+                    ChatUtil.sendCommand("ps " + player.getScoreboardName());
+                }
             }
         });
     }

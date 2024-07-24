@@ -1,13 +1,11 @@
 package com.floweytf.fma.util;
 
 import com.floweytf.fma.FMAClient;
+import static com.floweytf.fma.util.FormatUtil.*;
+import java.util.Objects;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
-
-import java.util.Objects;
-
-import static com.floweytf.fma.util.FormatUtil.*;
 
 public class ChatUtil {
     public static void send(Component... message) {

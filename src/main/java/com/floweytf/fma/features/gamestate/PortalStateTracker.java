@@ -1,9 +1,13 @@
-package com.floweytf.fma.gamestate;
+package com.floweytf.fma.features.gamestate;
 
 import com.floweytf.fma.FMAClient;
 import com.floweytf.fma.util.ChatUtil;
 import com.floweytf.fma.util.FormatUtil;
 import com.floweytf.fma.util.StatsUtil;
+import static com.floweytf.fma.util.Util.now;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderContext;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.renderer.LevelRenderer;
@@ -12,12 +16,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.item.Items;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-
-import static com.floweytf.fma.util.Util.now;
 
 public class PortalStateTracker implements StateTracker {
     public static class Data {

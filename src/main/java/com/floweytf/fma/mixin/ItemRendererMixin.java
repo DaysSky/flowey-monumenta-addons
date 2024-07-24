@@ -1,7 +1,7 @@
 package com.floweytf.fma.mixin;
 
 import com.floweytf.fma.FMAClient;
-import com.floweytf.fma.util.ItemUtil;
+import com.floweytf.fma.util.NBTUtil;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.Font;
@@ -26,7 +26,7 @@ public abstract class ItemRendererMixin {
     )
     private void renderVanityDurability(PoseStack poseStack, Font font, ItemStack stack, int x, int y, String text,
                                         CallbackInfo ci) {
-        final var res = ItemUtil.getVanityDurabilityInfo(stack);
+        final var res = NBTUtil.getVanityDurabilityInfo(stack);
         if (res.isEmpty() || !FMAClient.features().enableVanityDurability) {
             return;
         }
@@ -34,6 +34,10 @@ public abstract class ItemRendererMixin {
         final var data = res.get();
         final var durability = data.firstInt();
         final var maxDurability = data.secondInt();
+
+        if (durability == maxDurability) {
+            return;
+        }
 
         RenderSystem.disableDepthTest();
         int width = Math.round((durability * 13.0f) / maxDurability);

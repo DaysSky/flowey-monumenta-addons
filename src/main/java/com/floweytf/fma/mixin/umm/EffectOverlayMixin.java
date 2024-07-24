@@ -4,7 +4,6 @@ import ch.njol.minecraft.uiframework.hud.HudElement;
 import ch.njol.unofficialmonumentamod.features.effects.Effect;
 import ch.njol.unofficialmonumentamod.features.effects.EffectOverlay;
 import com.floweytf.fma.FMAClient;
-import com.floweytf.fma.util.FormatUtil;
 import static com.floweytf.fma.util.FormatUtil.join;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.sugar.Local;
@@ -32,7 +31,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
     remap = false
 )
 public abstract class EffectOverlayMixin extends HudElement {
-    @Shadow @Final private ArrayList<Effect> effects;
+    @Shadow
+    @Final
+    private ArrayList<Effect> effects;
     @Unique
     private static final Set<MobEffect> BAD_EFFECTS = Set.of(
         MobEffects.MOVEMENT_SLOWDOWN,
@@ -80,7 +81,10 @@ public abstract class EffectOverlayMixin extends HudElement {
 
         final var space = Component.literal(" ");
 
-        fma$renderLine(font, matrices, Component.translatable("hud.fma.ummEffects.vanillaCategory"), rAlign, width, currentY);
+        if (!player.getActiveEffects().isEmpty()) {
+            fma$renderLine(font, matrices, Component.translatable("hud.fma.ummEffects.vanillaCategory"), rAlign, width,
+                currentY);
+        }
 
         for (final var activeEffect : player.getActiveEffects()) {
             final var nameText = activeEffect.getEffect().getDisplayName();
@@ -98,7 +102,8 @@ public abstract class EffectOverlayMixin extends HudElement {
         }
 
         if (!effects.isEmpty()) {
-            fma$renderLine(font, matrices, Component.translatable("hud.fma.ummEffects.monumentaCategory"), rAlign, width, currentY);
+            fma$renderLine(font, matrices, Component.translatable("hud.fma.ummEffects.monumentaCategory"), rAlign,
+                width, currentY);
         }
     }
 
@@ -117,7 +122,17 @@ public abstract class EffectOverlayMixin extends HudElement {
             return original;
         }
 
-        return original + 11 * (effects.isEmpty() ? 1 : 2 + player.getActiveEffects().size());
+        original = original + 11 * player.getActiveEffects().size();
+
+        if (!effects.isEmpty()) {
+            original += 11;
+        }
+
+        if (!player.getActiveEffects().isEmpty()) {
+            original += 11;
+        }
+
+        return original;
     }
 
     @ModifyReturnValue(

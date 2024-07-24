@@ -1,10 +1,9 @@
-package com.floweytf.fma.chat;
+package com.floweytf.fma.features.chat;
 
+import java.util.function.UnaryOperator;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
-
-import java.util.function.UnaryOperator;
 
 public class SystemChatChannel extends ChatChannel {
     private final String channelId;

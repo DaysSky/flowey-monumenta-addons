@@ -10,12 +10,11 @@
         "EntityRenderDispatcherMixin",
         "GuiMixin",
         "ItemRendererMixin",
-        "LevelRendererMixin"
+        "LevelRendererMixin",
+        "SplashManagerMixin",
+        "umm.EffectOverlayMixin"
     ],
     "injectors": {
         "defaultRequire": 1
-    },
-    "mixins": [
-        "umm.EffectOverlayMixin"
-    ]
+    }
 }

@@ -2,27 +2,28 @@ package com.floweytf.fma.features;
 
 import com.floweytf.fma.FMAClient;
 import com.floweytf.fma.FMAConfig;
-import com.floweytf.fma.chat.ChatChannel;
 import com.floweytf.fma.debug.Debug;
+import com.floweytf.fma.features.chat.ChatChannel;
 import com.floweytf.fma.util.ChatUtil;
+import static com.floweytf.fma.util.CommandUtil.*;
 import com.floweytf.fma.util.FormatUtil;
+import static com.floweytf.fma.util.FormatUtil.join;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.tree.CommandNode;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import me.shedaniel.autoconfig.AutoConfig;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.SharedSuggestionProvider;
+import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.chat.Component;
-
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import static com.floweytf.fma.util.CommandUtil.*;
+import net.minecraft.world.InteractionHand;
 
 public class Commands {
     private final CommandDispatcher<CommandSourceStack> clientDispatch = new CommandDispatcher<>();
@@ -113,6 +114,13 @@ public class Commands {
                 });
                 return 0;
             }), debug),
+            opt(lit("dumpnbt", context -> {
+                ChatUtil.send(join(
+                    Component.literal("Data: "),
+                    NbtUtils.toPrettyComponent(FMAClient.player().getItemInHand(InteractionHand.MAIN_HAND).getTag())
+                ));
+                return 0;
+            }), debug),
             lit("help", ignored -> {
                 ChatUtil.send(Component.literal("Command Help").withStyle(ChatFormatting.BOLD));
 
@@ -173,29 +181,30 @@ public class Commands {
             })
         ));
 
-        registerHidden(lit("tell", arg("player", StringArgumentType.word(),
-            // forward
-            context -> {
-                final var player = StringArgumentType.getString(context, "player");
-                FMAClient.CHAT_CHANNELS.openDm(player);
-                return 0;
-            },
-            arg("text", StringArgumentType.greedyString(), context -> {
-                final var player = StringArgumentType.getString(context, "player");
-                final var arg = StringArgumentType.getString(context, "text");
-                ChatUtil.sendCommand(String.format("tell %s %s", player, arg));
-                FMAClient.CHAT_CHANNELS.openDm(player);
-                return 0;
-            })
-        )));
-
         register(mcLit("lb").redirect(fma.getChild("lb")));
         alias("lbp", "lb Portal");
 
+        // Macro alias, maybe customizable?
         alias("gg", "/g " + FMAClient.config().chat.ggText);
 
         // register the commands
         if (config.features.enableChatChannels) {
+            registerHidden(lit("tell", arg("player", StringArgumentType.word(),
+                // forward
+                context -> {
+                    final var player = StringArgumentType.getString(context, "player");
+                    FMAClient.CHAT_CHANNELS.openDm(player);
+                    return 0;
+                },
+                arg("text", StringArgumentType.greedyString(), context -> {
+                    final var player = StringArgumentType.getString(context, "player");
+                    final var arg = StringArgumentType.getString(context, "text");
+                    ChatUtil.sendCommand(String.format("tell %s %s", player, arg));
+                    FMAClient.CHAT_CHANNELS.openDm(player);
+                    return 0;
+                })
+            )));
+
             for (int i = 0; i < config.chat.channels.size(); i++) {
                 final var channel = config.chat.channels.get(i);
                 if (channel.shorthandCommand.isEmpty())

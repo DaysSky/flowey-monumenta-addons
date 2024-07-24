@@ -1,18 +1,17 @@
-package com.floweytf.fma.chat;
+package com.floweytf.fma.features.chat;
 
 import com.floweytf.fma.FMAConfig;
 import com.floweytf.fma.debug.DebugInfoExporter;
 import com.floweytf.fma.util.ChatUtil;
 import com.floweytf.fma.util.FormatUtil;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.ChatScreen;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 public class ChatChannelManager implements DebugInfoExporter {
     public static final SystemChatChannel GLOBAL = new SystemChatChannel("g", "global", ChatFormatting.WHITE);

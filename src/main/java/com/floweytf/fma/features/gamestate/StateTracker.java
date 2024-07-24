@@ -1,4 +1,4 @@
-package com.floweytf.fma.gamestate;
+package com.floweytf.fma.features.gamestate;
 
 import com.floweytf.fma.debug.DebugInfoExporter;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderContext;

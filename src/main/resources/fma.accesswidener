@@ -5,3 +5,6 @@ accessible method net/minecraft/client/gui/GuiComponent hLine (Lcom/mojang/blaze
 accessible method net/minecraft/client/gui/GuiComponent vLine (Lcom/mojang/blaze3d/vertex/PoseStack;IIII)V
 accessible field net/minecraft/client/gui/components/PlayerTabOverlay footer Lnet/minecraft/network/chat/Component;
 accessible field net/minecraft/client/gui/components/PlayerTabOverlay header Lnet/minecraft/network/chat/Component;
+
+accessible method net/minecraft/client/gui/Font getFontSet (Lnet/minecraft/resources/ResourceLocation;)Lnet/minecraft/client/gui/font/FontSet;
+accessible field net/minecraft/client/gui/Font filterFishyGlyphs Z

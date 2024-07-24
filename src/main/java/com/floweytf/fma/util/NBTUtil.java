@@ -1,0 +1,106 @@
+package com.floweytf.fma.util;
+
+import it.unimi.dsi.fastutil.ints.IntIntPair;
+import java.util.Optional;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.ItemStack;
+
+public class NBTUtil {
+    public static final String MONUMENTA_KEY = "Monumenta";
+    public static final String DISPLAY_KEY = "display";
+    public static final String LORE_KEY = "Lore";
+    public static final String MONUMENTA_TIER_KEY = "Tier";
+    public static final String MONUMENTA_CHARM_POWER_KEY = "CharmPower";
+
+    public static Optional<CompoundTag> get(ItemStack stack) {
+        return Optional.ofNullable(stack.getTag());
+    }
+
+    public static Optional<CompoundTag> getCompound(CompoundTag root, String name) {
+        if (!root.contains(name, Tag.TAG_COMPOUND))
+            return Optional.empty();
+        return Optional.of(root.getCompound(name));
+    }
+
+    public static Optional<String> getString(CompoundTag root, String name) {
+        if (!root.contains(name, Tag.TAG_STRING))
+            return Optional.empty();
+        return Optional.of(root.getString(name));
+    }
+
+    public static Optional<Integer> getInt(CompoundTag root, String name) {
+        if (!root.contains(name, Tag.TAG_INT))
+            return Optional.empty();
+        return Optional.of(root.getInt(name));
+    }
+
+    public static Optional<Double> getDouble(CompoundTag root, String name) {
+        if (!root.contains(name, Tag.TAG_DOUBLE))
+            return Optional.empty();
+        return Optional.of(root.getDouble(name));
+    }
+
+    public static Optional<ListTag> getList(CompoundTag root, String name, int type) {
+        if (!root.contains(name, Tag.TAG_LIST))
+            return Optional.empty();
+        return Optional.of(root.getList(name, type));
+    }
+
+    public static Optional<CompoundTag> getMonumenta(ItemStack stack) {
+        return get(stack).flatMap(tag -> getCompound(tag, MONUMENTA_KEY));
+    }
+
+    public static Optional<String> getTier(ItemStack stack) {
+        return getMonumenta(stack).flatMap(tag -> getString(tag, MONUMENTA_TIER_KEY));
+    }
+
+    public static Optional<Integer> getCharmPower(ItemStack stack) {
+        return getMonumenta(stack).flatMap(tag -> getInt(tag, MONUMENTA_CHARM_POWER_KEY));
+    }
+
+    public static Optional<CompoundTag> getDisplay(ItemStack stack) {
+        return get(stack).flatMap(tag -> getCompound(tag, DISPLAY_KEY));
+    }
+
+    public static Optional<ListTag> getLore(ItemStack stack) {
+        return getDisplay(stack).flatMap(tag -> getList(tag, LORE_KEY, Tag.TAG_STRING));
+    }
+
+    public static Optional<IntIntPair> getVanityDurabilityInfo(ItemStack stack) {
+        // Items with durability don't have custom vanity info
+        if (stack.getItem().canBeDepleted()) {
+            return Optional.empty();
+        }
+
+        return getLore(stack).flatMap(loreTag -> {
+            if (loreTag.size() < 2) {
+                return Optional.empty();
+            }
+
+            final var lastLine = Component.Serializer.fromJson(loreTag.getString(loreTag.size() - 1));
+
+            if (lastLine == null) {
+                return Optional.empty();
+            }
+
+            final var lastLineRaw = lastLine.getString();
+
+            if (!lastLineRaw.startsWith("Durability: ")) {
+                return Optional.empty();
+            }
+
+            final var parts = lastLineRaw.split("\\s+");
+            if (parts.length != 4) {
+                return Optional.empty();
+            }
+
+            return Optional.of(IntIntPair.of(
+                Integer.parseInt(parts[1]),
+                Integer.parseInt(parts[3])
+            ));
+        });
+    }
+}

@@ -1,0 +1,25 @@
+package com.floweytf.fma.features.cz.data;
+
+import net.minecraft.network.chat.Component;
+
+public enum ZenithClass {
+    DAWNBRINGER("Dawnbringer", 0xf0b326),
+    EARTHBOUND("Earthbound", 0x6b3d2d),
+    FLAMECALLER("Flamecaller", 0xf04e21),
+    FROSTBORN("Frostborn", 0xa3cbe1),
+    STEELSAGE("Steelsage", 0x929292),
+    SHADOWDANCER("Shadowdancer", 0x7948af),
+    WINDWALKER("Windwalker", 0xc0dea9);
+
+    public final String displayName;
+    public final int color;
+    public final Component coloredName;
+    public final Component coloredShortName;
+
+    ZenithClass(String displayName, int color) {
+        this.displayName = displayName;
+        this.color = color;
+        this.coloredName = Component.literal(displayName).withStyle(s -> s.withColor(color));
+        this.coloredShortName = Component.literal(displayName.substring(0, 2)).withStyle(s -> s.withColor(color));
+    }
+}

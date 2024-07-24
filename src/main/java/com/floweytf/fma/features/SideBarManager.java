@@ -1,18 +1,16 @@
 package com.floweytf.fma.features;
 
 import com.floweytf.fma.FMAConfig;
+import static com.floweytf.fma.util.FormatUtil.join;
+import static com.floweytf.fma.util.FormatUtil.withColor;
 import com.mojang.blaze3d.vertex.PoseStack;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Stream;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.network.chat.Component;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Stream;
-
-import static com.floweytf.fma.util.FormatUtil.join;
-import static com.floweytf.fma.util.FormatUtil.withColor;
 
 public class SideBarManager {
     private final Component title;

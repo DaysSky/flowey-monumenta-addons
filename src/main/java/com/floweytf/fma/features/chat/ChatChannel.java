@@ -1,4 +1,4 @@
-package com.floweytf.fma.chat;
+package com.floweytf.fma.features.chat;
 
 import net.minecraft.network.chat.Component;
 

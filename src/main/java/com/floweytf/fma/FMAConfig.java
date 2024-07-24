@@ -1,6 +1,13 @@
 package com.floweytf.fma;
 
-import com.floweytf.fma.chat.SystemChatChannel;
+import com.floweytf.fma.features.chat.SystemChatChannel;
+import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.util.*;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.ConfigHolder;
@@ -18,14 +25,6 @@ import net.minecraft.SharedConstants;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionResult;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.util.*;
-import java.util.function.Function;
-import java.util.function.Predicate;
-import java.util.stream.Stream;
-
 @Config(name = "fma")
 public class FMAConfig implements ConfigData {
     public static class FeatureToggles {
@@ -35,6 +34,7 @@ public class FMAConfig implements ConfigData {
         public boolean enableSideBar = true;
         public boolean enableVanillaEffectInUMMHud = false;
         public boolean enableVanityDurability = true;
+        public boolean enableCustomSplash = true;
         public boolean enableDebug = SharedConstants.IS_RUNNING_IN_IDE;
         public boolean suppressDebugWarning = !SharedConstants.IS_RUNNING_IN_IDE;
     }
@@ -84,6 +84,21 @@ public class FMAConfig implements ConfigData {
         public int lowHpColor = 0xefa22f;
         @ConfigEntry.ColorPicker
         public int criticalHpColor = 0xef472d;
+    }
+
+    public static class Zenith {
+        @ConfigEntry.Gui.PrefixText
+        public boolean enableCustomCharmInfo = true;
+        @ConfigEntry.Gui.Tooltip
+        public boolean disableMonumentaLore = false; // This feature is beta
+        @ConfigEntry.Gui.Tooltip
+        public boolean enableStatBreakdown = false;
+        @ConfigEntry.Gui.Tooltip
+        public boolean displayRollValue = true;
+        @ConfigEntry.Gui.Tooltip
+        public boolean displayEffectRarity = false;
+        @ConfigEntry.Gui.Tooltip
+        public boolean displayUUID = false;
     }
 
     public static class Portal {
@@ -220,13 +235,17 @@ public class FMAConfig implements ConfigData {
     @ConfigEntry.Gui.TransitiveObject
     public HpIndicator hpIndicator = new HpIndicator();
 
-    @ConfigEntry.Category("chatChannels")
+    @ConfigEntry.Category("chat")
     @ConfigEntry.Gui.TransitiveObject
     public Chat chat = new Chat();
 
     @ConfigEntry.Category("strikes")
     @ConfigEntry.Gui.CollapsibleObject
     public Portal portal = new Portal();
+
+    @ConfigEntry.Category("zenith")
+    @ConfigEntry.Gui.TransitiveObject
+    public Zenith zenith = new Zenith();
 
     @Override
     public void validatePostLoad() {

@@ -2,6 +2,7 @@ package com.floweytf.fma.debug;
 
 import com.floweytf.fma.FMAClient;
 import com.floweytf.fma.util.ChatUtil;
+import java.util.List;
 import net.fabricmc.fabric.api.event.player.AttackBlockCallback;
 import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
 import net.minecraft.ChatFormatting;
@@ -9,8 +10,6 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
-
-import java.util.List;
 
 public class Debug {
     public static final List<DebugInfoExporter> DEBUG = List.of(

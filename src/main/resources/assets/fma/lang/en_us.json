@@ -14,6 +14,7 @@
     "text.autoconfig.fma.category.hpIndicator": "HP Indicator",
     "text.autoconfig.fma.category.chat": "Chat",
     "text.autoconfig.fma.category.strikes": "Strikes",
+    "text.autoconfig.fma.category.zenith": "Zenith (experimental)",
     // Feature toggles
     "text.autoconfig.fma.option.features.enableChatChannels": "Chat channel prompt (experimental)",
     "text.autoconfig.fma.option.features.enableHpIndicators": "HP indicator",
@@ -21,6 +22,7 @@
     "text.autoconfig.fma.option.features.enableSideBar": "Custom HUD (replaces scoreboard)",
     "text.autoconfig.fma.option.features.enableVanillaEffectInUMMHud": "Vanilla effects in UMM HUD (requires UMM)",
     "text.autoconfig.fma.option.features.enableVanityDurability": "Enable durability bar on unbreakable vanities",
+    "text.autoconfig.fma.option.features.enableCustomSplash": "Enable custom splash",
     "text.autoconfig.fma.option.features.enableDebug": "Debugging mode",
     "text.autoconfig.fma.option.features.suppressDebugWarning": "Silence debugging warnings",
     // Chat appearance
@@ -47,6 +49,8 @@
     "text.autoconfig.fma.option.hpIndicator.criticalHpColor": "Critical HP color",
     // Chat Channels
     "text.autoconfig.fma.option.chat.meowingChannel": "Meow macro channel",
+    "text.autoconfig.fma.option.chat.meowingText": "Meow text",
+    "text.autoconfig.fma.option.chat.ggText": "GG text",
     "text.autoconfig.fma.option.chat.channels": "Chat Channels (experimental)",
     "text.autoconfig.fma.option.chat.channels.entry": "Entry",
     "text.autoconfig.fma.option.chat.channels.type": "Type",
@@ -86,13 +90,29 @@
     "stat.fma.portal.phase3Split": "Boss phase 3 took %s",
     "hud.fma.sidebar.portal.souls": "Souls %s/350",
     "hud.fma.sidebar.portal.chests": "Chests %s/41",
+
+    // CZ
+    "text.autoconfig.fma.option.zenith.enableCustomCharmInfo.@PrefixText": "WARNING: All features here are *experimental*! Avoid disabling Monumenta's stats to double check, and use at your own risk!",
+    "text.autoconfig.fma.option.zenith.enableCustomCharmInfo": "Enable enhanced charm stat",
+    "text.autoconfig.fma.option.zenith.disableMonumentaLore": "Disable Monumenta charm lore",
+    "text.autoconfig.fma.option.zenith.disableMonumentaLore.@Tooltip": "EXPERIMENTAL: turn this off at your own risk, the mod may lie about stats",
+    "text.autoconfig.fma.option.zenith.enableStatBreakdown": "Stat breakdown",
+    "text.autoconfig.fma.option.zenith.enableStatBreakdown.@Tooltip": "Display the base value and roll*variance value, like base%+rng%",
+    "text.autoconfig.fma.option.zenith.displayRollValue": "Display roll value",
+    "text.autoconfig.fma.option.zenith.displayRollValue.@Tooltip": "Display the internal roll value. Good rolls are green, bad are red. EXPERIMENTAL: may lie to you",
+    "text.autoconfig.fma.option.zenith.displayEffectRarity": "Display effect rarity",
+    "text.autoconfig.fma.option.zenith.displayEffectRarity.@Tooltip": "Each effect in a charm has it's own rarity (this affects budget). This is also related to the color of the effect",
+    "text.autoconfig.fma.option.zenith.useShorthands": "Use shorthands",
+    "text.autoconfig.fma.option.zenith.useShorthands.@Tooltip": "Display icons for things like 'Duration' or 'Radius' instead of text",
+    "text.autoconfig.fma.option.zenith.displayUUID": "Display charm UUID",
+    "text.autoconfig.fma.option.zenith.displayUUID.@Tooltip": "The UUID is not a uuid... it's just a long that seeds the RNG",
+
     // Error message
     "error.fma.no_empty_string": "Empty string not allowed here",
-    "error.fma.duplicate_shorthand": "Duplicate shorthands",
 
     // HUD
     "hud.fma.sidebar.timer": "Timer %s",
     "hud.fma.sidebar.shard": "Shard %s",
-    "hud.fma.ummEffects.vanillaCategory": "Vanilla Effects",
-    "hud.fma.ummEffects.monumentaCategory": "Monumenta Effects"
+    "hud.fma.ummEffects.vanillaCategory": "- Vanilla -",
+    "hud.fma.ummEffects.monumentaCategory": "- Monumenta -"
 }
