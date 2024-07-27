@@ -1,6 +1,8 @@
 package com.floweytf.fma.features;
 
 import com.floweytf.fma.FMAClient;
+import com.floweytf.fma.util.Util;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 
 public class HpIndicator {
@@ -13,6 +15,10 @@ public class HpIndicator {
         }
 
         final int ratio = (int) ((hp / entity.getMaxHealth()) * 100);
+
+        if (config.smoothColor) {
+            return Util.colorRange(Mth.clamp(hp, 0, entity.getMaxHealth()), entity.getMaxHealth());
+        }
 
         if (ratio > config.goodHpPercent) {
             return config.goodHpColor;

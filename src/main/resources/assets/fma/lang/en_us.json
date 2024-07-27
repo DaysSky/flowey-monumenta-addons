@@ -109,6 +109,7 @@
 
     // Error message
     "error.fma.no_empty_string": "Empty string not allowed here",
+    "error.fma.duplicate_shorthand": "Duplicate channel shorthand",
 
     // HUD
     "hud.fma.sidebar.timer": "Timer %s",

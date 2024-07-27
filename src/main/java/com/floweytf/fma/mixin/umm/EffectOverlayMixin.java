@@ -4,6 +4,7 @@ import ch.njol.minecraft.uiframework.hud.HudElement;
 import ch.njol.unofficialmonumentamod.features.effects.Effect;
 import ch.njol.unofficialmonumentamod.features.effects.EffectOverlay;
 import com.floweytf.fma.FMAClient;
+import com.floweytf.fma.Graphics;
 import static com.floweytf.fma.util.FormatUtil.join;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.sugar.Local;
@@ -51,7 +52,7 @@ public abstract class EffectOverlayMixin extends HudElement {
     @Unique
     private void fma$renderLine(Font font, PoseStack matrix, Component text, boolean rAlign, int width,
                                 LocalIntRef currentY) {
-        font.drawShadow(matrix, text, rAlign ? (float) (width - 5 - font.width(text)) : 5.0F, currentY.get(), -1);
+        Graphics.drawString(matrix, font, text, rAlign ? (width - 5 - font.width(text)) : 5, currentY.get(), -1);
         currentY.set(currentY.get() + 11);
     }
 

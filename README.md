@@ -9,6 +9,12 @@
 - random command aliases - see /fma help
 - vanilla effects in UMM HUD
 - HUD with shard/timer info
+- CZ charm stat helper
+- slot overlays
+    - item rarity
+    - cz charm rarity
+    - cooldown
+    - charm power (cz)
 - timers
     - configurable split notification
     - portal
@@ -18,5 +24,11 @@
 - experimental
     - better chat channels
 - usbplus:
-    - Player glowing based on HP
-    - Hitbox color based on HP
+    - player glowing based on HP
+    - hitbox color based on HP
+## TODO
+- overlay location info on items as icons
+- infusion cost calculators
+- ability rarity
+- procedurally generated charm textures
+- automatic score assignment to charms

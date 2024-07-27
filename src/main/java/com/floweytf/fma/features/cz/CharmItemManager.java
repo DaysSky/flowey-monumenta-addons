@@ -21,6 +21,9 @@ public class CharmItemManager {
     public static final String CHARM_EFFECTS_KEY = "DEPTHS_CHARM_EFFECT";
     public static final String CHARM_ACTIONS_KEY = "DEPTHS_CHARM_ACTIONS";
     public static final String CHARM_ROLLS_KEY = "DEPTHS_CHARM_ROLLS";
+    public static final String CHARM_UUID_KEY = "DEPTHS_CHARM_UUID";
+    public static final String CHARM_RARITY_KEY = "DEPTHS_CHARM_RARITY";
+    public static final String CHARM_KEY = "PlayerModified";
 
     public static void init() {
         ItemTooltipCallback.EVENT.register((stack, context, lines) -> {
@@ -64,15 +67,15 @@ public class CharmItemManager {
         }
 
         // meow meow meow meow meow meow
-        final var charmDataOptional = NBTUtil.getCompound(monumenta.get(), "PlayerModified");
+        final var charmDataOptional = NBTUtil.getCompound(monumenta.get(), CHARM_KEY);
         if (charmDataOptional.isEmpty()) {
             return Optional.empty();
         }
 
         final var charmData = charmDataOptional.get();
 
-        final var uuid = charmData.getLong("DEPTHS_CHARM_UUID");
-        final var rarity = CharmRarity.values()[charmData.getInt("DEPTHS_CHARM_RARITY") - 1];
+        final var uuid = charmData.getLong(CHARM_UUID_KEY);
+        final var rarity = CharmRarity.values()[charmData.getInt(CHARM_RARITY_KEY) - 1];
 
         final var effectsCount = charmData.getAllKeys().stream()
             .filter(x -> x.startsWith(CHARM_EFFECTS_KEY))

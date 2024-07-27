@@ -27,6 +27,14 @@ import net.minecraft.world.InteractionResult;
 
 @Config(name = "fma")
 public class FMAConfig implements ConfigData {
+    public static class InventoryOverlayToggles {
+        public boolean enable = true;
+        public boolean enableRarity = true;
+        public boolean enableCZCharmRarity = true;
+        public boolean enableCooldown = true;
+        public boolean enableCZCharmPower = true;
+    }
+
     public static class FeatureToggles {
         public boolean enableChatChannels = false;
         public boolean enableHpIndicators = true;
@@ -35,6 +43,8 @@ public class FMAConfig implements ConfigData {
         public boolean enableVanillaEffectInUMMHud = false;
         public boolean enableVanityDurability = true;
         public boolean enableCustomSplash = true;
+        @ConfigEntry.Gui.CollapsibleObject
+        public InventoryOverlayToggles inventoryOverlay = new InventoryOverlayToggles();
         public boolean enableDebug = SharedConstants.IS_RUNNING_IN_IDE;
         public boolean suppressDebugWarning = !SharedConstants.IS_RUNNING_IN_IDE;
     }
@@ -69,6 +79,8 @@ public class FMAConfig implements ConfigData {
         public boolean enableHitboxColoring = true;
         public boolean countAbsorptionAsHp = true;
 
+        public boolean smoothColor = false;
+
         @ConfigEntry.BoundedDiscrete(max = 100)
         public int goodHpPercent = 70;
         @ConfigEntry.BoundedDiscrete(max = 100)
@@ -90,7 +102,7 @@ public class FMAConfig implements ConfigData {
         @ConfigEntry.Gui.PrefixText
         public boolean enableCustomCharmInfo = true;
         @ConfigEntry.Gui.Tooltip
-        public boolean disableMonumentaLore = false; // This feature is beta
+        public boolean disableMonumentaLore = true; // This feature is beta
         @ConfigEntry.Gui.Tooltip
         public boolean enableStatBreakdown = false;
         @ConfigEntry.Gui.Tooltip
@@ -165,7 +177,7 @@ public class FMAConfig implements ConfigData {
 
             list.add(
                 builder.startStrField(Component.translatable(key + ".shorthand"), shorthandCommand)
-                    .setDefaultValue("")
+                    .setDefaultValue("") 
                     .setSaveConsumer(val -> this.shorthandCommand = val)
                     .build()
             );

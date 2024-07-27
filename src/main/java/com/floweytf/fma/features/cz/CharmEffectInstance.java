@@ -7,6 +7,7 @@ import com.floweytf.fma.features.cz.data.CharmEffectType;
 import com.floweytf.fma.util.FormatUtil;
 import static com.floweytf.fma.util.FormatUtil.join;
 import static com.floweytf.fma.util.FormatUtil.tabulate;
+import com.floweytf.fma.util.Util;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
@@ -63,7 +64,7 @@ public final class CharmEffectInstance {
         final var rollValueForColor = (rawBaseValue < 0 == rarity.isNegative) ? rollValue :
             (1 - rollValue);
 
-        rollColor = Style.EMPTY.withColor(Mth.hsvToRgb((float) (rollValueForColor / 3), 1, 1));
+        rollColor = Style.EMPTY.withColor(Util.colorRange((float) rollValueForColor));
         this.baseValue = baseValue;
         this.delta = delta;
         this.value = value;

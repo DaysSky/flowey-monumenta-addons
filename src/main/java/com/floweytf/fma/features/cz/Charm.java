@@ -100,10 +100,9 @@ public final class Charm {
             Component.literal("Charm Power : ").withStyle(ChatFormatting.DARK_GRAY),
             Component.literal("★".repeat(charmPower)).withStyle(style -> style.withColor(0xFFFA75)),
             Component.literal(" - ").withStyle(ChatFormatting.DARK_GRAY),
-            rarity.coloredText.copy().withStyle(ChatFormatting.BOLD),
+            rarity.coloredText,
             Component.literal(" - ").withStyle(ChatFormatting.DARK_GRAY),
-            Component.literal("Budget: ").withStyle(ChatFormatting.GRAY),
-            Component.literal("" + budget).withStyle(ChatFormatting.GREEN)
+            Component.literal("Budget: " + budget).withStyle(ChatFormatting.GRAY)
         ));
 
         if (FMAClient.config().zenith.displayUUID) {

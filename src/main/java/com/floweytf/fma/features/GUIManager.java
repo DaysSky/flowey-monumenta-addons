@@ -1,6 +1,7 @@
 package com.floweytf.fma.features;
 
 import com.floweytf.fma.FMAClient;
+import com.floweytf.fma.Graphics;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
@@ -15,7 +16,7 @@ public class GUIManager {
 
         final var height = minecraft.getWindow().getGuiScaledHeight();
 
-        GuiComponent.fill(
+        Graphics.fill(
             stack,
             2, height - 14,
             2 + FMAClient.CHAT_CHANNELS.promptTextWidth(), height - 2,
