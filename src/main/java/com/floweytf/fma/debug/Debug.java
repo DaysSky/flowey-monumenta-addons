@@ -1,8 +1,6 @@
 package com.floweytf.fma.debug;
 
-import com.floweytf.fma.FMAClient;
 import com.floweytf.fma.util.ChatUtil;
-import java.util.List;
 import net.fabricmc.fabric.api.event.player.AttackBlockCallback;
 import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
 import net.minecraft.ChatFormatting;
@@ -12,21 +10,15 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 
 public class Debug {
-    public static final List<DebugInfoExporter> DEBUG = List.of(
-        FMAClient.SCHEDULER,
-        FMAClient.LEADERBOARD,
-        FMAClient.GAME_STATE
-    );
-
-    public static boolean entityDebug = false;
-    public static boolean blockDebug = false;
+    public static boolean ENTITY_DEBUG = false;
+    public static boolean BLOCK_DEBUG = false;
 
     private Debug() {
     }
 
     public static void init() {
         AttackEntityCallback.EVENT.register((player, world, hand, entity, hitResult) -> {
-            if (entityDebug && !player.isSpectator()) {
+            if (ENTITY_DEBUG && !player.isSpectator()) {
                 dumpEntityInfo(entity);
             }
 
@@ -34,7 +26,7 @@ public class Debug {
         });
 
         AttackBlockCallback.EVENT.register((player, world, hand, pos, direction) -> {
-            if (blockDebug && !player.isSpectator()) {
+            if (BLOCK_DEBUG && !player.isSpectator()) {
                 ChatUtil.send(Component.literal("Block Info Dump").withStyle(ChatFormatting.BOLD));
                 ChatUtil.send("x = %d, y = %d, z = %d".formatted(pos.getX(), pos.getY(), pos.getZ()));
                 ChatUtil.send("direction = " + direction);
@@ -44,7 +36,6 @@ public class Debug {
             return InteractionResult.PASS;
         });
     }
-
 
     public static void dumpEntityInfo(Entity entity) {
         ChatUtil.send(Component.literal("Entity Info Dump").withStyle(ChatFormatting.BOLD));
@@ -60,13 +51,5 @@ public class Debug {
         ChatUtil.send("}");
         ChatUtil.send("x = %f, y = %f, z = %f".formatted(entity.getX(), entity.getY(), entity.getZ()));
         ChatUtil.send("tags = " + entity.getTags());
-    }
-
-    public static void runDebug() {
-        ChatUtil.send(Component.literal("Debug State Dump").withStyle(ChatFormatting.BOLD));
-        FMAClient.CHAT_CHANNELS.exportDebugInfo();
-        for (var exporter : DEBUG) {
-            exporter.exportDebugInfo();
-        }
     }
 }

@@ -84,10 +84,6 @@ public class Commands {
 
         final var fma = register(lit(
             "fma",
-            lit("debug", ignored -> {
-                Debug.runDebug();
-                return 0;
-            }),
             opt(lit("debug_test", ignored -> {
                 ChatUtil.send(":3");
                 return 0;
@@ -97,13 +93,13 @@ public class Commands {
                 return 0;
             }), debug),
             opt(lit("debug_e", ignored -> {
-                Debug.entityDebug = !Debug.entityDebug;
-                ChatUtil.send("Entity Debug: " + Debug.entityDebug);
+                Debug.ENTITY_DEBUG = !Debug.ENTITY_DEBUG;
+                ChatUtil.send("Entity Debug: " + Debug.ENTITY_DEBUG);
                 return 0;
             }), debug),
             opt(lit("debug_b", ignored -> {
-                Debug.blockDebug = !Debug.blockDebug;
-                ChatUtil.send("Block Debug: " + Debug.entityDebug);
+                Debug.BLOCK_DEBUG = !Debug.BLOCK_DEBUG;
+                ChatUtil.send("Block Debug: " + Debug.ENTITY_DEBUG);
                 return 0;
             }), debug),
             opt(lit("dump_e", context -> {

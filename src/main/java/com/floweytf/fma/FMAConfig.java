@@ -128,6 +128,13 @@ public class FMAConfig implements ConfigData {
         public boolean bossSplit = true;
     }
 
+    public static class Ruin {
+        public boolean startBossSplit = true;
+        public boolean daggerSplit = true;
+        public boolean dpsSplit = true;
+        public boolean bossSplit = true;
+    }
+
     public enum ChatChannelType {
         LOCAL(new SystemChatChannel("l", "local", ChatFormatting.YELLOW)),
         WORLD_CHAT(new SystemChatChannel("wc", "world-chat", ChatFormatting.BLUE)),
@@ -256,6 +263,10 @@ public class FMAConfig implements ConfigData {
     @ConfigEntry.Category("strikes")
     @ConfigEntry.Gui.CollapsibleObject
     public Portal portal = new Portal();
+
+    @ConfigEntry.Category("strikes")
+    @ConfigEntry.Gui.CollapsibleObject
+    public Ruin ruin = new Ruin();
 
     @ConfigEntry.Category("zenith")
     @ConfigEntry.Gui.TransitiveObject

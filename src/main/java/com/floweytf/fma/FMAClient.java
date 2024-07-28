@@ -68,11 +68,6 @@ public class FMAClient implements ClientModInitializer {
         Keybinds.init();
         Debug.init();
         CharmItemManager.init();
-        try {
-            Class.forName("com.floweytf.fma.features.cz.data.CharmEffectType");
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     private void initializeAfterMC(Minecraft minecraft) {

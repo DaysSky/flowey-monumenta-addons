@@ -1,10 +1,9 @@
 package com.floweytf.fma.features.gamestate;
 
-import com.floweytf.fma.debug.DebugInfoExporter;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderContext;
 import net.minecraft.network.chat.Component;
 
-public interface StateTracker extends DebugInfoExporter {
+public interface StateTracker {
     default void onLeave() {
 
     }
