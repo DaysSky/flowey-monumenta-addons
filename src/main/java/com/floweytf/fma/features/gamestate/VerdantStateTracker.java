@@ -7,7 +7,7 @@ import static com.floweytf.fma.util.Util.now;
 import java.util.List;
 import net.minecraft.network.chat.Component;
 
-public class RuinStateTracker implements StateTracker {
+public class VerdantStateTracker implements StateTracker {
     public static class Data {
         @StatsUtil.Detail
         public int soulCount = 0;
@@ -51,13 +51,13 @@ public class RuinStateTracker implements StateTracker {
 
     private boolean hasWon = false;
 
-    public RuinStateTracker() {
+    public VerdantStateTracker() {
         this.data = new Data();
         startTime = now();
     }
 
     private int logTime(String key, boolean send, long start, long deltaBegin, long deltaEnd, long... entries) {
-        return StatsUtil.logTime("timer.fma.ruin." + key, send, start, deltaBegin, deltaEnd, entries);
+        return StatsUtil.logTime("timer.fma.portal." + key, send, start, deltaBegin, deltaEnd, entries);
     }
 
     @Override
@@ -141,7 +141,7 @@ public class RuinStateTracker implements StateTracker {
             if (data.soulCount >= 350 && data.soulTime == -1) {
                 data.soulTime = logTime(
                     "souls",
-                    FMAClient.config().ruin.soulsSplit,
+                    FMAClient.config().portal.soulsSplit,
                     startTime,
                     startTime,
                     now()

@@ -1,8 +1,6 @@
 package com.floweytf.fma.features.chat;
 
 import com.floweytf.fma.FMAConfig;
-import com.floweytf.fma.debug.DebugInfoExporter;
-import com.floweytf.fma.util.ChatUtil;
 import com.floweytf.fma.util.FormatUtil;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -13,7 +11,7 @@ import net.minecraft.client.gui.screens.ChatScreen;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
 
-public class ChatChannelManager implements DebugInfoExporter {
+public class ChatChannelManager {
     public static final SystemChatChannel GLOBAL = new SystemChatChannel("g", "global", ChatFormatting.WHITE);
 
     // cache info
@@ -123,17 +121,5 @@ public class ChatChannelManager implements DebugInfoExporter {
 
     public int promptTextWidth() {
         return cachePromptWidth;
-    }
-
-    @Override
-    public void exportDebugInfo() {
-        ChatUtil.send(Component.literal("ChatChannelManager").withStyle(ChatFormatting.UNDERLINE));
-        ChatUtil.send(FormatUtil.join(Component.literal("cachePromptText = "), cachePromptText));
-        ChatUtil.send("cachePromptWidth = " + cachePromptWidth);
-        ChatUtil.send("currentChannel = " + currentChannel);
-        ChatUtil.send("builtinIndex = " + builtinIndex);
-        ChatUtil.send("dmIndex = " + dmIndex);
-        ChatUtil.send("currentEnabledChannels = " + systemChannels);
-        ChatUtil.send("dmChannels = " + dmChannels);
     }
 }

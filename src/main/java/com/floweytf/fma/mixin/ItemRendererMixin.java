@@ -180,7 +180,7 @@ public abstract class ItemRendererMixin {
         int color = Util.colorRange(durability, maxDurability);
         int barX = x + 2;
         int barY = y + 13;
-        Graphics.fill(poseStack, barX, barY, barX + 13, barY + 2, 0xffffffff);
+        Graphics.fill(poseStack, barX, barY, barX + 13, barY + 2, 0xff000000);
         Graphics.fill(poseStack, barX, barY, barX + width, barY + 1, color | 0xFF000000);
         RenderSystem.enableDepthTest();
     }

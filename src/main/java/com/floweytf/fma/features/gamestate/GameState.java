@@ -1,6 +1,5 @@
 package com.floweytf.fma.features.gamestate;
 
-import com.floweytf.fma.debug.DebugInfoExporter;
 import com.floweytf.fma.events.ClientReceiveSystemChatEvent;
 import com.floweytf.fma.events.ClientSetTitleEvent;
 import com.floweytf.fma.events.EventResult;
@@ -12,16 +11,18 @@ import java.util.function.Supplier;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientLoginConnectionEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
-import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.Nullable;
 
-public class GameState implements DebugInfoExporter {
+public class GameState {
     private static final List<Pair<String, Supplier<StateTracker>>> GAME_STATE_BY_DIMENSION = List.of(
         Pair.of("monumenta:portal", PortalStateTracker::new),
         Pair.of("monumenta:ruin", RuinStateTracker::new)
+        // Pair.of("monumenta:verdant", VerdantStateTracker::new),
+        // Pair.of("monumenta:sanctum", SanctumStateTracker::new)
+        // Pair.of("monumenta:mist", RuinStateTracker::new)
+        // Pair.of("monumenta:remorse", RuinStateTracker::new)
     );
 
     private String dimensionName = null;
@@ -118,16 +119,5 @@ public class GameState implements DebugInfoExporter {
 
             currentStateTracker = null;
         });
-    }
-
-    @Override
-    public void exportDebugInfo() {
-        ChatUtil.send(Component.literal("GameState").withStyle(ChatFormatting.UNDERLINE));
-        ChatUtil.send("dimensionName = " + dimensionName);
-        if (currentStateTracker != null) {
-            currentStateTracker.exportDebugInfo();
-        } else {
-            ChatUtil.send("currentStateTracker = null");
-        }
     }
 }

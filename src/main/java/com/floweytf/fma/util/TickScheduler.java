@@ -1,6 +1,5 @@
 package com.floweytf.fma.util;
 
-import com.floweytf.fma.debug.DebugInfoExporter;
 import java.util.PriorityQueue;
 import java.util.function.Consumer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
@@ -9,7 +8,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
 
-public class TickScheduler implements DebugInfoExporter {
+public class TickScheduler {
     public interface TaskControl {
         void cancel();
     }
@@ -41,12 +40,5 @@ public class TickScheduler implements DebugInfoExporter {
         final var task = new Task(tick + delay, handler);
         taskQueue.add(task);
         return () -> doCancel(task);
-    }
-
-    @Override
-    public void exportDebugInfo() {
-        ChatUtil.send(Component.literal("TickScheduler").withStyle(ChatFormatting.UNDERLINE));
-        ChatUtil.send("queueSize = " + taskQueue.size());
-        ChatUtil.send("tick = " + tick);
     }
 }
