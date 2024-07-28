@@ -1,71 +1,154 @@
 package com.floweytf.fma.features.gamestate;
 
-public class RuinStateTracker implements StateTracker {
-    @Override
-    public void exportDebugInfo() {
+import com.floweytf.fma.FMAClient;
+import com.floweytf.fma.util.ChatUtil;
+import com.floweytf.fma.util.StatsUtil;
+import static com.floweytf.fma.util.Util.now;
+import java.util.List;
+import net.minecraft.network.chat.Component;
 
-    }/*
-    public record Data(
-        int chestCount,
-        @Time int totalTime,
-        @Time int mobsTime,
-        @Time int bossSplitTime,
-        @Time int daggersSplitTime,
-        @Time int dps1SplitTime
-    ) {
+public class RuinStateTracker implements StateTracker {
+    public static class Data {
+        @StatsUtil.Detail
+        public int soulCount = 0;
+
+        public int chestCount = 0;
+
+        @StatsUtil.Time
+        public int totalTime = -1;
+
+        @StatsUtil.Detail
+        @StatsUtil.Time
+        public int soulTime = -1;
+
+        @StatsUtil.Detail
+        @StatsUtil.Time
+        public int startBossSplit = -1;
+
+        @StatsUtil.Detail
+        @StatsUtil.Time
+        public int bossSplit = -1;
+
+        @StatsUtil.Detail
+        @StatsUtil.Time
+        public int daggersSplit = -1;
+
+        @StatsUtil.Detail
+        @StatsUtil.Time
+        public int dpsSplit = -1;
+
         public void send() {
-            // FormatUtil.dumpStats("stats.fma.ruin", this);
+            StatsUtil.dumpStats("stat.fma.ruin", this);
         }
     }
 
-    private final Stopwatch totalTime = new Stopwatch();
-    private final Stopwatch splitStopwatch = new Stopwatch();
+    private final long startTime;
 
-    private final SplitTiming mobs = new SplitTiming(splitStopwatch, totalTime, "timer.fma.ruin.mobs");
-    private final SplitTiming boss = new SplitTiming(splitStopwatch, totalTime, "timer.fma.ruin.boss");
-    private final SplitTiming daggers = new SplitTiming(splitStopwatch, totalTime, "timer.fma.ruin.daggers");
-    private final SplitTiming dps = new SplitTiming(splitStopwatch, totalTime, "timer.fma.ruin.dps");
+    private long startBossSplit;
+    private long daggersSplit;
 
-    private int chestCount = 0;
+    private final Data data;
+
+    private boolean hasWon = false;
 
     public RuinStateTracker() {
+        this.data = new Data();
+        startTime = now();
+    }
+
+    private int logTime(String key, boolean send, long start, long deltaBegin, long deltaEnd, long... entries) {
+        return StatsUtil.logTime("timer.fma.ruin." + key, send, start, deltaBegin, deltaEnd, entries);
     }
 
     @Override
     public void onChatMessage(Component message) {
+        if (!FMAClient.features().enableTimerAndStats) {
+            return;
+        }
+
+        final var ruinCfg = FMAClient.config().ruin;
+
         final var raw = message.getString();
+
         if (raw.length() < 12)
             return;
 
         switch (raw.substring(0, 12)) {
-        case "Something in" -> mobs.done();
-        case "[Samwell] We" -> boss.done();
-        case "[Samwell] I'" -> daggers.done();
-        case "[Samwell] I." -> {
-            dps.done();
-            final var data = new Data(
-                chestCount,
-                totalTime.time(),
-                mobs.value(),
-                boss.value(),
-                daggers.value(),
-                dps.value()
+        case "[Samwell] We":
+            startBossSplit = now();
+            data.startBossSplit = logTime("startBoss", ruinCfg.startBossSplit, startTime, startTime, startBossSplit);
+            break;
+        case "[Samwell] I'":
+            daggersSplit = now();
+            data.daggersSplit = logTime("dagger", ruinCfg.daggerSplit, startTime, startBossSplit, daggersSplit);
+            break;
+        case "[Samwell] I.":
+            long dpsSplit = now();
+            data.dpsSplit = logTime("dps", ruinCfg.dpsSplit, startTime, daggersSplit, dpsSplit);
+            data.totalTime = (int) (dpsSplit - startTime);
+            data.bossSplit = logTime(
+                "boss",
+                ruinCfg.bossSplit,
+                startTime,
+                startBossSplit,
+                dpsSplit,
+                daggersSplit,
+                dpsSplit
             );
-
+            hasWon = true;
             data.send();
+            break;
         }
+    }
+
+    @Override
+    public void onLeave() {
+        if (!FMAClient.features().enableTimerAndStats) {
+            return;
+        }
+
+        FMAClient.SIDEBAR.setAdditionalText(List.of());
+
+        if (!hasWon) {
+            ChatUtil.send(Component.translatable("stat.fma.ruin.fail"));
+            data.send();
         }
     }
 
     @Override
     public void onActionBar(Component message) {
+        if (!FMAClient.features().enableTimerAndStats) {
+            return;
+        }
+
         final var raw = message.getString();
-        if (raw.contains("total chests")) {
-            chestCount = Integer.parseInt(raw.split(" ")[0]);
+        if (raw.contains("Masked Killed")) {
+            final var parts = raw.split(" : ");
+            if (parts.length != 2) {
+                ChatUtil.sendDebug("soul count parsing fail");
+                return;
+            }
+
+            final var counterText = parts[1];
+
+            if (!counterText.contains("/")) {
+                ChatUtil.sendDebug("soul count parsing fail");
+                return;
+            }
+
+            data.soulCount = Integer.parseInt(counterText.substring(0, counterText.indexOf("/")));
+
+            if (data.soulCount >= 350 && data.soulTime == -1) {
+                data.soulTime = logTime(
+                    "souls",
+                    FMAClient.config().ruin.soulsSplit,
+                    startTime,
+                    startTime,
+                    now()
+                );
+            }
+        } else if (raw.contains("total chests")) {
+            data.chestCount = Integer.parseInt(raw.split(" ")[0]);
         }
     }
-
-    @Override
-    public void exportDebugInfo() {
-    }*/
 }

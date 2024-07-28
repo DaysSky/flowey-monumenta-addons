@@ -29,12 +29,12 @@ import net.minecraft.world.InteractionResult;
 public class FMAConfig implements ConfigData {
     public static class InventoryOverlayToggles {
         public boolean enable = true;
-        public boolean enableRarity = true;
-        public boolean enableCZCharmRarity = true;
+        public boolean enableRarity = false;
+        public boolean enableCZCharmRarity = false;
         public boolean enableCooldown = true;
-        public boolean enableCZCharmPower = true;
+        public boolean enableCZCharmPower = false;
         public boolean enablePICount = true;
-        public boolean enableLoomFirmCount = true;
+        public boolean enableLoomFirmCount = false;
     }
 
     public static class FeatureToggles {
@@ -125,6 +125,14 @@ public class FMAConfig implements ConfigData {
         public boolean phase1Split = false;
         public boolean phase2Split = false;
         public boolean phase3Split = false;
+        public boolean bossSplit = true;
+    }
+
+    public static class Ruin {
+        public boolean soulsSplit = true;
+        public boolean startBossSplit = true;
+        public boolean daggerSplit = true;
+        public boolean dpsSplit = true;
         public boolean bossSplit = true;
     }
 
@@ -256,6 +264,10 @@ public class FMAConfig implements ConfigData {
     @ConfigEntry.Category("strikes")
     @ConfigEntry.Gui.CollapsibleObject
     public Portal portal = new Portal();
+
+    @ConfigEntry.Category("strikes")
+    @ConfigEntry.Gui.CollapsibleObject
+    public Ruin ruin = new Ruin();
 
     @ConfigEntry.Category("zenith")
     @ConfigEntry.Gui.TransitiveObject

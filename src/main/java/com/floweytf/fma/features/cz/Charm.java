@@ -62,7 +62,7 @@ public final class Charm {
 
     private void buildSingleClassCharm(Font font, List<Component> target) {
         target.add(join(
-            Component.literal("Class").withStyle(ChatFormatting.GRAY),
+            Component.literal("Treelocked").withStyle(ChatFormatting.GRAY),
             Component.literal(" - ").withStyle(ChatFormatting.DARK_GRAY),
             classes.get(0).coloredName
         ));
@@ -81,7 +81,7 @@ public final class Charm {
         classText.append(classes.get(classes.size() - 1).coloredShortName);
 
         target.add(join(
-            Component.literal("Multiclass").withStyle(ChatFormatting.GRAY),
+            Component.literal("Multi-tree").withStyle(ChatFormatting.GRAY),
             Component.literal(" - ").withStyle(ChatFormatting.DARK_GRAY),
             classText
         ));

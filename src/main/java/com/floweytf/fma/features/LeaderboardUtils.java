@@ -1,16 +1,13 @@
 package com.floweytf.fma.features;
 
 import com.floweytf.fma.FMAClient;
-import com.floweytf.fma.debug.DebugInfoExporter;
 import com.floweytf.fma.events.ClientReceiveSystemChatEvent;
 import com.floweytf.fma.events.EventResult;
 import com.floweytf.fma.util.ChatUtil;
 import java.util.function.BiConsumer;
-import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.Nullable;
 
-public class LeaderboardUtils implements DebugInfoExporter {
+public class LeaderboardUtils {
     private enum State {
         WAIT_START,
         WAIT_PLAYER,
@@ -115,13 +112,5 @@ public class LeaderboardUtils implements DebugInfoExporter {
             currLeaderboard = null;
             leaderboardConsumer = null;
         });
-    }
-
-    @Override
-    public void exportDebugInfo() {
-        ChatUtil.send(Component.literal("LeaderboardUtils").withStyle(ChatFormatting.UNDERLINE));
-        ChatUtil.send("currLeaderboard = " + currLeaderboard);
-        ChatUtil.send("leaderboardConsumer = " + leaderboardConsumer);
-        ChatUtil.send("state = " + state);
     }
 }
