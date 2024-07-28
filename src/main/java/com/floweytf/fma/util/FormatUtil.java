@@ -1,7 +1,6 @@
 package com.floweytf.fma.util;
 
 import com.floweytf.fma.FMAClient;
-import java.util.Arrays;
 import java.util.List;
 import net.minecraft.client.gui.Font;
 import net.minecraft.network.chat.Component;

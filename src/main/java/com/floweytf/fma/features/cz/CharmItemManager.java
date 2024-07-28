@@ -1,7 +1,6 @@
 package com.floweytf.fma.features.cz;
 
 import com.floweytf.fma.FMAClient;
-import com.floweytf.fma.FMAConfig;
 import com.floweytf.fma.features.cz.data.CharmEffectRarity;
 import com.floweytf.fma.features.cz.data.CharmEffectType;
 import com.floweytf.fma.features.cz.data.CharmRarity;
@@ -27,7 +26,7 @@ public class CharmItemManager {
 
     public static void init() {
         ItemTooltipCallback.EVENT.register((stack, context, lines) -> {
-            if(!FMAClient.config().zenith.enableCustomCharmInfo) {
+            if (!FMAClient.config().zenith.enableCustomCharmInfo) {
                 return;
             }
 
