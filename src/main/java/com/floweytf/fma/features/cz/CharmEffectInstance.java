@@ -15,7 +15,6 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Font;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
-import net.minecraft.util.Mth;
 
 public final class CharmEffectInstance {
     private final double rollValue;
@@ -120,10 +119,10 @@ public final class CharmEffectInstance {
 
         if (config.enableStatBreakdown)
             parts.add(modDetailText());
-        if (config.displayRollValue)
-            parts.add(rollText());
         if (config.displayEffectRarity)
             parts.add(rarityText());
+        if (config.displayRollValue)
+            parts.add(rollText());
 
         return parts;
     }
@@ -139,10 +138,10 @@ public final class CharmEffectInstance {
 
         if (config.enableStatBreakdown)
             header.add(Component.literal("Mod Detail").withStyle(ChatFormatting.GRAY, ChatFormatting.UNDERLINE));
-        if (config.displayRollValue)
-            header.add(Component.literal("Roll").withStyle(ChatFormatting.GRAY, ChatFormatting.UNDERLINE));
         if (config.displayEffectRarity)
             header.add(Component.literal("Rarity").withStyle(ChatFormatting.GRAY, ChatFormatting.UNDERLINE));
+        if (config.displayRollValue)
+            header.add(Component.literal("Roll").withStyle(ChatFormatting.GRAY, ChatFormatting.UNDERLINE));
         return header;
     }
 

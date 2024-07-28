@@ -1,6 +1,8 @@
 package com.floweytf.fma.util;
 
 import it.unimi.dsi.fastutil.ints.IntIntPair;
+import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -10,8 +12,10 @@ import net.minecraft.world.item.ItemStack;
 
 public class NBTUtil {
     public static final String MONUMENTA_KEY = "Monumenta";
+    public static final String BLOCK_ENTITY_KEY = "BlockEntityTag";
     public static final String DISPLAY_KEY = "display";
     public static final String LORE_KEY = "Lore";
+    public static final String NAME_KEY = "Name";
     public static final String MONUMENTA_TIER_KEY = "Tier";
     public static final String MONUMENTA_CHARM_POWER_KEY = "CharmPower";
 
@@ -65,8 +69,16 @@ public class NBTUtil {
         return get(stack).flatMap(tag -> getCompound(tag, DISPLAY_KEY));
     }
 
+    public static Optional<CompoundTag> getBlockEntityData(ItemStack stack) {
+        return get(stack).flatMap(tag -> getCompound(tag, BLOCK_ENTITY_KEY));
+    }
+
     public static Optional<ListTag> getLore(ItemStack stack) {
         return getDisplay(stack).flatMap(tag -> getList(tag, LORE_KEY, Tag.TAG_STRING));
+    }
+
+    public static Optional<String> getName(ItemStack stack) {
+        return getDisplay(stack).flatMap(tag -> getString(tag, NAME_KEY));
     }
 
     public static Optional<IntIntPair> getVanityDurabilityInfo(ItemStack stack) {
@@ -80,19 +92,13 @@ public class NBTUtil {
                 return Optional.empty();
             }
 
-            final var lastLine = Component.Serializer.fromJson(loreTag.getString(loreTag.size() - 1));
+            final var lastLine = NBTUtil.jsonToRaw(loreTag.getString(loreTag.size() - 1));
 
-            if (lastLine == null) {
+            if (!lastLine.startsWith("Durability: ")) {
                 return Optional.empty();
             }
 
-            final var lastLineRaw = lastLine.getString();
-
-            if (!lastLineRaw.startsWith("Durability: ")) {
-                return Optional.empty();
-            }
-
-            final var parts = lastLineRaw.split("\\s+");
+            final var parts = lastLine.split("\\s+");
             if (parts.length != 4) {
                 return Optional.empty();
             }
@@ -102,5 +108,15 @@ public class NBTUtil {
                 Integer.parseInt(parts[3])
             ));
         });
+    }
+
+    public static Optional<List<ItemStack>> getInventory(ItemStack stack) {
+        return NBTUtil.getBlockEntityData(stack)
+            .flatMap(t -> NBTUtil.getList(t, "Items", Tag.TAG_COMPOUND))
+            .map(list -> list.stream().map(data -> ItemStack.of((CompoundTag) data)).toList());
+    }
+
+    public static String jsonToRaw(String name) {
+        return Objects.requireNonNull(Component.Serializer.fromJson(name)).getString();
     }
 }

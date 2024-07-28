@@ -7,6 +7,7 @@ import com.floweytf.fma.util.NBTUtil;
 import com.floweytf.fma.util.Util;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
+import java.util.Optional;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.network.chat.Component;
@@ -51,7 +52,7 @@ public abstract class ItemRendererMixin {
                     .ifPresent(texture -> Graphics.renderTexture(poseStack, x, y, 0, 0, 16, 16, 16, 16, texture));
             }
 
-            if (config.enableCooldown && czCharmData.isEmpty()) {
+            if (config.enableCooldown && charmPower.isEmpty()) {
                 final var cooldowns = FMAClient.player().getCooldowns();
                 if (cooldowns.cooldowns.containsKey(stack.getItem())) {
                     final var endTime = cooldowns.cooldowns.get(stack.getItem()).endTime;
@@ -67,7 +68,7 @@ public abstract class ItemRendererMixin {
 
             if (config.enableCZCharmPower && charmPower.isPresent()) {
                 poseStack.pushPose();
-                poseStack.translate(x, y, 0);
+                poseStack.translate(x, y, 200);
                 poseStack.scale(0.5f, 0.5f, 1);
 
                 final var cp = charmPower.get();
@@ -76,9 +77,75 @@ public abstract class ItemRendererMixin {
                 czCharmData.ifPresent(compoundTag -> Graphics.drawString(
                     poseStack, font,
                     Component.literal(str),
-                    0, 0, 200, 0xFFFFFA75
+                    0, 0, 0xFFFFFA75
                 ));
                 poseStack.popPose();
+            }
+
+            final var itemName = stack.getDisplayName().getString();
+
+            if (config.enablePICount && (itemName.contains("Potion Injector") || itemName.contains("Iridium Injector"))) {
+                final var countOpt = NBTUtil.getLore(stack).flatMap(lore -> {
+                    boolean f = false;
+                    for (final var tag : lore) {
+                        final var str = NBTUtil.jsonToRaw(tag.getAsString());
+
+                        if (f) {
+                            return Optional.of(str);
+                        }
+                        if (str.contains("Selected Potion")) {
+                            f = true;
+                        }
+                    }
+
+                    return Optional.empty();
+                }).flatMap(potionName -> NBTUtil.getInventory(stack)
+                    .map(inventory -> inventory.stream()
+                        .filter(item -> NBTUtil.getName(item).map(NBTUtil::jsonToRaw).map(potionName::equals).orElse(false))
+                        .map(ItemStack::getCount)
+                        .reduce(0, Integer::sum)
+                    )
+                );
+
+                countOpt.ifPresent(count -> {
+                    final var t = Component.literal(String.valueOf(count));
+
+                    Graphics.drawString(
+                        poseStack, font, t,
+                        x + 17 - font.width(t), y + 9, 200, 0xff000000 | Util.colorRange(count, 27)
+                    );
+                });
+            }
+
+            if (config.enableLoomFirmCount && (itemName.contains("Doorway from Eternity") || itemName.contains(
+                "Worldshaper's Loom")) || itemName.contains("Firmament")) {
+                final var countOpt = NBTUtil.getInventory(stack)
+                    .map(inventory -> inventory.stream()
+                        .map(ItemStack::getCount)
+                        .reduce(0, Integer::sum)
+                    );
+
+                countOpt.ifPresent(count -> {
+                    final var t = Component.literal(String.valueOf(count));
+
+                    if (count < 100) {
+                        Graphics.drawString(
+                            poseStack, font, t,
+                            x + 17 - font.width(t), y + 9, 200, 0xffffffff
+                        );
+                    } else {
+                        poseStack.pushPose();
+                        poseStack.translate(x + 17 - (float) font.width(t) / 2, y + 12, 200);
+                        poseStack.scale(0.5f, 0.5f, 1);
+
+                        Graphics.drawString(
+                            poseStack, font, t,
+                            0, 0, 0xffffffff
+                        );
+
+                        poseStack.popPose();
+                    }
+                });
             }
         } catch (Exception e) {
             FMAClient.LOGGER.error("rendering fail", e);

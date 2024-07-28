@@ -33,7 +33,7 @@ public class Util {
     public static int colorRange(float val, float max) {
         return Mth.hsvToRgb(val / (max * 3.0f), 1.0f, 1.0f);
     }
-    
+
     public static int colorRange(float val) {
         return Mth.hsvToRgb(val / 3.0f, 1.0f, 1.0f);
     }

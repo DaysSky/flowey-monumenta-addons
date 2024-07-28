@@ -9,11 +9,11 @@ public enum CharmEffectRarity {
     RARE("Rare", CharmRarity.RARE, -11, false),
     EPIC("Epic", CharmRarity.EPIC, -14, false),
     LEGENDARY("Legendary", CharmRarity.LEGENDARY, -16, false),
-    N_COMMON("Negative Common", CharmRarity.COMMON, 4, true, 0xffc8d2),
-    N_UNCOMMON("Negative Uncommon", CharmRarity.UNCOMMON, 7, true, 0xffc8d2),
-    N_RARE("Negative Rare", CharmRarity.RARE, 10, true, 0xf35754),
-    N_EPIC("Negative Epic", CharmRarity.EPIC, 13, true, 0xe73730),
-    N_LEGENDARY("Negative Legendary", CharmRarity.LEGENDARY, 15, true, 0xd70000);
+    N_COMMON("Negative Common", CharmRarity.COMMON, 4, true, 0xff5555),
+    N_UNCOMMON("Negative Uncommon", CharmRarity.UNCOMMON, 7, true, 0xff5555),
+    N_RARE("Negative Rare", CharmRarity.RARE, 10, true, 0xff5555),
+    N_EPIC("Negative Epic", CharmRarity.EPIC, 13, true, 0xff5555),
+    N_LEGENDARY("Negative Legendary", CharmRarity.LEGENDARY, 15, true, 0xff5555);
 
     public final String name;
     public final CharmRarity rarity;

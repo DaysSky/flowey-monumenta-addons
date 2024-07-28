@@ -33,6 +33,8 @@ public class FMAConfig implements ConfigData {
         public boolean enableCZCharmRarity = true;
         public boolean enableCooldown = true;
         public boolean enableCZCharmPower = true;
+        public boolean enablePICount = true;
+        public boolean enableLoomFirmCount = true;
     }
 
     public static class FeatureToggles {
@@ -177,7 +179,7 @@ public class FMAConfig implements ConfigData {
 
             list.add(
                 builder.startStrField(Component.translatable(key + ".shorthand"), shorthandCommand)
-                    .setDefaultValue("") 
+                    .setDefaultValue("")
                     .setSaveConsumer(val -> this.shorthandCommand = val)
                     .build()
             );
