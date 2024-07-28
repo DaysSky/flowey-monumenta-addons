@@ -92,13 +92,38 @@
     "stat.fma.portal.soulCount": "Soul count: %s",
     "stat.fma.portal.soulTime": "Soul farming took %s",
     "stat.fma.portal.nodesSplit": "Activate nodes took %s",
-    "stat.fma.portal.startBossSplit": "Activate took %s",
+    "stat.fma.portal.startBossSplit": "Activate boss took %s",
     "stat.fma.portal.bossSplit": "Kill boss took %s",
     "stat.fma.portal.phase1Split": "Boss phase 1 took %s",
     "stat.fma.portal.phase2Split": "Boss phase 2 took %s",
     "stat.fma.portal.phase3Split": "Boss phase 3 took %s",
     "hud.fma.sidebar.portal.souls": "Souls %s/350",
     "hud.fma.sidebar.portal.chests": "Chests %s/41",
+    
+    // MR Strike
+    "text.autoconfig.fma.option.ruin": "Masquerader's Ruin Strike",
+    "text.autoconfig.fma.option.ruin.soulsSplit": "Send masked requirement reached split message",
+    "text.autoconfig.fma.option.ruin.startBossSplit": "Send activate boss split message",
+    "text.autoconfig.fma.option.ruin.daggerSplit": "Send dagger split message",
+    "text.autoconfig.fma.option.ruin.dpsSplit": "Send dps split message",
+    "text.autoconfig.fma.option.ruin.bossSplit": "Send boss split message",
+    "timer.fma.ruin.startBoss": "Boss activation took %s -- %s",
+    "timer.fma.ruin.boss": "Boss took %s -- %s",
+    "timer.fma.ruin.boss.0": "Boss daggers took %s",
+    "timer.fma.ruin.boss.1": "Boss dps took %s",
+    "timer.fma.ruin.souls": "Masked farming took %s -- %s",
+    "stat.fma.ruin.fail": "Masquerader's Ruin failed...",
+    "stat.fma.ruin.title": "Masquerader's Ruin Strike Stats",
+    "stat.fma.ruin.chestCount": "Chest count: %s",
+    "stat.fma.ruin.totalTime": "Time: %s",
+    "stat.fma.ruin.soulCount": "Masked killed: %s",
+    "stat.fma.ruin.soulTime": "Masked kill requirement took %s",
+    "stat.fma.ruin.startBossSplit": "Activate boss took %s",
+    "stat.fma.ruin.bossSplit": "Kill boss took %s",
+    "stat.fma.ruin.daggerSplit": "Boss daggers took %s",
+    "stat.fma.ruin.dpsSplit": "Boss DPS took %s",
+    "hud.fma.sidebar.ruin.souls": "Masked killed %s/450",
+    "hud.fma.sidebar.ruin.chests": "Chests %s/107",
 
     // CZ
     "text.autoconfig.fma.option.zenith.enableCustomCharmInfo.@PrefixText": "WARNING: All features here are *experimental*! Use at your own risk!",
@@ -123,6 +148,7 @@
     // HUD
     "hud.fma.sidebar.timer": "Timer %s",
     "hud.fma.sidebar.shard": "Shard %s",
+    "hud.fma.sidebar.ip":  "IP %s",
     "hud.fma.ummEffects.vanillaCategory": "- Vanilla -",
     "hud.fma.ummEffects.monumentaCategory": "- Monumenta -"
 }
