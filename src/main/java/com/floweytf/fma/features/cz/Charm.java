@@ -62,7 +62,7 @@ public final class Charm {
 
     private void buildSingleClassCharm(Font font, List<Component> target) {
         target.add(join(
-            Component.literal("Ability").withStyle(ChatFormatting.GRAY),
+            Component.literal("Class").withStyle(ChatFormatting.GRAY),
             Component.literal(" - ").withStyle(ChatFormatting.DARK_GRAY),
             classes.get(0).coloredName
         ));
@@ -102,7 +102,7 @@ public final class Charm {
             Component.literal(" - ").withStyle(ChatFormatting.DARK_GRAY),
             rarity.coloredText,
             Component.literal(" - ").withStyle(ChatFormatting.DARK_GRAY),
-            Component.literal("Budget: " + budget).withStyle(ChatFormatting.GRAY)
+            Component.literal("Budget : " + budget).withStyle(ChatFormatting.GRAY)
         ));
 
         if (FMAClient.config().zenith.displayUUID) {
