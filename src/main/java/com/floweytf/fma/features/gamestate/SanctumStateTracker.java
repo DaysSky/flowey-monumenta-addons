@@ -7,7 +7,7 @@ import static com.floweytf.fma.util.Util.now;
 import java.util.List;
 import net.minecraft.network.chat.Component;
 
-public class RuinStateTracker implements StateTracker {
+public class SanctumStateTracker implements StateTracker {
     public static class Data {
         @StatsUtil.Detail
         public int soulCount = 0;
@@ -51,7 +51,7 @@ public class RuinStateTracker implements StateTracker {
 
     private boolean hasWon = false;
 
-    public RuinStateTracker() {
+    public SanctumStateTracker() {
         this.data = new Data();
         startTime = now();
     }

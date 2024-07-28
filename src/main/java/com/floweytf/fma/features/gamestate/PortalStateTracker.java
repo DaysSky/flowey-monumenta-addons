@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderContext;
-import net.minecraft.ChatFormatting;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Component;
@@ -21,6 +20,7 @@ public class PortalStateTracker implements StateTracker {
     public static class Data {
         @StatsUtil.Detail
         public int soulCount = 0;
+
         public int chestCount = 0;
 
         @StatsUtil.Time
@@ -83,7 +83,6 @@ public class PortalStateTracker implements StateTracker {
 
     private void render() {
         final var parts = new ArrayList<Component>();
-
         parts.add(Component.translatable("hud.fma.sidebar.timer", FormatUtil.timestamp(now() - startTime)));
         parts.add(Component.translatable("hud.fma.sidebar.portal.chests", FormatUtil.numeric(data.chestCount)));
         parts.add(Component.translatable("hud.fma.sidebar.portal.souls", FormatUtil.numeric(data.soulCount)));
@@ -190,11 +189,6 @@ public class PortalStateTracker implements StateTracker {
         } else if (raw.contains("total chests")) {
             data.chestCount = Integer.parseInt(raw.split(" ")[0]);
         }
-    }
-
-    @Override
-    public void exportDebugInfo() {
-        ChatUtil.send(Component.literal("PortalStateTracker").withStyle(ChatFormatting.UNDERLINE));
     }
 
     @Override
