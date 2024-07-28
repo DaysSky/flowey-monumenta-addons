@@ -8,9 +8,13 @@
         "ClientPacketListenerMixin",
         "CommandSuggestionsMixin",
         "EntityRenderDispatcherMixin",
-        "LevelRendererMixin"
+        "GuiMixin",
+        "GuiGraphicsMixin",
+        "LevelRendererMixin",
+        "SplashManagerMixin",
+        "umm.EffectOverlayMixin"
     ],
     "injectors": {
         "defaultRequire": 1
-  }
+    }
 }

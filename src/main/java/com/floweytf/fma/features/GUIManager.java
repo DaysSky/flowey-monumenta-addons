@@ -1,7 +1,7 @@
 package com.floweytf.fma.features;
 
 import com.floweytf.fma.FMAClient;
-import com.floweytf.fma.chat.ChatChannelManager;
+import com.floweytf.fma.Graphics;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 
@@ -9,21 +9,23 @@ public class GUIManager {
     private final Minecraft minecraft = Minecraft.getInstance();
 
     private void renderChatChannelHud(GuiGraphics graphics) {
-        if (!FMAClient.CONFIG.get().features.enableChatChannels) {
+        if (!FMAClient.features().enableChatChannels) {
             return;
         }
 
         final var height = minecraft.getWindow().getGuiScaledHeight();
 
-        graphics.fill(
+        Graphics.fill(
+            graphics,
             2, height - 14,
-            2 + ChatChannelManager.getInstance().promptTextWidth(), height - 2,
+            2 + FMAClient.CHAT_CHANNELS.promptTextWidth(), height - 2,
             this.minecraft.options.getBackgroundColor(Integer.MIN_VALUE)
         );
 
-        graphics.drawString(
+        Graphics.drawString(
+            graphics,
             minecraft.fontFilterFishy,
-            ChatChannelManager.getInstance().promptText(),
+            FMAClient.CHAT_CHANNELS.promptText(),
             4,
             height - 12,
             0xffffffff

@@ -1,6 +1,6 @@
 package com.floweytf.fma.features;
 
-import com.floweytf.fma.chat.ChatChannelManager;
+import com.floweytf.fma.FMAClient;
 import com.floweytf.fma.util.ChatUtil;
 import com.mojang.blaze3d.platform.InputConstants;
 import de.siphalor.amecs.api.AmecsKeyBinding;
@@ -9,6 +9,7 @@ import de.siphalor.amecs.api.PriorityKeyBinding;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.ChatScreen;
+import net.minecraft.world.entity.player.Player;
 import org.lwjgl.glfw.GLFW;
 
 public class Keybinds {
@@ -48,7 +49,7 @@ public class Keybinds {
             "category.fma",
             new KeyModifiers(false, true, false),
             () -> {
-                final var manager = ChatChannelManager.getInstance();
+                final var manager = FMAClient.CHAT_CHANNELS;
                 if (manager.isDm()) {
                     manager.toggleDmBuiltin();
                 } else {
@@ -64,7 +65,7 @@ public class Keybinds {
             "category.fma",
             new KeyModifiers(false, true, true),
             () -> {
-                final var manager = ChatChannelManager.getInstance();
+                final var manager = FMAClient.CHAT_CHANNELS;
                 if (!manager.isDm()) {
                     manager.toggleDmBuiltin();
                 } else {
@@ -79,20 +80,8 @@ public class Keybinds {
             GLFW.GLFW_KEY_UNKNOWN,
             "category.fma",
             new KeyModifiers(false, false, false),
-            () -> ChatChannelManager.getInstance().cycleDm()
+            () -> FMAClient.CHAT_CHANNELS.cycleDm()
         );
-
-        ChatChannelManager.BUILTIN_CHANNELS.forEach(systemChatChannel -> {
-            // unbound by default
-            new ChatChannelControlKeybind(
-                "key.fma.set_channel_" + systemChatChannel.command(),
-                InputConstants.Type.KEYSYM,
-                GLFW.GLFW_KEY_UNKNOWN,
-                "category.fma",
-                new KeyModifiers(false, false, false),
-                () -> ChatChannelManager.getInstance().setChannel(systemChatChannel)
-            );
-        });
 
         KeyBindingHelper.registerKeyBinding(new AmecsKeyBinding(
             "key.fma.meow",
@@ -103,7 +92,27 @@ public class Keybinds {
         ) {
             @Override
             public void onPressed() {
-                ChatUtil.sendCommand("g meow");
+                ChatUtil.sendCommand(String.format(
+                    "chat say %s %s",
+                    FMAClient.config().chat.meowingChannel,
+                    FMAClient.config().chat.meowingText
+                ));
+            }
+        });
+
+        KeyBindingHelper.registerKeyBinding(new AmecsKeyBinding(
+            "key.fma.playerstats",
+            InputConstants.Type.MOUSE,
+            GLFW.GLFW_MOUSE_BUTTON_MIDDLE,
+            "category.fma",
+            new KeyModifiers(false, false, false)
+        ) {
+            @Override
+            public void onPressed() {
+                final var entity = Minecraft.getInstance().crosshairPickEntity;
+                if (entity instanceof Player player) {
+                    ChatUtil.sendCommand("ps " + player.getScoreboardName());
+                }
             }
         });
     }

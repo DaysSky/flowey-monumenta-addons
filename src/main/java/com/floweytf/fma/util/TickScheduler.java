@@ -1,14 +1,13 @@
 package com.floweytf.fma.util;
 
 import com.floweytf.fma.debug.DebugInfoExporter;
+import java.util.PriorityQueue;
+import java.util.function.Consumer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.PriorityQueue;
-import java.util.function.Consumer;
 
 public class TickScheduler implements DebugInfoExporter {
     public interface TaskControl {

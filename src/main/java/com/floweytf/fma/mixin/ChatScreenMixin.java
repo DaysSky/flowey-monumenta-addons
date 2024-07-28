@@ -1,8 +1,6 @@
 package com.floweytf.fma.mixin;
 
 import com.floweytf.fma.FMAClient;
-import com.floweytf.fma.chat.ChatChannelManager;
-import com.floweytf.fma.features.Commands;
 import com.floweytf.fma.util.ChatUtil;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
@@ -30,8 +28,8 @@ public class ChatScreenMixin extends Screen {
         )
     )
     private void handleFMACommands(ClientPacketListener instance, String string, Operation<Void> original) {
-        if (Commands.parseAccepts(string)) {
-            Commands.run(string);
+        if (FMAClient.COMMANDS.parseAccepts(string)) {
+            FMAClient.COMMANDS.run(string);
         } else {
             original.call(instance, string);
         }
@@ -45,7 +43,12 @@ public class ChatScreenMixin extends Screen {
         )
     )
     private void sendWithChatChannel(ClientPacketListener instance, String message, Operation<Void> original) {
-        ChatUtil.sendCommand(ChatChannelManager.getInstance().getChannel().buildSendCommand(message));
+        if (!FMAClient.features().enableChatChannels) {
+            original.call(instance, message);
+            return;
+        }
+
+        ChatUtil.sendCommand(FMAClient.CHAT_CHANNELS.getChannel().buildSendCommand(message));
     }
 
     @ModifyArg(
@@ -57,11 +60,11 @@ public class ChatScreenMixin extends Screen {
         index = 1
     )
     private int renderChannelBg(int x) {
-        if (!FMAClient.CONFIG.get().features.enableChatChannels) {
+        if (!FMAClient.features().enableChatChannels) {
             return x;
         }
 
-        return x + ChatChannelManager.getInstance().promptTextWidth() + 3;
+        return x + FMAClient.CHAT_CHANNELS.promptTextWidth() + 3;
     }
 
     @ModifyConstant(
@@ -69,10 +72,10 @@ public class ChatScreenMixin extends Screen {
         constant = @Constant(intValue = 4)
     )
     private int moveEditBox(int original) {
-        if (!FMAClient.CONFIG.get().features.enableChatChannels) {
+        if (!FMAClient.features().enableChatChannels) {
             return original;
         }
 
-        return original + 3 + ChatChannelManager.getInstance().promptTextWidth();
+        return original + 3 + FMAClient.CHAT_CHANNELS.promptTextWidth();
     }
 }

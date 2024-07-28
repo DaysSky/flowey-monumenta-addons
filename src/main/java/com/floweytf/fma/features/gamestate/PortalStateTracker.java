@@ -1,8 +1,13 @@
-package com.floweytf.fma.gamestate;
+package com.floweytf.fma.features.gamestate;
 
 import com.floweytf.fma.FMAClient;
 import com.floweytf.fma.util.ChatUtil;
+import com.floweytf.fma.util.FormatUtil;
 import com.floweytf.fma.util.StatsUtil;
+import static com.floweytf.fma.util.Util.now;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderContext;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.renderer.LevelRenderer;
@@ -12,15 +17,11 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.item.Items;
 
-import java.util.Objects;
-
-import static com.floweytf.fma.util.Util.now;
-
 public class PortalStateTracker implements StateTracker {
     public static class Data {
         @StatsUtil.Detail
-        public int soulCount = -1;
-        public int chestCount = -1;
+        public int soulCount = 0;
+        public int chestCount = 0;
 
         @StatsUtil.Time
         public int totalTime = -1;
@@ -76,11 +77,26 @@ public class PortalStateTracker implements StateTracker {
         startTime = now();
     }
 
+    private int logTime(String key, boolean send, long start, long deltaBegin, long deltaEnd, long... entries) {
+        return StatsUtil.logTime("timer.fma.portal." + key, send, start, deltaBegin, deltaEnd, entries);
+    }
+
+    private void render() {
+        final var parts = new ArrayList<Component>();
+
+        parts.add(Component.translatable("hud.fma.sidebar.timer", FormatUtil.timestamp(now() - startTime)));
+        parts.add(Component.translatable("hud.fma.sidebar.portal.chests", FormatUtil.numeric(data.chestCount)));
+        parts.add(Component.translatable("hud.fma.sidebar.portal.souls", FormatUtil.numeric(data.soulCount)));
+        FMAClient.SIDEBAR.setAdditionalText(parts);
+    }
+
     @Override
     public void onChatMessage(Component message) {
-        if (!FMAClient.CONFIG.get().features.enableTimerAndStats) {
+        if (!FMAClient.features().enableTimerAndStats) {
             return;
         }
+
+        final var portalCfg = FMAClient.config().portal;
 
         final var raw = message.getString();
 
@@ -90,32 +106,33 @@ public class PortalStateTracker implements StateTracker {
         switch (raw.substring(0, 12)) {
         case "Doorway prot":
             nodesSplit = now();
-            data.nodesSplit = StatsUtil.logTime("timer.fma.portal.nodes", startTime, startTime, nodesSplit);
+            data.nodesSplit = logTime("nodes", portalCfg.nodeSplit, startTime, startTime, nodesSplit);
             break;
         case "[Iota] INTRU":
             enteredBoss = true;
             startBossSplit = now();
-            data.startBossSplit = StatsUtil.logTime("timer.fma.portal.startBoss", startTime, nodesSplit,
-                startBossSplit);
+            data.startBossSplit = logTime("startBoss", portalCfg.startBossSplit, startTime, nodesSplit, startBossSplit);
             break;
         case "[Iota] DAMAG":
             phase1Split = now();
-            data.phase1Split = (int) (phase1Split - startBossSplit);
+            data.phase1Split = logTime("phase1", portalCfg.phase1Split, startTime, startBossSplit, phase1Split);
             break;
         case "[Iota] DAMA9":
             phase2Split = now();
-            data.phase2Split = (int) (phase2Split - phase1Split);
+            data.phase2Split = logTime("phase2", portalCfg.phase2Split, startTime, phase1Split, phase2Split);
             break;
         case "[Iota] DESTR":
             long phase3Split = now();
-            data.phase3Split = (int) (phase3Split - phase2Split);
+            data.phase3Split = logTime("phase3", portalCfg.phase3Split, startTime, phase2Split, phase3Split);
             data.totalTime = (int) (phase3Split - startTime);
-            data.bossSplit = StatsUtil.logTime(
-                "timer.fma.portal.boss",
-                startTime, nodesSplit,
+            data.bossSplit = logTime(
+                "boss",
+                portalCfg.bossSplit,
+                startTime,
+                startBossSplit,
+                phase3Split,
                 phase1Split,
                 phase2Split,
-                phase3Split,
                 phase3Split
             );
             hasWon = true;
@@ -126,19 +143,21 @@ public class PortalStateTracker implements StateTracker {
 
     @Override
     public void onLeave() {
-        if (!FMAClient.CONFIG.get().features.enableTimerAndStats) {
+        if (!FMAClient.features().enableTimerAndStats) {
             return;
         }
 
+        FMAClient.SIDEBAR.setAdditionalText(List.of());
+
         if (!hasWon) {
+            ChatUtil.send(Component.translatable("stat.fma.portal.fail"));
             data.send();
-            StatsUtil.dumpStats("stat.fma.portal", data);
         }
     }
 
     @Override
     public void onActionBar(Component message) {
-        if (!FMAClient.CONFIG.get().features.enableTimerAndStats) {
+        if (!FMAClient.features().enableTimerAndStats) {
             return;
         }
 
@@ -160,8 +179,9 @@ public class PortalStateTracker implements StateTracker {
             data.soulCount = Integer.parseInt(counterText.substring(0, counterText.indexOf("/")));
 
             if (data.soulCount >= 350 && data.soulTime == -1) {
-                data.soulTime = StatsUtil.logTime(
-                    "timer.fma.portal.souls",
+                data.soulTime = logTime(
+                    "souls",
+                    FMAClient.config().portal.soulsSplit,
                     startTime,
                     startTime,
                     now()
@@ -179,6 +199,8 @@ public class PortalStateTracker implements StateTracker {
 
     @Override
     public void onTick() {
+        render();
+
         if (!enteredBoss) {
             return;
         }
@@ -188,7 +210,7 @@ public class PortalStateTracker implements StateTracker {
         // Stupid IOTA bug!
         // I'm sure this code will work perfectly fine, right?!
         FMAClient.level().entitiesForRendering().forEach(entity -> {
-            if (FMAClient.CONFIG.get().features.enableIotaFix &&
+            if (FMAClient.config().portal.enableIotaFix &&
                 entity.getName().getString().contains("Iota") &&
                 !entity.isInvisible() &&
                 entity.getPosition(0).y < 88
@@ -216,7 +238,7 @@ public class PortalStateTracker implements StateTracker {
     // Render a box around buttons
     @Override
     public void onRender(WorldRenderContext context) {
-        if (!FMAClient.CONFIG.get().features.enablePortalButtonIndicator) {
+        if (!FMAClient.config().portal.enablePortalButtonIndicator) {
             return;
         }
 

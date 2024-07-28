@@ -1,39 +1,42 @@
 {
-    // Keybind stuff
+    // Keybindings
     "category.fma": "Flowey Monumenta Addons",
     "key.fma.cycle_chat_builtin": "Cycle builtin chat channels",
     "key.fma.cycle_chat_dm": "Cycle DM chat channels",
     "key.fma.toggle_dm_builtin": "Toggle DM/builtin channels",
     "key.fma.meow": "Meow :3",
-    "key.fma.set_channel_g": "Join 'g' channel",
-    "key.fma.set_channel_gc": "Join 'gc' channel",
-    "key.fma.set_channel_l": "Join 'l' channel",
-    "key.fma.set_channel_lfg": "Join 'lfg' channel",
-    "key.fma.set_channel_gr": "Join 'gr' channel",
-    "key.fma.set_channel_wc": "Join 'wc' channel",
-    // Command stuff
+    // Command feedback
     "commands.fma.leaderboard": "%s: #%s %s - %s",
-    // Config: "features" tab
+    "text.autoconfig.fma.title": "Flowey's Monumenta Addons Config",
+    // Categories
     "text.autoconfig.fma.category.features": "Features",
-    "text.autoconfig.fma.option.features.enableChatChannels": "Chat channel prompt",
-    "text.autoconfig.fma.option.features.enableHpIndicators": "HP indicator",
-    "text.autoconfig.fma.option.features.enableTimersAndStats": "Timers & statistics",
-    "text.autoconfig.fma.option.features.enableDebug": "Debugging mode",
-    "text.autoconfig.fma.option.features.enableIotaFix.@PrefixText": "Misc portal stuff",
-    "text.autoconfig.fma.option.features.enableIotaFix": "Iota fix",
-    "text.autoconfig.fma.option.features.enablePortalButtonIndicator": "Portal button/cube indicator",
-    // Config: "chat appearance" tab
-    "text.autoconfig.fma.category.chatAppearance": "Chat Appearance",
-    "text.autoconfig.fma.option.chatAppearance.bracketColor": "Tag bracket color",
-    "text.autoconfig.fma.option.chatAppearance.tagColor": "Tag text color",
-    "text.autoconfig.fma.option.chatAppearance.tagText": "Tag text",
-    "text.autoconfig.fma.option.chatAppearance.textColor": "Default text color",
-    "text.autoconfig.fma.option.chatAppearance.numericColor": "Numeric/time statistic text color",
-    "text.autoconfig.fma.option.chatAppearance.detailColor": "Detail color",
-    "text.autoconfig.fma.option.chatAppearance.playerNameColor": "Player name color",
-    "text.autoconfig.fma.option.chatAppearance.altTextColor": "Alternate text color",
-    // Config: "hp indicator" tab
+    "text.autoconfig.fma.category.appearance": "Appearance",
     "text.autoconfig.fma.category.hpIndicator": "HP Indicator",
+    "text.autoconfig.fma.category.chat": "Chat",
+    "text.autoconfig.fma.category.strikes": "Strikes",
+    "text.autoconfig.fma.category.zenith": "Zenith (experimental)",
+    // Feature toggles
+    "text.autoconfig.fma.option.features.enableChatChannels": "Chat channel prompt (experimental)",
+    "text.autoconfig.fma.option.features.enableHpIndicators": "HP indicator",
+    "text.autoconfig.fma.option.features.enableTimerAndStats": "Timers & statistics",
+    "text.autoconfig.fma.option.features.enableSideBar": "Custom HUD (replaces scoreboard)",
+    "text.autoconfig.fma.option.features.enableVanillaEffectInUMMHud": "Vanilla effects in UMM HUD (requires UMM)",
+    "text.autoconfig.fma.option.features.enableVanityDurability": "Enable durability bar on unbreakable vanities",
+    "text.autoconfig.fma.option.features.enableCustomSplash": "Enable custom splash",
+    "text.autoconfig.fma.option.features.enableDebug": "Debugging mode",
+    "text.autoconfig.fma.option.features.suppressDebugWarning": "Silence debugging warnings",
+    // Chat appearance
+    "text.autoconfig.fma.option.appearance.bracketColor": "Tag bracket color",
+    "text.autoconfig.fma.option.appearance.tagColor": "Tag text color",
+    "text.autoconfig.fma.option.appearance.tagText": "Tag text",
+    "text.autoconfig.fma.option.appearance.textColor": "Default text color",
+    "text.autoconfig.fma.option.appearance.numericColor": "Numeric/time statistic text color",
+    "text.autoconfig.fma.option.appearance.detailColor": "Detail color",
+    "text.autoconfig.fma.option.appearance.playerNameColor": "Player name color",
+    "text.autoconfig.fma.option.appearance.altTextColor": "Alternate text color",
+    "text.autoconfig.fma.option.appearance.warningColor": "Warning color",
+    "text.autoconfig.fma.option.appearance.errorColor": "Error color",
+    // HP indicators
     "text.autoconfig.fma.option.hpIndicator.enableGlowingPlayer": "Glowing by HP color (players)",
     "text.autoconfig.fma.option.hpIndicator.enableHitboxColoring": "Hitbox by HP color (entities)",
     "text.autoconfig.fma.option.hpIndicator.countAbsorptionAsHp": "Consider absorption as HP",
@@ -44,7 +47,28 @@
     "text.autoconfig.fma.option.hpIndicator.mediumHpColor": "Medium HP color",
     "text.autoconfig.fma.option.hpIndicator.lowHpColor": "Low HP color",
     "text.autoconfig.fma.option.hpIndicator.criticalHpColor": "Critical HP color",
+    // Chat Channels
+    "text.autoconfig.fma.option.chat.meowingChannel": "Meow macro channel",
+    "text.autoconfig.fma.option.chat.meowingText": "Meow text",
+    "text.autoconfig.fma.option.chat.ggText": "GG text",
+    "text.autoconfig.fma.option.chat.channels": "Chat Channels (experimental)",
+    "text.autoconfig.fma.option.chat.channels.entry": "Entry",
+    "text.autoconfig.fma.option.chat.channels.type": "Type",
+    "text.autoconfig.fma.option.chat.channels.shorthand": "Shorthand",
+    "text.autoconfig.fma.option.chat.channels.name": "ID/Name",
+    "text.autoconfig.fma.option.chat.channels.prettyName": "Display Name",
+    "text.autoconfig.fma.option.chat.channels.color": "Color",
     // Portal strike
+    "text.autoconfig.fma.option.portal": "Portal Strike",
+    "text.autoconfig.fma.option.portal.enableIotaFix": "Iota fix",
+    "text.autoconfig.fma.option.portal.enablePortalButtonIndicator": "Portal button/cube indicator",
+    "text.autoconfig.fma.option.portal.nodeSplit": "Send nodes split message",
+    "text.autoconfig.fma.option.portal.soulsSplit": "Send souls split message",
+    "text.autoconfig.fma.option.portal.startBossSplit": "Send activate boss split message",
+    "text.autoconfig.fma.option.portal.phase1Split": "Send phase 1 split message",
+    "text.autoconfig.fma.option.portal.phase2Split": "Send phase 2 split message",
+    "text.autoconfig.fma.option.portal.phase3Split": "Send phase 3 split message",
+    "text.autoconfig.fma.option.portal.bossSplit": "Send boss split message",
     "timer.fma.portal.nodes": "Activate nodes took %s -- %s",
     "timer.fma.portal.startBoss": "Boss activation took %s -- %s",
     "timer.fma.portal.boss": "Boss took %s -- %s",
@@ -52,11 +76,10 @@
     "timer.fma.portal.boss.1": "Boss phase 2 took %s",
     "timer.fma.portal.boss.2": "Boss phase 3 took %s",
     "timer.fma.portal.souls": "Soul farming took %s -- %s",
-    // stats
+    "stat.fma.portal.fail": "Portal failed...",
     "stat.fma.portal.title": "Portal Strike Stats",
     "stat.fma.portal.chestCount": "Chest count: %s",
     "stat.fma.portal.totalTime": "Time: %s",
-    // detail
     "stat.fma.portal.soulCount": "Soul count: %s",
     "stat.fma.portal.soulTime": "Soul farming took %s",
     "stat.fma.portal.nodesSplit": "Activate nodes took %s",
@@ -64,5 +87,33 @@
     "stat.fma.portal.bossSplit": "Kill boss took %s",
     "stat.fma.portal.phase1Split": "Boss phase 1 took %s",
     "stat.fma.portal.phase2Split": "Boss phase 2 took %s",
-    "stat.fma.portal.phase3Split": "Boss phase 3 took %s"
+    "stat.fma.portal.phase3Split": "Boss phase 3 took %s",
+    "hud.fma.sidebar.portal.souls": "Souls %s/350",
+    "hud.fma.sidebar.portal.chests": "Chests %s/41",
+
+    // CZ
+    "text.autoconfig.fma.option.zenith.enableCustomCharmInfo.@PrefixText": "WARNING: All features here are *experimental*! Avoid disabling Monumenta's stats to double check, and use at your own risk!",
+    "text.autoconfig.fma.option.zenith.enableCustomCharmInfo": "Enable enhanced charm stat",
+    "text.autoconfig.fma.option.zenith.disableMonumentaLore": "Disable Monumenta charm lore",
+    "text.autoconfig.fma.option.zenith.disableMonumentaLore.@Tooltip": "EXPERIMENTAL: turn this off at your own risk, the mod may lie about stats",
+    "text.autoconfig.fma.option.zenith.enableStatBreakdown": "Stat breakdown",
+    "text.autoconfig.fma.option.zenith.enableStatBreakdown.@Tooltip": "Display the base value and roll*variance value, like base%+rng%",
+    "text.autoconfig.fma.option.zenith.displayRollValue": "Display roll value",
+    "text.autoconfig.fma.option.zenith.displayRollValue.@Tooltip": "Display the internal roll value. Good rolls are green, bad are red. EXPERIMENTAL: may lie to you",
+    "text.autoconfig.fma.option.zenith.displayEffectRarity": "Display effect rarity",
+    "text.autoconfig.fma.option.zenith.displayEffectRarity.@Tooltip": "Each effect in a charm has it's own rarity (this affects budget). This is also related to the color of the effect",
+    "text.autoconfig.fma.option.zenith.useShorthands": "Use shorthands",
+    "text.autoconfig.fma.option.zenith.useShorthands.@Tooltip": "Display icons for things like 'Duration' or 'Radius' instead of text",
+    "text.autoconfig.fma.option.zenith.displayUUID": "Display charm UUID",
+    "text.autoconfig.fma.option.zenith.displayUUID.@Tooltip": "The UUID is not a uuid... it's just a long that seeds the RNG",
+
+    // Error message
+    "error.fma.no_empty_string": "Empty string not allowed here",
+    "error.fma.duplicate_shorthand": "Duplicate channel shorthand",
+
+    // HUD
+    "hud.fma.sidebar.timer": "Timer %s",
+    "hud.fma.sidebar.shard": "Shard %s",
+    "hud.fma.ummEffects.vanillaCategory": "- Vanilla -",
+    "hud.fma.ummEffects.monumentaCategory": "- Monumenta -"
 }

@@ -1,4 +1,4 @@
-package com.floweytf.fma.gamestate;
+package com.floweytf.fma.features.gamestate;
 
 public class RuinStateTracker implements StateTracker {
     @Override

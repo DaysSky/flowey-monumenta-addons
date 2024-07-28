@@ -1,20 +1,18 @@
 package com.floweytf.fma.util;
 
-import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.HoverEvent;
-import net.minecraft.network.chat.MutableComponent;
-
+import static com.floweytf.fma.util.ChatUtil.send;
+import static com.floweytf.fma.util.FormatUtil.numeric;
+import static com.floweytf.fma.util.FormatUtil.timestamp;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.floweytf.fma.util.ChatUtil.send;
-import static com.floweytf.fma.util.FormatUtil.numeric;
-import static com.floweytf.fma.util.FormatUtil.timestamp;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.HoverEvent;
+import net.minecraft.network.chat.MutableComponent;
 
 public class StatsUtil {
     @Target(ElementType.FIELD)
@@ -27,37 +25,34 @@ public class StatsUtil {
     public @interface Detail {
     }
 
-    public static int logTime(String translation, long startTime, long deltaBegin, long... entries) {
-        if (entries.length == 0)
-            throw new IllegalArgumentException();
-
+    public static int logTime(String key, boolean send, long start, long deltaBegin, long deltaEnd, long... entries) {
         List<Component> tooltipLines = new ArrayList<>();
 
         var base = deltaBegin;
-        for (int i = 0; i < entries.length - 1; i++) {
+        for (int i = 0; i < entries.length; i++) {
             tooltipLines.add(Component.translatable(
-                translation + "." + i,
+                key + "." + i,
                 FormatUtil.timestamp(entries[i] - base)
             ));
             base = entries[i];
         }
 
-        final var last = entries[entries.length - 1];
-
         final var text = Component.translatable(
-            translation,
-            FormatUtil.timestamp(last - deltaBegin),
-            FormatUtil.timestampAlt(last - startTime)
+            key,
+            FormatUtil.timestamp(deltaEnd - deltaBegin),
+            FormatUtil.timestampAlt(deltaEnd - start)
         );
 
-        if (entries.length == 1) {
-            send(text);
-        } else {
-            final var event = new HoverEvent(HoverEvent.Action.SHOW_TEXT, FormatUtil.buildTooltip(tooltipLines));
-            send(text.withStyle(style -> style.withHoverEvent(event)));
+        if (send) {
+            if (entries.length == 1) {
+                send(text);
+            } else {
+                final var event = new HoverEvent(HoverEvent.Action.SHOW_TEXT, FormatUtil.buildTooltip(tooltipLines));
+                send(text.withStyle(style -> style.withHoverEvent(event)));
+            }
         }
 
-        return (int) (last - deltaBegin);
+        return (int) (deltaEnd - deltaBegin);
     }
 
     public static <T> void dumpStats(String translationRoot, T object) {

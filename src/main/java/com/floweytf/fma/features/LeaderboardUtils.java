@@ -5,11 +5,10 @@ import com.floweytf.fma.debug.DebugInfoExporter;
 import com.floweytf.fma.events.ClientReceiveSystemChatEvent;
 import com.floweytf.fma.events.EventResult;
 import com.floweytf.fma.util.ChatUtil;
+import java.util.function.BiConsumer;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.function.BiConsumer;
 
 public class LeaderboardUtils implements DebugInfoExporter {
     private enum State {

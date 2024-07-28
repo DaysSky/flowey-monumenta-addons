@@ -25,11 +25,11 @@ public class EntityRenderDispatcherMixin {
         )
     )
     private static void modifyHitboxColor(Args args, @Local(argsOnly = true) Entity entity) {
-        if (!FMAClient.CONFIG.get().features.enableHpIndicators) {
+        if (!FMAClient.features().enableHpIndicators) {
             return;
         }
 
-        if (!FMAClient.CONFIG.get().hpIndicator.enableHitboxColoring) {
+        if (!FMAClient.config().hpIndicator.enableHitboxColoring) {
             return;
         }
 

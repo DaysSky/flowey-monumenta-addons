@@ -1,16 +1,34 @@
 # Flowey Monumenta Addons
 
-## Features 
-Timers:
-- portal
-
-Misc:
-- iota doesn't appear fix
-- green box around buttons when cube isn't alive in portal 
-- better chat channels
-- leaderboard parser 
-- random commands
-
-Stolen from usbplus:
-- Player glowing based on HP
-- Hitbox color based on HP
+## Features
+- :3
+- ultra configurable (feature toggle for everything)
+- meow keybind/macro
+- (portal) green box around buttons when cube summon is required
+- leaderboard command shorthand - /lb 
+- random command aliases - see /fma help
+- vanilla effects in UMM HUD
+- HUD with shard/timer info
+- CZ charm stat helper
+- slot overlays
+    - item rarity
+    - cz charm rarity
+    - cooldown
+    - charm power (cz)
+- timers
+    - configurable split notification
+    - portal
+- bugfix
+    - iota doesn't appear (wtb fix 10har @usb)
+    - items where vanity doesn't have durability but the base item does won't show durability (mojang)
+- experimental
+    - better chat channels
+- usbplus:
+    - player glowing based on HP
+    - hitbox color based on HP
+## TODO
+- overlay location info on items as icons
+- infusion cost calculators
+- ability rarity
+- procedurally generated charm textures
+- automatic score assignment to charms

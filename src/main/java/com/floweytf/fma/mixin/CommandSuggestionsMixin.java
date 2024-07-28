@@ -1,6 +1,6 @@
 package com.floweytf.fma.mixin;
 
-import com.floweytf.fma.features.Commands;
+import com.floweytf.fma.FMAClient;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.mojang.brigadier.CommandDispatcher;
 import net.minecraft.client.gui.components.CommandSuggestions;
@@ -31,8 +31,8 @@ public class CommandSuggestionsMixin {
             return val;
         }
 
-        if (Commands.suggestAccepts(input.getValue().substring(1))) {
-            return (CommandDispatcher<SharedSuggestionProvider>) (CommandDispatcher<?>) Commands.getDispatcher();
+        if (FMAClient.COMMANDS.suggestAccepts(input.getValue().substring(1))) {
+            return (CommandDispatcher<SharedSuggestionProvider>) (CommandDispatcher<?>) FMAClient.COMMANDS.getDispatcher();
         }
 
         return val;

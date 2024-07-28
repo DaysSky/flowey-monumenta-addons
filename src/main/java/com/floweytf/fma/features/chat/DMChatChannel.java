@@ -1,4 +1,4 @@
-package com.floweytf.fma.chat;
+package com.floweytf.fma.features.chat;
 
 import com.floweytf.fma.util.FormatUtil;
 import net.minecraft.ChatFormatting;

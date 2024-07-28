@@ -18,10 +18,7 @@ base {
 repositories {
     exclusiveContent {
         forRepository {
-            maven {
-                name = "Modrinth"
-                url = uri("https://api.modrinth.com/maven")
-            }
+            maven("https://api.modrinth.com/maven")
         }
         filter {
             includeGroup("maven.modrinth")
@@ -31,10 +28,15 @@ repositories {
     maven("https://maven.siphalor.de/")
     maven("https://maven.shedaniel.me/")
     maven("https://maven.terraformersmc.com/releases/")
+    maven("https://jitpack.io/")
+    mavenLocal()
+    mavenCentral()
 }
+
 loom {
     accessWidenerPath = file("src/main/resources/fma.accesswidener")
 }
+
 dependencies {
     // To change the versions see the gradle.properties file
     minecraft("com.mojang:minecraft:${minecraft_version_target}")
@@ -50,6 +52,11 @@ dependencies {
     modApi("me.shedaniel.cloth:cloth-config-fabric:11.1.118") {
         exclude(group = "net.fabricmc.fabric-api")
     }
+
+    // Optional dependency, take care to never classload
+    modImplementation("maven.modrinth:unofficial-monumenta-mod:1.9.9.2-fabric,1.20.1")
+    // Janky, obtained from UMM jar
+    modApi(files("libs/MCUIFramework-mc1.19.4-SNAPSHOT.jar"))
 }
 
 tasks {

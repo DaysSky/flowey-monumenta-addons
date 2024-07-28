@@ -1,4 +1,4 @@
-package com.floweytf.fma.gamestate;
+package com.floweytf.fma.features.gamestate;
 
 import com.floweytf.fma.debug.DebugInfoExporter;
 import com.floweytf.fma.events.ClientReceiveSystemChatEvent;
@@ -6,6 +6,9 @@ import com.floweytf.fma.events.ClientSetTitleEvent;
 import com.floweytf.fma.events.EventResult;
 import com.floweytf.fma.util.ChatUtil;
 import it.unimi.dsi.fastutil.Pair;
+import java.util.List;
+import java.util.Objects;
+import java.util.function.Supplier;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientLoginConnectionEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
@@ -15,15 +18,10 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.function.Supplier;
-
 public class GameState implements DebugInfoExporter {
     private static final List<Pair<String, Supplier<StateTracker>>> GAME_STATE_BY_DIMENSION = List.of(
         Pair.of("monumenta:portal", PortalStateTracker::new),
-        Pair.of("monumenta:ruin", RuinStateTracker::new),
-        Pair.of("minecraft:overworld", PortalStateTracker::new)// TODO: debug, remove
+        Pair.of("monumenta:ruin", RuinStateTracker::new)
     );
 
     private String dimensionName = null;
@@ -35,8 +33,16 @@ public class GameState implements DebugInfoExporter {
             return;
 
         final var newDimensionName = level.dimension().location().toString();
+
+        // Edge-triggered
         if (Objects.equals(dimensionName, newDimensionName)) {
             return;
+        }
+
+        // Trigger leave event...
+        if (currentStateTracker != null) {
+            currentStateTracker.onLeave();
+            currentStateTracker = null;
         }
 
         dimensionName = newDimensionName;
@@ -48,10 +54,6 @@ public class GameState implements DebugInfoExporter {
         if (worldFilterRes.isEmpty()) {
             ChatUtil.sendDebug("unknown dimension '" + newDimensionName + "'");
             return;
-        }
-
-        if (currentStateTracker != null) {
-            currentStateTracker.onLeave();
         }
 
         currentStateTracker = worldFilterRes.get().second().get();
@@ -113,6 +115,8 @@ public class GameState implements DebugInfoExporter {
             if (currentStateTracker != null) {
                 currentStateTracker.onLeave();
             }
+
+            currentStateTracker = null;
         });
     }
 

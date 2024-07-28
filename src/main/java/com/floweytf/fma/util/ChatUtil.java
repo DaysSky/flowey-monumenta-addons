@@ -1,17 +1,15 @@
 package com.floweytf.fma.util;
 
 import com.floweytf.fma.FMAClient;
+import static com.floweytf.fma.util.FormatUtil.*;
+import java.util.Objects;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 
-import java.util.Objects;
-
-import static com.floweytf.fma.util.FormatUtil.*;
-
 public class ChatUtil {
     public static void send(Component... message) {
-        final var config = FMAClient.CONFIG.get().chatAppearance;
+        final var config = FMAClient.appearance();
         FMAClient.player().sendSystemMessage(join(
             withColor("[", config.bracketColor),
             withColor(config.tagText, config.tagColor).withStyle(ChatFormatting.BOLD),
@@ -26,7 +24,7 @@ public class ChatUtil {
 
     public static void sendWarn(Component message) {
         send(Component.empty()
-            .append(Component.literal("WARN").withStyle(ChatFormatting.GOLD))
+            .append(withColor("WARN", FMAClient.appearance().warningColor))
             .append(" ")
             .append(message)
         );
@@ -37,7 +35,11 @@ public class ChatUtil {
     }
 
     public static void sendDebug(String message) {
-        sendWarn("(debug/possible bug) " + message);
+        if (!FMAClient.features().suppressDebugWarning) {
+            sendWarn("(debug/possible bug) " + message);
+        } else {
+            FMAClient.LOGGER.warn(message);
+        }
     }
 
     public static void sendCommand(String command) {
