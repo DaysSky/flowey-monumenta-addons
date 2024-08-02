@@ -28,8 +28,10 @@ public class Graphics {
 
     public static void renderTexture(PoseStack poseStack, int x, int y, float uOff, float vOff, int w, int h, int texW,
                                      int texH, ResourceLocation texture) {
+        RenderSystem.enableBlend();
         RenderSystem.setShaderTexture(0, texture);
         GuiComponent.blit(poseStack, x, y, uOff, vOff, w, h, texW, texH);
+        RenderSystem.disableBlend();
     }
 
     public static void fill(PoseStack stack, int sX, int sY, int eX, int eY, int color) {

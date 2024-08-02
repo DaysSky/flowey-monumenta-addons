@@ -131,8 +131,8 @@ public class FMAConfig implements ConfigData {
     public static class Ruin {
         public boolean soulsSplit = true;
         public boolean startBossSplit = true;
-        public boolean daggerSplit = true;
-        public boolean dpsSplit = true;
+        public boolean daggerSplit = false;
+        public boolean dpsSplit = false;
         public boolean bossSplit = true;
     }
 
