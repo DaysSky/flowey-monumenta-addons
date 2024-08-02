@@ -29,12 +29,12 @@ import net.minecraft.world.InteractionResult;
 public class FMAConfig implements ConfigData {
     public static class InventoryOverlayToggles {
         public boolean enable = true;
-        public boolean enableRarity = true;
-        public boolean enableCZCharmRarity = true;
+        public boolean enableRarity = false;
+        public boolean enableCZCharmRarity = false;
         public boolean enableCooldown = true;
-        public boolean enableCZCharmPower = true;
+        public boolean enableCZCharmPower = false;
         public boolean enablePICount = true;
-        public boolean enableLoomFirmCount = true;
+        public boolean enableLoomFirmCount = false;
     }
 
     public static class FeatureToggles {
