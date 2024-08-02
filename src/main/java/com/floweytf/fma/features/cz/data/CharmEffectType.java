@@ -206,7 +206,7 @@ public enum CharmEffectType {
     ICE_LANCE_RANGE("Range", ICE_LANCE, false, true, 5.0, 50.0, 10.0, 15.0, 20.0, 25.0, 30.0),
     ICE_LANCE_DEBUFF_AMPLIFIER("Debuff Amplifier", ICE_LANCE, false, true, 5, 40, 5, 7.5, 10, 12.5, 15),
     ICE_LANCE_DURATION("Debuff Duration", ICE_LANCE, true, false, 0.25, 4.0, 0.5, 0.75, 1.0, 1.25, 1.5),
-    ICE_LANCE_ICE_DURATION("Ice Duration", PERMAFROST, false, false, 0.0, 0.0, 2.0, 3.0, 4.0, 5.0, 6.0),
+    ICE_LANCE_ICE_DURATION("Ice Duration", ICE_LANCE, false, false, 0.0, 0.0, 2.0, 3.0, 4.0, 5.0, 6.0),
     PERMAFROST_ICE_BONUS_DURATION("Ice Bonus Duration", PERMAFROST, true, false, 1.0, 10.0, 1.0, 2.0, 3.0, 4.0, 5.0),
     PERMAFROST_ICE_DURATION("Ice Duration", PERMAFROST, false, false, 2.0, 0.0, 2.0, 3.0, 4.0, 5.0, 6.0),
     PERMAFROST_RADIUS("Radius", PERMAFROST, false, true, 10, 100, 20, 30, 40, 50, 60),

@@ -182,7 +182,7 @@ public abstract class GuiGraphicsMixin {
         int color = Util.colorRange(durability, maxDurability);
         int barX = x + 2;
         int barY = y + 13;
-        Graphics.fill(c(this), barX, barY, barX + 13, barY + 2, 0xffffffff);
+        Graphics.fill(c(this), barX, barY, barX + 13, barY + 2, 0xff000000);
         Graphics.fill(c(this), barX, barY, barX + width, barY + 1, color | 0xFF000000);
         RenderSystem.enableDepthTest();
     }

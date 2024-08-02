@@ -181,7 +181,7 @@ public class Commands {
         alias("lbp", "lb Portal");
 
         // Macro alias, maybe customizable?
-        alias("gg", "/g " + FMAClient.config().chat.ggText);
+        alias("gg", "g " + FMAClient.config().chat.ggText);
 
         // register the commands
         if (config.features.enableChatChannels) {

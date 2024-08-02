@@ -57,7 +57,7 @@ public class RuinStateTracker implements StateTracker {
     }
 
     private int logTime(String key, boolean send, long start, long deltaBegin, long deltaEnd, long... entries) {
-        return StatsUtil.logTime("timer.fma.portal." + key, send, start, deltaBegin, deltaEnd, entries);
+        return StatsUtil.logTime("timer.fma.ruin." + key, send, start, deltaBegin, deltaEnd, entries);
     }
 
     @Override
@@ -141,7 +141,7 @@ public class RuinStateTracker implements StateTracker {
             if (data.soulCount >= 350 && data.soulTime == -1) {
                 data.soulTime = logTime(
                     "souls",
-                    FMAClient.config().portal.soulsSplit,
+                    FMAClient.config().ruin.soulsSplit,
                     startTime,
                     startTime,
                     now()
