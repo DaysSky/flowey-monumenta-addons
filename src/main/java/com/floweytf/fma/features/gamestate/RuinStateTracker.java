@@ -138,7 +138,7 @@ public class RuinStateTracker implements StateTracker {
 
             data.soulCount = Integer.parseInt(counterText.substring(0, counterText.indexOf("/")));
 
-            if (data.soulCount >= 350 && data.soulTime == -1) {
+            if (data.soulCount >= 450 && data.soulTime == -1) {
                 data.soulTime = logTime(
                     "souls",
                     FMAClient.config().ruin.soulsSplit,
