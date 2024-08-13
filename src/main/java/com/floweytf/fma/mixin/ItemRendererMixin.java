@@ -117,8 +117,7 @@ public abstract class ItemRendererMixin {
                 });
             }
 
-            if (config.enableLoomFirmCount && (itemName.contains("Doorway from Eternity") || itemName.contains(
-                "Worldshaper's Loom")) || itemName.contains("Firmament")) {
+            if (config.enableLoomFirmCount && NBTUtil.BLOCK_PLACER.stream().anyMatch(itemName::contains)) {
                 final var countOpt = NBTUtil.getInventory(stack)
                     .map(inventory -> inventory.stream()
                         .map(ItemStack::getCount)

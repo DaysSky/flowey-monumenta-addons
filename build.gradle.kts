@@ -43,6 +43,7 @@ dependencies {
         officialMojangMappings()
         parchment("org.parchmentmc.data:parchment-1.19.4:2023.06.26@zip")
     })
+
     modImplementation("net.fabricmc:fabric-loader:${loader_version}")
     modImplementation("net.fabricmc.fabric-api:fabric-api:${fabric_version}")
     modApi("de.siphalor:amecsapi-1.19:1.5.2+mc1.19.4")

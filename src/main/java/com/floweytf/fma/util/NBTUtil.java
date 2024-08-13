@@ -18,6 +18,7 @@ public class NBTUtil {
     public static final String NAME_KEY = "Name";
     public static final String MONUMENTA_TIER_KEY = "Tier";
     public static final String MONUMENTA_CHARM_POWER_KEY = "CharmPower";
+    public static final List<String> BLOCK_PLACER = List.of("Doorway from Eternity", "Worldshaper's Loom", "Firmament");
 
     public static Optional<CompoundTag> get(ItemStack stack) {
         return Optional.ofNullable(stack.getTag());

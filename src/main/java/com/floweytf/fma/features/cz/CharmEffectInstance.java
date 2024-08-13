@@ -148,10 +148,23 @@ public final class CharmEffectInstance {
     public static List<Component> format(Font font, List<CharmEffectInstance> entries, boolean includeCharmEffect) {
         final var config = FMAClient.config().zenith;
 
-        return tabulate(font, Stream.concat(
-            Stream.of(getHeader(config, includeCharmEffect)),
-            entries.stream().map(entry -> entry.formatParts(config, includeCharmEffect))
-        ).toList());
+        if (config.peliCompatibilityMode) {
+            return entries.stream().map(entry -> (Component) join(
+                entry.modText(),
+                Component.literal(" "),
+                entry.effect().ability.coloredName.copy().withStyle(entry.modText().getStyle()),
+                Component.literal(" "),
+                entry.effectText(),
+                Component.literal(" ["),
+                entry.rollText(),
+                Component.literal("]")
+            )).toList();
+        } else {
+            return tabulate(font, Stream.concat(
+                Stream.of(getHeader(config, includeCharmEffect)),
+                entries.stream().map(entry -> entry.formatParts(config, includeCharmEffect))
+            ).toList());
+        }
     }
 
     public CharmEffectType effect() {

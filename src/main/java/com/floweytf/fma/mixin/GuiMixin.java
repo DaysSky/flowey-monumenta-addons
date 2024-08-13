@@ -26,7 +26,7 @@ public class GuiMixin {
         cancellable = true
     )
     private void renderCustomSidebar(PoseStack poseStack, Objective objective, CallbackInfo ci) {
-        if (FMAClient.features().enableSideBar) {
+        if (FMAClient.features().sidebarToggles.enable) {
             ci.cancel();
         }
     }
@@ -47,7 +47,7 @@ public class GuiMixin {
         )
     )
     private void renderCustomSidebar(PoseStack poseStack, float partialTick, CallbackInfo ci) {
-        if (FMAClient.features().enableSideBar) {
+        if (FMAClient.features().sidebarToggles.enable) {
             FMAClient.SIDEBAR.render(minecraft, poseStack);
         }
     }
