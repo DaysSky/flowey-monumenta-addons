@@ -37,8 +37,7 @@ public abstract class ItemRendererMixin {
             }
 
             final var tier = NBTUtil.getTier(stack);
-            final var czCharmData = NBTUtil.getMonumenta(stack)
-                .flatMap(c -> NBTUtil.getCompound(c, CharmItemManager.CHARM_KEY));
+            final var czCharmData = NBTUtil.getPlayerModified(stack);
             final var charmPower = NBTUtil.getCharmPower(stack);
 
             if (config.enableRarity) {
