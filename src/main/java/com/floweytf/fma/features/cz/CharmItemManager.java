@@ -22,7 +22,7 @@ public class CharmItemManager {
     public static final String CHARM_ROLLS_KEY = "DEPTHS_CHARM_ROLLS";
     public static final String CHARM_UUID_KEY = "DEPTHS_CHARM_UUID";
     public static final String CHARM_RARITY_KEY = "DEPTHS_CHARM_RARITY";
-    public static final String CHARM_KEY = "PlayerModified";
+    public static final String HAS_USED_KEY = "CELESTIAL_GEM_USED";
 
     public static void init() {
         ItemTooltipCallback.EVENT.register((stack, context, lines) -> {
@@ -66,7 +66,7 @@ public class CharmItemManager {
         }
 
         // meow meow meow meow meow meow
-        final var charmDataOptional = NBTUtil.getCompound(monumenta.get(), CHARM_KEY);
+        final var charmDataOptional = NBTUtil.getPlayerModified(item);
         if (charmDataOptional.isEmpty()) {
             return Optional.empty();
         }
@@ -108,6 +108,8 @@ public class CharmItemManager {
             return new CharmEffectInstance(roll, effectType, effectRarity);
         }).toList();
 
-        return Optional.of(new Charm(charmPower.get(), uuid, rarity, effects, charmBudget[0]));
+
+        return Optional.of(new Charm(charmPower.get(), uuid, rarity, effects, charmBudget[0],
+            charmData.getBoolean(HAS_USED_KEY)));
     }
 }

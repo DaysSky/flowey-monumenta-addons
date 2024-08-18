@@ -21,12 +21,15 @@ public final class Charm {
     private final List<ZenithClass> classes;
     private final List<ZenithAbility> abilities;
     private final int budget;
+    private final boolean hasUpgraded;
 
-    public Charm(int charmPower, long uuid, CharmRarity rarity, List<CharmEffectInstance> effects, int budget) {
+    public Charm(int charmPower, long uuid, CharmRarity rarity, List<CharmEffectInstance> effects, int budget,
+                 boolean hasUpgraded) {
         this.charmPower = charmPower;
         this.uuid = uuid;
         this.rarity = rarity;
         this.effects = new ArrayList<>(effects);
+        this.hasUpgraded = hasUpgraded;
         this.effects.sort(Comparator.comparingInt(x -> x.effect().ordinal()));
 
         classes = effects.stream()
@@ -96,11 +99,13 @@ public final class Charm {
             Component.literal("Zenith Charm").withStyle(style -> style.withColor(0xFF9CF0))
         ));
 
+        final var rarityText = hasUpgraded ? rarity.coloredText.copy().append(" (u)") : rarity.coloredText;
+
         target.add(join(
             Component.literal("Charm Power : ").withStyle(ChatFormatting.DARK_GRAY),
             Component.literal("★".repeat(charmPower)).withStyle(style -> style.withColor(0xFFFA75)),
             Component.literal(" - ").withStyle(ChatFormatting.DARK_GRAY),
-            rarity.coloredText,
+            rarityText,
             Component.literal(" - ").withStyle(ChatFormatting.DARK_GRAY),
             Component.literal("Budget : " + budget).withStyle(ChatFormatting.GRAY)
         ));
