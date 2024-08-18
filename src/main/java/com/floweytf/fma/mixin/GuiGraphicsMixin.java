@@ -11,7 +11,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import java.util.Optional;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Final;
@@ -23,10 +22,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(GuiGraphics.class)
 public abstract class GuiGraphicsMixin {
-    @Shadow @Final private PoseStack pose;
+    @Shadow
+    @Final
+    private PoseStack pose;
 
     @Inject(
-        method = "renderItemDecorations(Lnet/minecraft/client/gui/Font;Lnet/minecraft/world/item/ItemStack;IILjava/lang/String;)V",
+        method = "renderItemDecorations(Lnet/minecraft/client/gui/Font;Lnet/minecraft/world/item/ItemStack;" +
+            "IILjava/lang/String;)V",
         at = @At(
             value = "INVOKE",
             target = "Lcom/mojang/blaze3d/vertex/PoseStack;pushPose()V"
@@ -41,8 +43,7 @@ public abstract class GuiGraphicsMixin {
             }
 
             final var tier = NBTUtil.getTier(stack);
-            final var czCharmData = NBTUtil.getMonumenta(stack)
-                .flatMap(c -> NBTUtil.getCompound(c, CharmItemManager.CHARM_KEY));
+            final var czCharmData = NBTUtil.getPlayerModified(stack);
             final var charmPower = NBTUtil.getCharmPower(stack);
 
             if (config.enableRarity) {
@@ -121,8 +122,7 @@ public abstract class GuiGraphicsMixin {
                 });
             }
 
-            if (config.enableLoomFirmCount && (itemName.contains("Doorway from Eternity") || itemName.contains(
-                "Worldshaper's Loom")) || itemName.contains("Firmament")) {
+            if (config.enableLoomFirmCount && NBTUtil.BLOCK_PLACER.stream().anyMatch(itemName::contains)) {
                 final var countOpt = NBTUtil.getInventory(stack)
                     .map(inventory -> inventory.stream()
                         .map(ItemStack::getCount)
@@ -157,7 +157,8 @@ public abstract class GuiGraphicsMixin {
     }
 
     @Inject(
-        method = "renderItemDecorations(Lnet/minecraft/client/gui/Font;Lnet/minecraft/world/item/ItemStack;IILjava/lang/String;)V",
+        method = "renderItemDecorations(Lnet/minecraft/client/gui/Font;Lnet/minecraft/world/item/ItemStack;" +
+            "IILjava/lang/String;)V",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/world/item/ItemStack;isBarVisible()Z"

@@ -2,7 +2,6 @@ package com.floweytf.fma.mixin;
 
 import com.floweytf.fma.FMAClient;
 import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphics;
@@ -27,7 +26,7 @@ public class GuiMixin {
         cancellable = true
     )
     private void renderCustomSidebar(GuiGraphics poseStack, Objective objective, CallbackInfo ci) {
-        if (FMAClient.features().enableSideBar) {
+        if (FMAClient.features().sidebarToggles.enable) {
             ci.cancel();
         }
     }
@@ -48,7 +47,7 @@ public class GuiMixin {
         )
     )
     private void renderCustomSidebar(GuiGraphics poseStack, float partialTick, CallbackInfo ci) {
-        if (FMAClient.features().enableSideBar) {
+        if (FMAClient.features().sidebarToggles.enable) {
             FMAClient.SIDEBAR.render(minecraft, poseStack);
         }
     }
@@ -57,10 +56,10 @@ public class GuiMixin {
         method = "render",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/client/gui/Gui;renderEffects(Lcom/mojang/blaze3d/vertex/PoseStack;)V"
+            target = "Lnet/minecraft/client/gui/Gui;renderEffects(Lnet/minecraft/client/gui/GuiGraphics;)V"
         )
     )
-    private boolean wrapEffectHudPredicate(Gui instance, PoseStack poseStack) {
+    private boolean wrapEffectHudPredicate(Gui instance, GuiGraphics guiGraphics) {
         return !FMAClient.features().enableVanillaEffectInUMMHud;
     }
 }

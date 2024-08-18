@@ -18,6 +18,8 @@ public class NBTUtil {
     public static final String NAME_KEY = "Name";
     public static final String MONUMENTA_TIER_KEY = "Tier";
     public static final String MONUMENTA_CHARM_POWER_KEY = "CharmPower";
+    public static final String PLAYER_MODIFIED = "PlayerModified";
+    public static final List<String> BLOCK_PLACER = List.of("Doorway from Eternity", "Worldshaper's Loom", "Firmament");
 
     public static Optional<CompoundTag> get(ItemStack stack) {
         return Optional.ofNullable(stack.getTag());
@@ -55,6 +57,11 @@ public class NBTUtil {
 
     public static Optional<CompoundTag> getMonumenta(ItemStack stack) {
         return get(stack).flatMap(tag -> getCompound(tag, MONUMENTA_KEY));
+    }
+
+
+    public static Optional<CompoundTag> getPlayerModified(ItemStack stack) {
+        return getMonumenta(stack).flatMap(tag -> getCompound(tag, PLAYER_MODIFIED));
     }
 
     public static Optional<String> getTier(ItemStack stack) {

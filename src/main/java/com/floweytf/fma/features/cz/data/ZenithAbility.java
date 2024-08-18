@@ -63,7 +63,7 @@ public enum ZenithAbility {
     AVALANCHE("Avalanche", ZenithClass.FROSTBORN),
     CRYOBOX("Cryobox", ZenithClass.FROSTBORN),
     FRIGID_COMBOS("Frigid Combos", ZenithClass.FROSTBORN),
-    FROST_NOVA("Frost Nova", ZenithClass.FROSTBORN),
+    SNOWSTORM("Snowstorm", ZenithClass.FROSTBORN),
     FROZEN_DOMAIN("Frozen Domain", ZenithClass.FROSTBORN),
     ICE_BARRIER("Ice Barrier", ZenithClass.FROSTBORN),
     ICEBREAKER("Icebreaker", ZenithClass.FROSTBORN),

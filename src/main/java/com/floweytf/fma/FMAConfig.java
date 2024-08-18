@@ -37,16 +37,24 @@ public class FMAConfig implements ConfigData {
         public boolean enableLoomFirmCount = false;
     }
 
+    public static class SidebarToggles {
+        public boolean enable = true;
+        public boolean enableShard = true;
+        public boolean enableIp = true;
+        public boolean enableIpElision = true;
+    }
+
     public static class FeatureToggles {
         public boolean enableChatChannels = false;
         public boolean enableHpIndicators = true;
         public boolean enableTimerAndStats = true;
-        public boolean enableSideBar = true;
         public boolean enableVanillaEffectInUMMHud = false;
         public boolean enableVanityDurability = true;
         public boolean enableCustomSplash = true;
         @ConfigEntry.Gui.CollapsibleObject
         public InventoryOverlayToggles inventoryOverlay = new InventoryOverlayToggles();
+        @ConfigEntry.Gui.CollapsibleObject
+        public SidebarToggles sidebarToggles = new SidebarToggles();
         public boolean enableDebug = SharedConstants.IS_RUNNING_IN_IDE;
         public boolean suppressDebugWarning = !SharedConstants.IS_RUNNING_IN_IDE;
     }
@@ -106,6 +114,8 @@ public class FMAConfig implements ConfigData {
         @ConfigEntry.Gui.Tooltip
         public boolean disableMonumentaLore = true; // This feature is beta
         @ConfigEntry.Gui.Tooltip
+        public boolean peliCompatibilityMode = false;
+        @ConfigEntry.Gui.Tooltip
         public boolean enableStatBreakdown = false;
         @ConfigEntry.Gui.Tooltip
         public boolean displayRollValue = true;
@@ -131,8 +141,8 @@ public class FMAConfig implements ConfigData {
     public static class Ruin {
         public boolean soulsSplit = true;
         public boolean startBossSplit = true;
-        public boolean daggerSplit = true;
-        public boolean dpsSplit = true;
+        public boolean daggerSplit = false;
+        public boolean dpsSplit = false;
         public boolean bossSplit = true;
     }
 

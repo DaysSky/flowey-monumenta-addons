@@ -44,6 +44,7 @@ dependencies {
         officialMojangMappings()
         parchment("org.parchmentmc.data:parchment-1.19.4:2023.06.26@zip")
     })
+
     modImplementation("net.fabricmc:fabric-loader:${loader_version}")
     modImplementation("net.fabricmc.fabric-api:fabric-api:${fabric_version}")
     modApi("de.siphalor:amecsapi-1.20:1.3.9+mc1.20-pre1")
@@ -56,7 +57,7 @@ dependencies {
     // Optional dependency, take care to never classload
     modImplementation("maven.modrinth:unofficial-monumenta-mod:1.9.9.2-fabric,1.20.1")
     // Janky, obtained from UMM jar
-    modApi(files("libs/MCUIFramework-mc1.19.4-SNAPSHOT.jar"))
+    modApi(files("libs/MCUIFramework-mc1.20-SNAPSHOT.jar"))
 }
 
 tasks {
