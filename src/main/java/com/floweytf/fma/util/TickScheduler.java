@@ -3,9 +3,7 @@ package com.floweytf.fma.util;
 import java.util.PriorityQueue;
 import java.util.function.Consumer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
 
 public class TickScheduler {
