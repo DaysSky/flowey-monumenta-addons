@@ -14,6 +14,8 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.network.chat.Component;
+import static net.minecraft.network.chat.Component.literal;
+import static net.minecraft.network.chat.Component.translatable;
 
 public class SideBarManager {
     private static final Map<String, String> IP_TO_SHORTHAND = Map.of(
@@ -31,11 +33,11 @@ public class SideBarManager {
 
     public SideBarManager(FMAConfig config) {
         title = join(
-            Component.literal("     "),
+            literal("     "),
             withColor("[", config.appearance.bracketColor),
             withColor(config.appearance.tagText, config.appearance.tagColor).withStyle(ChatFormatting.BOLD),
             withColor("] ", config.appearance.bracketColor),
-            Component.literal("     ")
+            literal("     ")
         );
         textColor = config.appearance.textColor;
         altColor = config.appearance.altTextColor;
@@ -55,14 +57,13 @@ public class SideBarManager {
 
         if (config.sidebarToggles.enableShard) {
             if (start == -1 || end == -1) {
-                builtinText.add(Component.translatable("hud.fma.sidebar.shard", withColor("unknown (bug)",
-                    errorColor)));
+                builtinText.add(translatable("hud.fma.sidebar.shard", withColor("unknown (bug)", errorColor)));
             } else {
                 final var shard = raw.substring(start + 1, end);
-                builtinText.add(Component.translatable("hud.fma.sidebar.shard", withColor(shard, altColor)));
+                builtinText.add(translatable("hud.fma.sidebar.shard", withColor(shard, altColor)));
             }
         }
-        
+
         if (config.sidebarToggles.enableIp) {
             final var conn = Minecraft.getInstance().getConnection();
 
@@ -73,7 +74,7 @@ public class SideBarManager {
                     ip = IP_TO_SHORTHAND.getOrDefault(ip, ip);
                 }
 
-                builtinText.add(Component.translatable("hud.fma.sidebar.ip", withColor(ip, altColor)));
+                builtinText.add(translatable("hud.fma.sidebar.ip", withColor(ip, altColor)));
             }
         }
     }

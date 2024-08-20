@@ -155,9 +155,9 @@ public final class CharmEffectInstance {
                 entry.effect().ability.coloredName.copy().withStyle(entry.modText().getStyle()),
                 Component.literal(" "),
                 entry.effectText(),
-                Component.literal(" ["),
+                Component.literal(" [").withStyle(ChatFormatting.GRAY),
                 entry.rollText(),
-                Component.literal("]")
+                Component.literal("]").withStyle(ChatFormatting.GRAY)
             )).toList();
         } else {
             return tabulate(font, Stream.concat(
