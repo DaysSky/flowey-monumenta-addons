@@ -3,6 +3,7 @@ package com.floweytf.fma.mixin;
 import com.floweytf.fma.FMAClient;
 import com.floweytf.fma.Graphics;
 import com.floweytf.fma.features.cz.CharmItemManager;
+import static com.floweytf.fma.util.FormatUtil.literal;
 import com.floweytf.fma.util.NBTUtil;
 import com.floweytf.fma.util.Util;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -59,7 +60,7 @@ public abstract class ItemRendererMixin {
                     final var currTime = cooldowns.tickCount;
                     final var timeLeft = (endTime - currTime + 19) / 20;
                     Graphics.drawString(
-                        poseStack, font, Component.literal(String.valueOf(timeLeft)), x, y, 200,
+                        poseStack, font, literal(timeLeft), x, y, 200,
                         0xff000000 | Util.colorRange(currTime - startTime, endTime - startTime)
                     );
                 }
@@ -75,7 +76,7 @@ public abstract class ItemRendererMixin {
 
                 czCharmData.ifPresent(compoundTag -> Graphics.drawString(
                     poseStack, font,
-                    Component.literal(str),
+                    literal(str),
                     0, 0, 0xFFFFFA75
                 ));
                 poseStack.popPose();
@@ -107,7 +108,7 @@ public abstract class ItemRendererMixin {
                 );
 
                 countOpt.ifPresent(count -> {
-                    final var t = Component.literal(String.valueOf(count));
+                    final var t = literal(count);
 
                     Graphics.drawString(
                         poseStack, font, t,
@@ -124,7 +125,7 @@ public abstract class ItemRendererMixin {
                     );
 
                 countOpt.ifPresent(count -> {
-                    final var t = Component.literal(String.valueOf(count));
+                    final var t = literal(count);
 
                     if (count < 100) {
                         Graphics.drawString(

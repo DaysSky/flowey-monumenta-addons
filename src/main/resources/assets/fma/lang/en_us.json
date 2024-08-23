@@ -135,7 +135,7 @@
     "hud.fma.sidebar.ruin.chests": "Chests %s/118z",
 
     // CZ
-    "text.autoconfig.fma.option.zenith.enableCustomCharmInfo.@PrefixText": "WARNING: All features here are *experimental*! Use at your own risk!",
+    "text.autoconfig.fma.option.zenith.enableCustomCharmInfo.@PrefixText": "WARNING: All features here are *experimental*! Use at your own risk! There is a chance this mod will lie about charm info!",
     "text.autoconfig.fma.option.zenith.enableCustomCharmInfo": "Enable enhanced charm stat",
     "text.autoconfig.fma.option.zenith.disableMonumentaLore": "Disable Monumenta charm lore",
     "text.autoconfig.fma.option.zenith.disableMonumentaLore.@Tooltip": "Turn this off at your own risk, the mod may lie about stats",

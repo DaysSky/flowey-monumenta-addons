@@ -1,13 +1,34 @@
 package com.floweytf.fma.util;
 
 import com.floweytf.fma.FMAClient;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.function.UnaryOperator;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Font;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
 
 public class FormatUtil {
+    public static class ComponentJoiner {
+        private final List<Component> elements = new ArrayList<>();
+
+        public ComponentJoiner add(Component... components) {
+            elements.addAll(List.of(components));
+            return this;
+        }
+
+        public Component build() {
+            return join(Component.empty(), elements);
+        }
+    }
+
+    public static ComponentJoiner joiner() {
+        return new ComponentJoiner();
+    }
+
     public static MutableComponent join(Component... components) {
         return join(Component.empty(), List.of(components));
     }
@@ -107,6 +128,15 @@ public class FormatUtil {
         }
     }
 
+    public static String fmtDoubleDelta(double d) {
+        String prefix = d >= 0 ? "+" : "";
+        if (d == (int) d) {
+            return prefix + (int) d;
+        } else {
+            return prefix + d;
+        }
+    }
+
     private static final ResourceLocation SPACING = new ResourceLocation("fma:formatting/spacing");
 
     public static Component pad(int pixels) {
@@ -158,5 +188,25 @@ public class FormatUtil {
         }
 
         return List.of(components);
+    }
+
+    public static MutableComponent literal(Object value, ChatFormatting... formatting) {
+        return Component.literal(String.valueOf(value)).withStyle(formatting);
+    }
+
+    public static MutableComponent literal(Object value, UnaryOperator<Style> formatter) {
+        return Component.literal(String.valueOf(value)).withStyle(formatter);
+    }
+
+    public static MutableComponent literal(Object value, int color) {
+        return Component.literal(String.valueOf(value)).withStyle(s -> s.withColor(color));
+    }
+
+    public static MutableComponent literal(Object value, Style s) {
+        return Component.literal(String.valueOf(value)).withStyle(s);
+    }
+
+    public static double twoDecimal(double value) {
+        return Math.round(value * 100) / 100.0;
     }
 }
