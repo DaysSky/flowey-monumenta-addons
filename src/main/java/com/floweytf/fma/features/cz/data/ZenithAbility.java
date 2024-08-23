@@ -1,5 +1,6 @@
 package com.floweytf.fma.features.cz.data;
 
+import static com.floweytf.fma.util.FormatUtil.literal;
 import net.minecraft.network.chat.Component;
 
 public enum ZenithAbility {
@@ -20,7 +21,7 @@ public enum ZenithAbility {
     GUARDING_BOLT("Guarding Bolt", ZenithClass.WINDWALKER),
     THUNDERCLOUD_FORM("Thundercloud Form", ZenithClass.WINDWALKER),
     LAST_BREATH("Last Breath", ZenithClass.WINDWALKER),
-    ONE_WITH_THE_WIND("One With The Wind", ZenithClass.WINDWALKER),
+    ONE_WITH_THE_WIND("One with the Wind", ZenithClass.WINDWALKER),
     RESTORING_DRAFT("Restoring Draft", ZenithClass.WINDWALKER),
     SKYHOOK("Skyhook", ZenithClass.WINDWALKER),
     WIND_WALK("Wind Walk", ZenithClass.WINDWALKER),
@@ -34,7 +35,7 @@ public enum ZenithAbility {
     DEADLY_STRIKE("Deadly Strike", ZenithClass.SHADOWDANCER),
     DETHRONER("Dethroner", ZenithClass.SHADOWDANCER),
     DUMMY_DECOY("Dummy Decoy", ZenithClass.SHADOWDANCER),
-    CLOAK_OF_SHADOWS("Cloak Of Shadows", ZenithClass.SHADOWDANCER),
+    CLOAK_OF_SHADOWS("Cloak of Shadows", ZenithClass.SHADOWDANCER),
     SHADOW_SLAM("Shadow Slam", ZenithClass.SHADOWDANCER),
     ESCAPE_ARTIST("Escape Artist", ZenithClass.SHADOWDANCER),
     PHANTOM_FORCE("Phantom Force", ZenithClass.SHADOWDANCER),
@@ -45,7 +46,7 @@ public enum ZenithAbility {
     REJUVENATION("Rejuvenation", ZenithClass.DAWNBRINGER),
     SOOTHING_COMBOS("Soothing Combos", ZenithClass.DAWNBRINGER),
     SUNDROPS("Sundrops", ZenithClass.DAWNBRINGER),
-    WARD_OF_LIGHT("Ward Of Light", ZenithClass.DAWNBRINGER),
+    WARD_OF_LIGHT("Ward of Light", ZenithClass.DAWNBRINGER),
     DIVINE_BEAM("Divine Beam", ZenithClass.DAWNBRINGER),
     ETERNAL_SAVIOR("Eternal Savior", ZenithClass.DAWNBRINGER),
     SPARK_OF_INSPIRATION("Spark of Inspiration", ZenithClass.DAWNBRINGER),
@@ -88,6 +89,6 @@ public enum ZenithAbility {
     ZenithAbility(String displayName, ZenithClass zenithClass) {
         this.displayName = displayName;
         this.zenithClass = zenithClass;
-        this.coloredName = Component.literal(displayName).withStyle(s -> s.withColor(zenithClass.color));
+        this.coloredName = literal(displayName, zenithClass.color);
     }
 }

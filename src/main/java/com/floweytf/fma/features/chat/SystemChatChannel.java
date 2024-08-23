@@ -1,5 +1,6 @@
 package com.floweytf.fma.features.chat;
 
+import static com.floweytf.fma.util.FormatUtil.literal;
 import java.util.function.UnaryOperator;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -9,12 +10,12 @@ public class SystemChatChannel extends ChatChannel {
     private final String channelId;
 
     public SystemChatChannel(String channelId, String displayName, ChatFormatting color) {
-        super(Component.literal("#").append(Component.literal(displayName).withStyle(color)));
+        super(literal("#" + displayName, color));
         this.channelId = channelId;
     }
 
     public SystemChatChannel(String channelId, String displayName, UnaryOperator<Style> style) {
-        super(Component.literal("#").append(Component.literal(displayName).withStyle(style)));
+        super(literal("#" + displayName, style));
         this.channelId = channelId;
     }
 

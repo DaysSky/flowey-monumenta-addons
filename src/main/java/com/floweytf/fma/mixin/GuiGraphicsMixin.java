@@ -3,6 +3,7 @@ package com.floweytf.fma.mixin;
 import com.floweytf.fma.FMAClient;
 import com.floweytf.fma.Graphics;
 import com.floweytf.fma.features.cz.CharmItemManager;
+import static com.floweytf.fma.util.FormatUtil.literal;
 import com.floweytf.fma.util.NBTUtil;
 import com.floweytf.fma.util.Util;
 import static com.floweytf.fma.util.Util.c;
@@ -113,7 +114,7 @@ public abstract class GuiGraphicsMixin {
                 );
 
                 countOpt.ifPresent(count -> {
-                    final var t = Component.literal(String.valueOf(count));
+                    final var t = literal(count);
 
                     Graphics.drawString(
                         c(this), font, t,
@@ -130,7 +131,7 @@ public abstract class GuiGraphicsMixin {
                     );
 
                 countOpt.ifPresent(count -> {
-                    final var t = Component.literal(String.valueOf(count));
+                    final var t = literal(count);
 
                     if (count < 100) {
                         Graphics.drawString(

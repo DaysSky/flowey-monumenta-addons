@@ -2,6 +2,8 @@ package com.floweytf.fma.features.chat;
 
 import com.floweytf.fma.FMAConfig;
 import com.floweytf.fma.util.FormatUtil;
+import static com.floweytf.fma.util.FormatUtil.join;
+import static com.floweytf.fma.util.FormatUtil.literal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -52,9 +54,9 @@ public class ChatChannelManager {
     }
 
     private void renderPrompt() {
-        setPrompt(FormatUtil.join(
+        setPrompt(join(
             getChannel().getPromptText(),
-            Component.literal(" >> ")
+            literal(" >> ")
         ));
     }
 
