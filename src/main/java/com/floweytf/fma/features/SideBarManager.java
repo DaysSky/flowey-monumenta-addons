@@ -2,8 +2,7 @@ package com.floweytf.fma.features;
 
 import com.floweytf.fma.FMAClient;
 import com.floweytf.fma.FMAConfig;
-import static com.floweytf.fma.util.FormatUtil.join;
-import static com.floweytf.fma.util.FormatUtil.withColor;
+import static com.floweytf.fma.util.FormatUtil.*;
 import com.mojang.blaze3d.vertex.PoseStack;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +13,6 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.network.chat.Component;
-import static net.minecraft.network.chat.Component.literal;
 import static net.minecraft.network.chat.Component.translatable;
 
 public class SideBarManager {

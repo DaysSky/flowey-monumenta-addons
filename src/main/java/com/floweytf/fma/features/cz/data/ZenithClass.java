@@ -1,5 +1,6 @@
 package com.floweytf.fma.features.cz.data;
 
+import static com.floweytf.fma.util.FormatUtil.literal;
 import net.minecraft.network.chat.Component;
 
 public enum ZenithClass {
@@ -19,7 +20,7 @@ public enum ZenithClass {
     ZenithClass(String displayName, int color) {
         this.displayName = displayName;
         this.color = color;
-        this.coloredName = Component.literal(displayName).withStyle(s -> s.withColor(color));
-        this.coloredShortName = Component.literal(displayName.substring(0, 2)).withStyle(s -> s.withColor(color));
+        this.coloredName = literal(displayName, s -> s.withColor(color));
+        this.coloredShortName = literal(displayName.substring(0, 2), s -> s.withColor(color));
     }
 }

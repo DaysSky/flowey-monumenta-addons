@@ -5,34 +5,38 @@ import com.floweytf.fma.FMAConfig;
 import com.floweytf.fma.features.cz.data.CharmEffectRarity;
 import com.floweytf.fma.features.cz.data.CharmEffectType;
 import com.floweytf.fma.util.FormatUtil;
-import static com.floweytf.fma.util.FormatUtil.join;
-import static com.floweytf.fma.util.FormatUtil.tabulate;
+import static com.floweytf.fma.util.FormatUtil.*;
 import com.floweytf.fma.util.Util;
+import com.google.common.collect.Streams;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.UnaryOperator;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Font;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
+import org.jetbrains.annotations.Nullable;
 
 public final class CharmEffectInstance {
     private final double rollValue;
     private final CharmEffectType effect;
-    private final CharmEffectRarity rarity;
+    private final CharmEffectRarity effectRarity;
 
     private final double baseValue;
     private final double delta;
     private final double value;
+    private final double displayRollValue;
     private final Style rarityColor;
     private final Style rollColor;
 
     public CharmEffectInstance(double rollValue, CharmEffectType effect, CharmEffectRarity rarity) {
         this.rollValue = rollValue;
         this.effect = effect;
-        this.rarity = rarity;
+        this.effectRarity = rarity;
         // we should compute a few other values
-        final var rawBaseValue = effect.rarityValue(rarity.rarity);
+        final var rawBaseValue = effect.rarityValue(rarity.charmRarity);
 
         var baseValue = rawBaseValue;
         var delta = effect.variance * (2 * rollValue - 1);
@@ -54,19 +58,31 @@ public final class CharmEffectInstance {
         }
 
         // prep colors
-        rarityColor = Style.EMPTY.withColor(rarity.color);
+        this.rarityColor = Style.EMPTY.withColor(rarity.color);
 
         // basically, if the base value is negative, we can assume that a low roll is good
         // or else we can assume a high roll is good
         // if it's negative, we negate this
 
-        final var rollValueForColor = (rawBaseValue < 0 == rarity.isNegative) ? rollValue :
+        this.displayRollValue = (rawBaseValue < 0 == rarity.isNegative) ? rollValue :
             (1 - rollValue);
 
-        rollColor = Style.EMPTY.withColor(Util.colorRange((float) rollValueForColor));
+        rollColor = Style.EMPTY.withColor(Util.colorRange((float) displayRollValue));
         this.baseValue = baseValue;
         this.delta = delta;
         this.value = value;
+    }
+
+    public CharmEffectInstance withRarity(UnaryOperator<CharmEffectRarity> rarityMod) {
+        return new CharmEffectInstance(rollValue, effect, rarityMod.apply(effectRarity));
+    }
+
+    public CharmEffectInstance withRarity(CharmEffectRarity rarity) {
+        return new CharmEffectInstance(rollValue, effect, rarity);
+    }
+
+    public CharmEffectRarity getEffectRarity() {
+        return effectRarity;
     }
 
     private String unit() {
@@ -77,97 +93,165 @@ public final class CharmEffectInstance {
         return FormatUtil.fmtDouble(value) + unit();
     }
 
-    private double twoDecimal(double value) {
-        return Math.round(value * 100) / 100.0;
-    }
-
     private Component effectText() {
-        return Component.literal(effect.modifier).withStyle(rarityColor);
+        return literal(effect.modifier, rarityColor);
     }
 
     private Component modText() {
-        return Component.literal(fmt(value)).withStyle(rarityColor);
+        return literal(fmt(value), rarityColor);
+    }
+
+    public String monumentaText() {
+        return fmt(value) + " " + effect().ability.displayName + " " + effect.modifier;
     }
 
     private Component modDetailText() {
         return join(
-            Component.literal(fmt(baseValue)).withStyle(rarityColor),
+            literal(fmt(baseValue), rarityColor),
             effect.variance == 0 ?
-                Component.literal("+0" + unit()).withStyle(ChatFormatting.DARK_GRAY) :
-                Component.literal(fmt(twoDecimal(delta))).withStyle(rollColor)
+                literal("+0" + unit(), ChatFormatting.DARK_GRAY) :
+                literal(fmtDoubleDelta(twoDecimal(delta)) + unit(), rollColor)
         );
     }
 
     private Component rarityText() {
-        return Component.literal(rarity.getShorthand()).withStyle(rarityColor);
+        return literal(effectRarity.getShorthand(), rarityColor);
     }
 
     private Component rollText() {
-        return Component.literal(FormatUtil.fmtDouble(twoDecimal(rollValue * 100), false) + "%").withStyle(rollColor);
+        return literal(fmtDouble(twoDecimal(displayRollValue * 100), false) + "%", rollColor);
     }
 
-    private List<Component> formatParts(FMAConfig.Zenith config, boolean includeCharmEffect) {
+    private static List<Component> formatParts(FMAConfig.Zenith config, boolean includeAbility,
+                                               CharmEffectInstance self, @Nullable CharmEffectInstance upgrade) {
         final var parts = new ArrayList<Component>();
 
-        parts.add(modText());
-
-        if (includeCharmEffect) {
-            parts.add(effect.ability.coloredName);
+        // Janky way to disable rendering stuff...
+        if(self.equals(upgrade)) {
+            upgrade = null;
         }
 
-        parts.add(effectText());
+        parts.add(upgrade == null ? self.modText() : join(
+            self.modText(),
+            literal(" -> ", ChatFormatting.GRAY),
+            upgrade.modText()
+        ));
 
-        if (config.enableStatBreakdown)
-            parts.add(modDetailText());
-        if (config.displayEffectRarity)
-            parts.add(rarityText());
-        if (config.displayRollValue)
-            parts.add(rollText());
+        if (includeAbility) {
+            parts.add(self.effect.ability.coloredName);
+        }
+
+        parts.add(self.effectText());
+
+        if (config.enableStatBreakdown) {
+            parts.add(upgrade == null ? self.modDetailText() : join(
+                self.modDetailText(),
+                literal(" -> ", ChatFormatting.GRAY),
+                upgrade.modDetailText()
+            ));
+        }
+
+        if (config.displayEffectRarity) {
+            parts.add(upgrade == null ? self.rarityText() : join(
+                self.rarityText(),
+                literal(" -> ", ChatFormatting.GRAY),
+                upgrade.rarityText()
+            ));
+        }
+
+        if (config.displayRollValue) {
+            parts.add(self.rollText());
+        }
 
         return parts;
     }
 
-    private static List<Component> getHeader(FMAConfig.Zenith config, boolean includeCharmAbility) {
+    private static List<Component> getHeader(FMAConfig.Zenith config, boolean includeAbility) {
         final var header = new ArrayList<Component>();
-        header.add(Component.literal("Mod").withStyle(ChatFormatting.GRAY, ChatFormatting.UNDERLINE));
-        if (includeCharmAbility) {
-            header.add(Component.literal("Ability").withStyle(ChatFormatting.GRAY, ChatFormatting.UNDERLINE));
+        header.add(literal("Mod", ChatFormatting.GRAY, ChatFormatting.UNDERLINE));
+        if (includeAbility) {
+            header.add(literal("Ability", ChatFormatting.GRAY, ChatFormatting.UNDERLINE));
         }
 
-        header.add(Component.literal("Effect").withStyle(ChatFormatting.GRAY, ChatFormatting.UNDERLINE));
+        header.add(literal("Effect", ChatFormatting.GRAY, ChatFormatting.UNDERLINE));
 
         if (config.enableStatBreakdown)
-            header.add(Component.literal("Mod Detail").withStyle(ChatFormatting.GRAY, ChatFormatting.UNDERLINE));
+            header.add(literal("Mod Detail", ChatFormatting.GRAY, ChatFormatting.UNDERLINE));
         if (config.displayEffectRarity)
-            header.add(Component.literal("Rarity").withStyle(ChatFormatting.GRAY, ChatFormatting.UNDERLINE));
+            header.add(literal("Rarity", ChatFormatting.GRAY, ChatFormatting.UNDERLINE));
         if (config.displayRollValue)
-            header.add(Component.literal("Roll").withStyle(ChatFormatting.GRAY, ChatFormatting.UNDERLINE));
+            header.add(literal("Roll", ChatFormatting.GRAY, ChatFormatting.UNDERLINE));
         return header;
     }
 
-    public static List<Component> format(Font font, List<CharmEffectInstance> entries, boolean includeCharmEffect) {
+    private static List<Component> formatPeli(List<CharmEffectInstance> effects,
+                                              @Nullable List<CharmEffectInstance> upgradedEffects) {
+        return IntStream.range(0, effects.size()).mapToObj(i -> {
+            final var effect = effects.get(i);
+            final var upgradedEffect = upgradedEffects == null ? null : upgradedEffects.get(i);
+
+            final var builder = joiner();
+
+            if (upgradedEffects == null || effect.equals(upgradedEffect)) {
+                builder.add(effect.modText());
+            } else {
+                builder.add(effect.modText(), literal(" -> ", ChatFormatting.GRAY), upgradedEffect.modText());
+            }
+
+            return builder.add(
+                literal(" "),
+                effect.effect().ability.coloredName.copy().withStyle(effect.modText().getStyle()),
+                literal(" "),
+                effect.effectText(),
+                literal(" [", ChatFormatting.GRAY),
+                effect.rollText(),
+                literal("]", ChatFormatting.GRAY)
+            ).build();
+        }).toList();
+    }
+
+    private static List<Component> formatTabular(Font font, List<CharmEffectInstance> effects,
+                                                 @Nullable List<CharmEffectInstance> upgradedEffects,
+                                                 boolean includeAbility, FMAConfig.Zenith config) {
+        if (upgradedEffects == null) {
+            return tabulate(font, Stream.concat(
+                Stream.of(getHeader(config, includeAbility)),
+                effects.stream().map(entry -> formatParts(config, includeAbility, entry, null))
+            ).toList());
+        } else {
+            return tabulate(font, Stream.concat(
+                Stream.of(getHeader(config, includeAbility)),
+                Streams.zip(
+                    effects.stream(),
+                    upgradedEffects.stream(),
+                    (entry, upgrade) -> formatParts(config, includeAbility, entry, upgrade)
+                )
+            ).toList());
+        }
+    }
+
+    public static List<Component> format(Font font, List<CharmEffectInstance> effects,
+                                         @Nullable List<CharmEffectInstance> upgradedEffects, boolean includeAbility) {
         final var config = FMAClient.config().zenith;
 
         if (config.peliCompatibilityMode) {
-            return entries.stream().map(entry -> (Component) join(
-                entry.modText(),
-                Component.literal(" "),
-                entry.effect().ability.coloredName.copy().withStyle(entry.modText().getStyle()),
-                Component.literal(" "),
-                entry.effectText(),
-                Component.literal(" [").withStyle(ChatFormatting.GRAY),
-                entry.rollText(),
-                Component.literal("]").withStyle(ChatFormatting.GRAY)
-            )).toList();
+            return formatPeli(effects, upgradedEffects);
         } else {
-            return tabulate(font, Stream.concat(
-                Stream.of(getHeader(config, includeCharmEffect)),
-                entries.stream().map(entry -> entry.formatParts(config, includeCharmEffect))
-            ).toList());
+            return formatTabular(font, effects, upgradedEffects, includeAbility, config);
         }
     }
 
     public CharmEffectType effect() {
         return effect;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CharmEffectInstance that = (CharmEffectInstance) o;
+        return Double.compare(rollValue, that.rollValue) == 0 &&
+            effect == that.effect &&
+            effectRarity == that.effectRarity;
     }
 }

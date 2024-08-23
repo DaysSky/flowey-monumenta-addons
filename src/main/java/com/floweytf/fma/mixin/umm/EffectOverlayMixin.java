@@ -6,6 +6,7 @@ import ch.njol.unofficialmonumentamod.features.effects.EffectOverlay;
 import com.floweytf.fma.FMAClient;
 import com.floweytf.fma.Graphics;
 import static com.floweytf.fma.util.FormatUtil.join;
+import static com.floweytf.fma.util.FormatUtil.literal;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.llamalad7.mixinextras.sugar.ref.LocalIntRef;
@@ -80,7 +81,7 @@ public abstract class EffectOverlayMixin extends HudElement {
             return;
         }
 
-        final var space = Component.literal(" ");
+        final var space = literal(" ");
 
         if (!player.getActiveEffects().isEmpty()) {
             fma$renderLine(font, matrices, Component.translatable("hud.fma.ummEffects.vanillaCategory"), rAlign, width,
@@ -90,7 +91,7 @@ public abstract class EffectOverlayMixin extends HudElement {
         for (final var activeEffect : player.getActiveEffects()) {
             final var nameText = activeEffect.getEffect().getDisplayName();
             final var amp = activeEffect.getAmplifier();
-            final var levelText = Component.literal(amp == 0 ? "" : (amp + 1) + " ");
+            final var levelText = literal(amp == 0 ? "" : (amp + 1) + " ");
             final var timeText = MobEffectUtil.formatDuration(activeEffect, 1f);
             final var color = BAD_EFFECTS.contains(activeEffect.getEffect()) ? ChatFormatting.RED :
                 ChatFormatting.GREEN;

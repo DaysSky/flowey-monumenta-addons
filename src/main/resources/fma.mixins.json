@@ -14,6 +14,7 @@
         "SplashManagerMixin",
         "umm.EffectOverlayMixin"
     ],
+    "plugin": "com.floweytf.fma.MixinConfigPlugin",
     "injectors": {
         "defaultRequire": 1
     }

@@ -37,4 +37,8 @@ public class Util {
     public static int colorRange(float val) {
         return Mth.hsvToRgb(val / 3.0f, 1.0f, 1.0f);
     }
+
+    public static int colorRange(double val) {
+        return Mth.hsvToRgb((float) (val / 3.0), 1.0f, 1.0f);
+    }
 }

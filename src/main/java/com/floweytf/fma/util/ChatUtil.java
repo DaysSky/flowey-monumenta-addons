@@ -6,6 +6,7 @@ import java.util.Objects;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
+import static net.minecraft.network.chat.Component.empty;
 
 public class ChatUtil {
     public static void send(Component... message) {
@@ -19,11 +20,11 @@ public class ChatUtil {
     }
 
     public static void send(String message) {
-        send(Component.literal(message));
+        send(literal(message));
     }
 
     public static void sendWarn(Component message) {
-        send(Component.empty()
+        send(empty()
             .append(withColor("WARN", FMAClient.appearance().warningColor))
             .append(" ")
             .append(message)
@@ -31,7 +32,7 @@ public class ChatUtil {
     }
 
     public static void sendWarn(String message) {
-        sendWarn(Component.literal(message));
+        sendWarn(literal(message));
     }
 
     public static void sendDebug(String message) {
