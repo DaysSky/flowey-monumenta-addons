@@ -1,8 +1,7 @@
 package com.floweytf.fma.util;
 
-import java.util.Collection;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
+import java.util.regex.Pattern;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import net.minecraft.util.Mth;
@@ -40,5 +39,15 @@ public class Util {
 
     public static int colorRange(double val) {
         return Mth.hsvToRgb((float) (val / 3.0), 1.0f, 1.0f);
+    }
+
+    public static List<String> match(Pattern pattern, String string, int group) {
+        final var matcher = pattern.matcher(string);
+        final var result = new ArrayList<String>();
+        while (matcher.find()) {
+            result.add(matcher.group(group));
+        }
+
+        return result;
     }
 }

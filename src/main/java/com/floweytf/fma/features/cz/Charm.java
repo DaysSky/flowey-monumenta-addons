@@ -100,8 +100,8 @@ public final class Charm {
         this.hasWarning = selfTest(monumentaLore);
 
         if (canUpgrade()) {
-            final var upgradedRarity = rarity.upgrade();
-            final var newBudget = computeBudget(upgradedRarity, charmPower, type);
+            final var upgradedCharmRarity = rarity.upgrade();
+            final var newBudget = computeBudget(upgradedCharmRarity, charmPower, type);
 
             // NOTE: this relies on strict order of effects
             final var result = new ArrayList<CharmEffectInstance>();
@@ -112,20 +112,27 @@ public final class Charm {
 
             var remainingBudget = newBudget - budget;
 
-            for (int i = 1; i < effects.size(); i++) {
-                var value = effects.get(i);
+            // upgrade each charm
+            var hasUpgrade = false;
+            do {
+                hasUpgrade = false;
 
-                var newEffectRarity = value.getEffectRarity();
+                for (int i = 1; i < effects.size(); i++) {
+                    var effect = effects.get(i);
 
-                while (newEffectRarity.canUpgrade(upgradedRarity, remainingBudget)) {
-                    // perform the upgrade
-                    remainingBudget += newEffectRarity.upgradeDelta();
-                    newEffectRarity = newEffectRarity.upgrade();
+                    var newEffectRarity = effect.getEffectRarity();
+
+                    if (effect.canUpgrade(upgradedCharmRarity, remainingBudget)) {
+                        // perform the upgrade
+                        remainingBudget += newEffectRarity.upgradeDelta();
+                        newEffectRarity = newEffectRarity.upgrade();
+                        hasUpgrade = true;
+                    }
+
+                    // add the new rarity...
+                    result.add(effect.withRarity(newEffectRarity));
                 }
-
-                // add the new rarity...
-                result.add(value.withRarity(newEffectRarity));
-            }
+            } while (hasUpgrade);
 
             // currBudget is the new budget, need to store this somewhere
             this.upgradedEffects = result;

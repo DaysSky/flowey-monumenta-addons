@@ -41,6 +41,8 @@ public class Keybinds {
         }
     }
 
+    private static long meowMsNext = System.currentTimeMillis();
+
     public static void init() {
         new ChatChannelControlKeybind(
             "key.fma.cycle_chat_builtin",
@@ -92,6 +94,14 @@ public class Keybinds {
         ) {
             @Override
             public void onPressed() {
+                final var current = System.currentTimeMillis();
+
+                if(meowMsNext > current) {
+                    return;
+                }
+
+                meowMsNext = current + 3000;
+
                 ChatUtil.sendCommand(String.format(
                     "chat say %s %s",
                     FMAClient.config().chat.meowingChannel,

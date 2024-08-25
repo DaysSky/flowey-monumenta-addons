@@ -3,11 +3,13 @@ package com.floweytf.fma.features;
 import com.floweytf.fma.FMAClient;
 import com.floweytf.fma.FMAConfig;
 import static com.floweytf.fma.util.FormatUtil.*;
+import com.floweytf.fma.util.Util;
 import com.mojang.blaze3d.vertex.PoseStack;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.regex.Pattern;
 import java.util.stream.Stream;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
@@ -21,6 +23,7 @@ public class SideBarManager {
         "monumenta-13.playmonumenta.com", "playmonumenta.com (m13)",
         "monumenta-17.playmonumenta.com", "playmonumenta.com (m17)"
     );
+    private static final Pattern MATCH_ANGLE_BRACKET = Pattern.compile("<([a-z0-9-]+)>");
 
     private final Component title;
     private List<Component> builtinText = List.of();
@@ -47,19 +50,22 @@ public class SideBarManager {
 
     public void onTick(Minecraft mc) {
         final var config = FMAClient.features();
-        final var raw = Optional.ofNullable(mc.gui.getTabList().header).map(Component::getString).orElse("");
-        final var start = raw.indexOf("<");
-        final var end = raw.indexOf(">");
-
         builtinText = new ArrayList<>();
 
+        final var raw = Optional.ofNullable(mc.gui.getTabList().header).map(Component::getString).orElse("");
+        final var parts = Util.match(MATCH_ANGLE_BRACKET, raw, 1);
+
+        final var proxy = !parts.isEmpty() ? parts.get(0) : null;
+        final var shard = parts.size() >= 2 ? parts.get(1) : null;
+
+        if (config.sidebarToggles.enableProxy) {
+            final var text = parts.isEmpty() ? withColor("unknown", errorColor) : withColor(parts.get(0), altColor);
+            builtinText.add(translatable("hud.fma.sidebar.proxy", text));
+        }
+
         if (config.sidebarToggles.enableShard) {
-            if (start == -1 || end == -1) {
-                builtinText.add(translatable("hud.fma.sidebar.shard", withColor("unknown (bug)", errorColor)));
-            } else {
-                final var shard = raw.substring(start + 1, end);
-                builtinText.add(translatable("hud.fma.sidebar.shard", withColor(shard, altColor)));
-            }
+            final var text = parts.size() < 2 ? withColor("unknown", errorColor) : withColor(shard, altColor);
+            builtinText.add(translatable("hud.fma.sidebar.shard", text));
         }
 
         if (config.sidebarToggles.enableIp) {
