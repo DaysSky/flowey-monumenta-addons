@@ -4,6 +4,7 @@ import com.floweytf.fma.FMAClient;
 import com.floweytf.fma.FMAConfig;
 import com.floweytf.fma.features.cz.data.CharmEffectRarity;
 import com.floweytf.fma.features.cz.data.CharmEffectType;
+import com.floweytf.fma.features.cz.data.CharmRarity;
 import com.floweytf.fma.util.FormatUtil;
 import static com.floweytf.fma.util.FormatUtil.*;
 import com.floweytf.fma.util.Util;
@@ -127,7 +128,7 @@ public final class CharmEffectInstance {
         final var parts = new ArrayList<Component>();
 
         // Janky way to disable rendering stuff...
-        if(self.equals(upgrade)) {
+        if (self.equals(upgrade)) {
             upgrade = null;
         }
 
@@ -243,6 +244,11 @@ public final class CharmEffectInstance {
 
     public CharmEffectType effect() {
         return effect;
+    }
+
+    public boolean canUpgrade(CharmRarity charmRarity, int remainingBudget) {
+        return effectRarity.canUpgrade(charmRarity, remainingBudget) &&
+            effect.rarityValue(effectRarity.upgrade().charmRarity) != 0;
     }
 
     @Override

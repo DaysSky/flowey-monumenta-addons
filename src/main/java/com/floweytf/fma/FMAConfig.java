@@ -39,6 +39,7 @@ public class FMAConfig implements ConfigData {
 
     public static class SidebarToggles {
         public boolean enable = true;
+        public boolean enableProxy = true;
         public boolean enableShard = true;
         public boolean enableIp = true;
         public boolean enableIpElision = true;

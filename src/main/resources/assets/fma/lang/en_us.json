@@ -157,6 +157,7 @@
 
     // HUD
     "hud.fma.sidebar.timer": "Timer %s",
+    "hud.fma.sidebar.proxy": "Proxy %s",
     "hud.fma.sidebar.shard": "Shard %s",
     "hud.fma.sidebar.ip":  "IP %s",
     "hud.fma.ummEffects.vanillaCategory": "- Vanilla -",
