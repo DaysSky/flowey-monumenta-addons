@@ -1,26 +1,20 @@
 package com.floweytf.fma;
 
-import com.floweytf.fma.features.chat.SystemChatChannel;
-import java.lang.reflect.Field;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.util.*;
+import com.floweytf.fma.features.cz.data.CharmEffectType;
+import java.util.Arrays;
+import java.util.EnumMap;
+import java.util.List;
 import java.util.function.Function;
-import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.ConfigHolder;
 import me.shedaniel.autoconfig.annotation.Config;
 import me.shedaniel.autoconfig.annotation.ConfigEntry;
-import me.shedaniel.autoconfig.gui.registry.api.GuiRegistryAccess;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
-import me.shedaniel.autoconfig.util.Utils;
 import me.shedaniel.clothconfig2.api.AbstractConfigListEntry;
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
-import me.shedaniel.clothconfig2.gui.entries.MultiElementListEntry;
-import me.shedaniel.clothconfig2.gui.entries.NestedListListEntry;
-import net.minecraft.ChatFormatting;
 import net.minecraft.SharedConstants;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionResult;
@@ -124,6 +118,11 @@ public class FMAConfig implements ConfigData {
         public boolean displayEffectRarity = false;
         @ConfigEntry.Gui.Tooltip
         public boolean displayUUID = false;
+        public boolean nbtOrder = false;
+
+        @ConfigEntry.Gui.Tooltip
+        @ConfigEntry.Gui.CollapsibleObject
+        public EnumMap<CharmEffectType, Boolean> ignoredAbilities = new EnumMap<>(CharmEffectType.class);
     }
 
     public static class Portal {
@@ -147,113 +146,10 @@ public class FMAConfig implements ConfigData {
         public boolean bossSplit = true;
     }
 
-    public enum ChatChannelType {
-        LOCAL(new SystemChatChannel("l", "local", ChatFormatting.YELLOW)),
-        WORLD_CHAT(new SystemChatChannel("wc", "world-chat", ChatFormatting.BLUE)),
-        LFG(new SystemChatChannel("lfg", "looking-for-group", ChatFormatting.GOLD)),
-        TR(new SystemChatChannel("tr", "trading", ChatFormatting.DARK_GREEN)),
-        MAID(new SystemChatChannel("MAID", "Maids of Monumenta", style -> style.withColor(0xbe74fb))),
-        GUILD_CHAT(new SystemChatChannel("gc", "guild-chat", ChatFormatting.GRAY)),
-        CUSTOM(cfg -> new SystemChatChannel(cfg.name, cfg.prettyName, style -> style.withColor(cfg.color)));
-
-        private final Function<ChatChannelEntry, SystemChatChannel> builder;
-
-        ChatChannelType(Function<ChatChannelEntry, SystemChatChannel> builder) {
-            this.builder = builder;
-        }
-
-        ChatChannelType(SystemChatChannel instance) {
-            this.builder = x -> instance;
-        }
-
-        public SystemChatChannel build(ChatChannelEntry entry) {
-            return builder.apply(entry);
-        }
-    }
-
-    public static class ChatChannelEntry {
-        public ChatChannelType type = ChatChannelType.CUSTOM;
-        public String shorthandCommand = "";
-        public String name = "";
-        public String prettyName = "";
-        @ConfigEntry.ColorPicker
-        public int color = 0xffffff;
-
-        public static ChatChannelEntry of(ChatChannelType type, String shorthand) {
-            final var inst = new ChatChannelEntry();
-            inst.type = type;
-            inst.shorthandCommand = shorthand;
-            return inst;
-        }
-
-        public List<AbstractConfigListEntry<?>> render(String key, GuiRegistryAccess access) {
-            final var list = new ArrayList<AbstractConfigListEntry<?>>();
-            final var builder = ConfigEntryBuilder.create();
-
-            list.add(
-                builder.startEnumSelector(Component.translatable(key + ".type"), ChatChannelType.class, type)
-                    .setSaveConsumer(val -> this.type = val)
-                    .build()
-            );
-
-            list.add(
-                builder.startStrField(Component.translatable(key + ".shorthand"), shorthandCommand)
-                    .setDefaultValue("")
-                    .setSaveConsumer(val -> this.shorthandCommand = val)
-                    .build()
-            );
-
-            final Function<String, Optional<Component>> notEmpty = string -> {
-                if (string.isEmpty()) {
-                    return Optional.of(Component.translatable("error.fma.no_empty_string"));
-                }
-                return Optional.empty();
-            };
-
-            if (type == ChatChannelType.CUSTOM) {
-                list.add(
-                    builder.startStrField(Component.translatable(key + ".name"), name)
-                        .setDefaultValue("")
-                        .setErrorSupplier(notEmpty)
-                        .setSaveConsumer(val -> this.name = val)
-                        .build()
-                );
-
-                list.add(
-                    builder.startStrField(Component.translatable(key + ".prettyName"), prettyName)
-                        .setDefaultValue("")
-                        .setErrorSupplier(notEmpty)
-                        .setSaveConsumer(val -> this.prettyName = val)
-                        .build()
-                );
-
-                list.add(
-                    builder.startColorField(Component.translatable(key + ".color"), color)
-                        .setDefaultValue(0xffffff)
-                        .setSaveConsumer(val -> this.color = val)
-                        .build()
-                );
-            }
-
-            return list;
-        }
-
-        public SystemChatChannel build() {
-            return type.build(this);
-        }
-    }
-
     public static class Chat {
         public String meowingChannel = "wc";
         public String meowingText = "meow";
         public String ggText = "gg";
-
-        public List<ChatChannelEntry> channels = new ArrayList<>(List.of(
-            ChatChannelEntry.of(ChatChannelType.LOCAL, "l"),
-            ChatChannelEntry.of(ChatChannelType.WORLD_CHAT, "wc"),
-            ChatChannelEntry.of(ChatChannelType.LFG, "lfg"),
-            ChatChannelEntry.of(ChatChannelType.MAID, "gc")
-        ));
     }
 
     @ConfigEntry.Category("features")
@@ -291,63 +187,65 @@ public class FMAConfig implements ConfigData {
 
         if (hpIndicator.lowHpPercent > hpIndicator.mediumHpPercent)
             hpIndicator.lowHpPercent = hpIndicator.mediumHpPercent;
-
-        final var seen = EnumSet.noneOf(ChatChannelType.class);
-
-        chat.channels.removeIf(entry -> {
-            if (entry.type == ChatChannelType.CUSTOM) {
-                return entry.name.isEmpty() || entry.prettyName.isEmpty();
-            }
-
-            final var contains = seen.contains(entry.type);
-            seen.add(entry.type);
-            return contains;
-        });
-
-        final var seenShorthands = new HashSet<String>();
-        chat.channels.forEach(entry -> {
-            if (seenShorthands.contains(entry.shorthandCommand)) {
-                entry.shorthandCommand = "";
-            }
-            seenShorthands.add(entry.shorthandCommand);
-        });
     }
 
+    @SuppressWarnings("rawtypes")
+    private static AbstractConfigListEntry buildEntryToggle(CharmEffectType x, ConfigEntryBuilder builder,
+                                                            EnumMap<CharmEffectType, Boolean> config) {
+        return builder.startBooleanToggle(Component.literal(x.modifier), config.getOrDefault(x, false))
+            .setSaveConsumer(b -> config.put(x, b))
+            .setDefaultValue(false)
+            .build();
+    }
+
+    @SuppressWarnings("rawtypes")
+    private static <T, U> Stream<AbstractConfigListEntry> buildClassifying(
+        Stream<T> entries, Function<T, U> classifier,
+        Function<U, Component> nameGetter,
+        Function<Stream<T>, Stream<AbstractConfigListEntry>> entryBuilder,
+        ConfigEntryBuilder builder
+    ) {
+        return entries.collect(Collectors.groupingBy(classifier))
+            .entrySet()
+            .stream()
+            .map(x -> builder.startSubCategory(nameGetter.apply(x.getKey()),
+                entryBuilder.apply(x.getValue().stream()).toList()).build());
+    }
+
+    @SuppressWarnings("unchecked")
     public static ConfigHolder<FMAConfig> register() {
         final var holder = AutoConfig.register(FMAConfig.class, GsonConfigSerializer::new);
-        final var registry = AutoConfig.getGuiRegistry(FMAConfig.class);
 
-        registry.registerPredicateProvider((key, field, configObject, defaultsObject, guiRegistryAccess) -> {
-            final var conf = new NestedListListEntry<ChatChannelEntry, AbstractConfigListEntry<ChatChannelEntry>>(
-                Component.translatable(key), Utils.getUnsafely(field, configObject), true, null,
-                (newValue) -> Utils.setUnsafely(field, configObject, newValue),
-                () -> Utils.getUnsafely(field, defaultsObject),
-                ConfigEntryBuilder.create().getResetButtonKey(), true, false,
-                (elem, nestedListListEntry) -> {
-                    if (elem == null) {
-                        elem = new ChatChannelEntry();
-                    }
+        AutoConfig.getGuiRegistry(FMAConfig.class).registerTypeProvider(
+            (s, field, o, o1, guiRegistryAccess) -> {
+                final EnumMap<CharmEffectType, Boolean> config;
 
-                    return new MultiElementListEntry<>(
-                        Component.translatable(key + ".entry"),
-                        elem,
-                        elem.render(key, guiRegistryAccess),
-                        true
-                    );
-                }
-            );
-
-            conf.setErrorSupplier(() -> {
-                final List<ChatChannelEntry> value = Utils.getUnsafely(field, defaultsObject);
-                if (!value.stream().map(x -> x.shorthandCommand).filter(x -> !x.isEmpty()).allMatch(new HashSet<>()::add)) {
-                    return Optional.of(Component.translatable("error.fma.duplicate_shorthand"));
+                try {
+                    config = (EnumMap<CharmEffectType, Boolean>) field.get(o);
+                } catch (IllegalAccessException e) {
+                    throw new RuntimeException(e);
                 }
 
-                return Optional.empty();
-            });
+                final var builder = ConfigEntryBuilder.create();
 
-            return List.of(conf);
-        }, isListOfType(ChatChannelEntry.class));
+                final var res = buildClassifying(
+                    Arrays.stream(CharmEffectType.values()),
+                    charmEffectType -> charmEffectType.ability.zenithClass,
+                    zenithClass -> Component.literal(zenithClass.displayName),
+                    charmEffectTypes -> buildClassifying(
+                        charmEffectTypes,
+                        charmEffectType -> charmEffectType.ability,
+                        zenithAbility -> Component.literal(zenithAbility.displayName),
+                        entries -> entries.map(x -> buildEntryToggle(x, builder, config)),
+                        builder
+                    ),
+                    builder
+                ).toList();
+
+                return List.of(builder.startSubCategory(Component.translatable(s), res).setExpanded(false).build());
+            },
+            EnumMap.class
+        );
 
         holder.registerSaveListener((configHolder, config) -> {
             config.validatePostLoad();
@@ -356,16 +254,5 @@ public class FMAConfig implements ConfigData {
         });
 
         return holder;
-    }
-
-    private static Predicate<Field> isListOfType(Class<?> types) {
-        return (field) -> {
-            if (List.class.isAssignableFrom(field.getType()) && field.getGenericType() instanceof ParameterizedType) {
-                Type[] args = ((ParameterizedType) field.getGenericType()).getActualTypeArguments();
-                return args.length == 1 && Stream.of(types).anyMatch((type) -> Objects.equals(args[0], type));
-            } else {
-                return false;
-            }
-        };
     }
 }

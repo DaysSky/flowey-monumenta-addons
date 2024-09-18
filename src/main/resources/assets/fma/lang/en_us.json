@@ -21,6 +21,7 @@
     "text.autoconfig.fma.option.features.enableTimerAndStats": "Timers & statistics",
     "text.autoconfig.fma.option.features.sidebarToggles": "Custom HUD (replaces scoreboard)",
     "text.autoconfig.fma.option.features.sidebarToggles.enable": "Enable",
+    "text.autoconfig.fma.option.features.sidebarToggles.enableProxy": "Enable proxy info",
     "text.autoconfig.fma.option.features.sidebarToggles.enableShard": "Enable shard info",
     "text.autoconfig.fma.option.features.sidebarToggles.enableIp": "Display server IP",
     "text.autoconfig.fma.option.features.sidebarToggles.enableIpElision": "Elide proxy info",
@@ -106,7 +107,6 @@
     "stat.fma.portal.phase3Split": "Boss phase 3 took %s",
     "hud.fma.sidebar.portal.souls": "Souls %s/350",
     "hud.fma.sidebar.portal.chests": "Chests %s/41",
-    
     // MR Strike
     "text.autoconfig.fma.option.ruin": "Masquerader's Ruin Strike",
     "text.autoconfig.fma.option.ruin.soulsSplit": "Send masked requirement reached split message",
@@ -132,10 +132,9 @@
     "stat.fma.ruin.daggerSplit": "Boss daggers took %s",
     "stat.fma.ruin.dpsSplit": "Boss DPS took %s",
     "hud.fma.sidebar.ruin.souls": "Masked killed %s/450",
-    "hud.fma.sidebar.ruin.chests": "Chests %s/118z",
-
+    "hud.fma.sidebar.ruin.chests": "Chests %s/118",
     // CZ
-    "text.autoconfig.fma.option.zenith.enableCustomCharmInfo.@PrefixText": "WARNING: All features here are *experimental*! Use at your own risk! There is a chance this mod will lie about charm info!",
+    "text.autoconfig.fma.option.zenith.enableCustomCharmInfo.@PrefixText": "WARNING: features may be buggy, please report all warnings!",
     "text.autoconfig.fma.option.zenith.enableCustomCharmInfo": "Enable enhanced charm stat",
     "text.autoconfig.fma.option.zenith.disableMonumentaLore": "Disable Monumenta charm lore",
     "text.autoconfig.fma.option.zenith.disableMonumentaLore.@Tooltip": "Turn this off at your own risk, the mod may lie about stats",
@@ -151,16 +150,17 @@
     "text.autoconfig.fma.option.zenith.useShorthands.@Tooltip": "Display icons for things like 'Duration' or 'Radius' instead of text",
     "text.autoconfig.fma.option.zenith.displayUUID": "Display charm UUID",
     "text.autoconfig.fma.option.zenith.displayUUID.@Tooltip": "The UUID is not a uuid... it's just a long that seeds the RNG",
-
+    "text.autoconfig.fma.option.zenith.nbtOrder": "Sort charm effects by NBT order",
+    "text.autoconfig.fma.option.zenith.ignoredAbilities.@Tooltip": "Useful for stats you don't really care about",
+    "text.autoconfig.fma.option.zenith.ignoredAbilities": "Configure abilities to 'hide' (strikethrough) in charm description",
     // Error message
     "error.fma.no_empty_string": "Empty string not allowed here",
     "error.fma.duplicate_shorthand": "Duplicate channel shorthand",
-
     // HUD
     "hud.fma.sidebar.timer": "Timer %s",
     "hud.fma.sidebar.proxy": "Proxy %s",
     "hud.fma.sidebar.shard": "Shard %s",
-    "hud.fma.sidebar.ip":  "IP %s",
+    "hud.fma.sidebar.ip": "IP %s",
     "hud.fma.ummEffects.vanillaCategory": "- Vanilla -",
     "hud.fma.ummEffects.monumentaCategory": "- Monumenta -"
 }

@@ -3,7 +3,6 @@ package com.floweytf.fma.features;
 import com.floweytf.fma.FMAClient;
 import com.floweytf.fma.FMAConfig;
 import com.floweytf.fma.debug.Debug;
-import com.floweytf.fma.features.chat.ChatChannel;
 import com.floweytf.fma.util.ChatUtil;
 import static com.floweytf.fma.util.CommandUtil.*;
 import com.floweytf.fma.util.FormatUtil;
@@ -34,26 +33,6 @@ public class Commands {
         commandInitiators.add(node.getLiteral());
         suggestionInitiators.add(node.getLiteral());
         return clientDispatch.register(node);
-    }
-
-    private CommandNode<CommandSourceStack> registerHidden(LiteralArgumentBuilder<CommandSourceStack> node) {
-        commandInitiators.add(node.getLiteral());
-        return clientDispatch.register(node);
-    }
-
-    private void chatWrapper(String name, ChatChannel channel) {
-        registerHidden(lit(name,
-            // forward
-            context -> {
-                FMAClient.CHAT_CHANNELS.setChannel(channel);
-                return 0;
-            },
-            arg("text", StringArgumentType.greedyString(), context -> {
-                final var arg = StringArgumentType.getString(context, "text");
-                ChatUtil.sendCommand(channel.buildSendCommand(arg));
-                return 0;
-            })
-        ));
     }
 
     private void alias(String name, String target) {
@@ -182,35 +161,6 @@ public class Commands {
 
         // Macro alias, maybe customizable?
         alias("gg", "g " + FMAClient.config().chat.ggText);
-
-        // register the commands
-        if (config.features.enableChatChannels) {
-            registerHidden(lit("tell", arg("player", StringArgumentType.word(),
-                // forward
-                context -> {
-                    final var player = StringArgumentType.getString(context, "player");
-                    FMAClient.CHAT_CHANNELS.openDm(player);
-                    return 0;
-                },
-                arg("text", StringArgumentType.greedyString(), context -> {
-                    final var player = StringArgumentType.getString(context, "player");
-                    final var arg = StringArgumentType.getString(context, "text");
-                    ChatUtil.sendCommand(String.format("tell %s %s", player, arg));
-                    FMAClient.CHAT_CHANNELS.openDm(player);
-                    return 0;
-                })
-            )));
-
-            for (int i = 0; i < config.chat.channels.size(); i++) {
-                final var channel = config.chat.channels.get(i);
-                if (channel.shorthandCommand.isEmpty())
-                    return;
-
-                final var manager = FMAClient.CHAT_CHANNELS;
-                int index = i + 1;
-                chatWrapper(channel.shorthandCommand, manager.getSystemChannels().get(index));
-            }
-        }
     }
 
     public CommandDispatcher<CommandSourceStack> getDispatcher() {

@@ -20,7 +20,7 @@ public class FormatUtil {
             return this;
         }
 
-        public Component build() {
+        public MutableComponent build() {
             return join(Component.empty(), elements);
         }
     }
@@ -157,7 +157,7 @@ public class FormatUtil {
         return res;
     }
 
-    public static List<Component> tabulate(Font font, List<? extends List<Component>> table) {
+    public static List<MutableComponent> tabulate(Font font, List<? extends List<Component>> table) {
         // we need to iterate by columns...
         final var cols = table.get(0).size();
 

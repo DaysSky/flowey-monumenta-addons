@@ -1,6 +1,7 @@
 package com.floweytf.fma.util;
 
 import java.util.*;
+import java.util.function.UnaryOperator;
 import java.util.regex.Pattern;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
@@ -38,6 +39,7 @@ public class Util {
     }
 
     public static int colorRange(double val) {
+        val = Mth.clamp(val, 0, 1);
         return Mth.hsvToRgb((float) (val / 3.0), 1.0f, 1.0f);
     }
 
@@ -49,5 +51,9 @@ public class Util {
         }
 
         return result;
+    }
+
+    public static <T> void with(List<T> list, int index, UnaryOperator<T> operator) {
+        list.set(index, operator.apply(list.get(index)));
     }
 }
