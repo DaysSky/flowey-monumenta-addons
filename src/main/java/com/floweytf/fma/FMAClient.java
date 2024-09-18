@@ -1,8 +1,10 @@
 package com.floweytf.fma;
 
 import com.floweytf.fma.debug.Debug;
-import com.floweytf.fma.features.*;
-import com.floweytf.fma.features.chat.ChatChannelManager;
+import com.floweytf.fma.features.Commands;
+import com.floweytf.fma.features.Keybinds;
+import com.floweytf.fma.features.LeaderboardUtils;
+import com.floweytf.fma.features.SideBarManager;
 import com.floweytf.fma.features.cz.CharmItemManager;
 import com.floweytf.fma.features.gamestate.GameState;
 import com.floweytf.fma.util.TickScheduler;
@@ -12,7 +14,6 @@ import me.shedaniel.autoconfig.ConfigHolder;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
 import net.minecraft.client.Minecraft;
@@ -35,9 +36,7 @@ public class FMAClient implements ClientModInitializer {
     public static final Logger LOGGER = LogManager.getLogger();
     public static final TickScheduler SCHEDULER = new TickScheduler();
     public static final LeaderboardUtils LEADERBOARD = new LeaderboardUtils();
-    public static final GUIManager GUI = new GUIManager();
     public final static GameState GAME_STATE = new GameState();
-    public static ChatChannelManager CHAT_CHANNELS;
     public static Commands COMMANDS;
     public static SideBarManager SIDEBAR;
     public final static ModContainer MOD = FabricLoader.getInstance().getModContainer("fma").orElseThrow();
@@ -60,8 +59,6 @@ public class FMAClient implements ClientModInitializer {
     public void onInitializeClient() {
         CONFIG = FMAConfig.register();
 
-        HudRenderCallback.EVENT.register(GUI::render);
-
         // stupid ass hack
         ClientLifecycleEvents.CLIENT_STARTED.register(this::initializeAfterMC);
         ClientTickEvents.END_CLIENT_TICK.register(mc -> SIDEBAR.onTick(mc));
@@ -76,7 +73,6 @@ public class FMAClient implements ClientModInitializer {
 
     public static void reload() {
         final var config = CONFIG.get();
-        CHAT_CHANNELS = new ChatChannelManager(config);
         COMMANDS = new Commands(config);
         SIDEBAR = new SideBarManager(config);
     }

@@ -7,9 +7,9 @@ import com.floweytf.fma.features.cz.data.ZenithAbility;
 import com.floweytf.fma.features.cz.data.ZenithClass;
 import static com.floweytf.fma.util.FormatUtil.*;
 import com.floweytf.fma.util.NBTUtil;
+import com.floweytf.fma.util.Util;
 import static com.floweytf.fma.util.Util.colorRange;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -76,7 +76,7 @@ public final class Charm {
         this.charmPower = charmPower;
         this.uuid = uuid;
         this.rarity = rarity;
-        this.effects = Collections.unmodifiableList(effects);
+        this.effects = new ArrayList<>(effects);
         this.hasUpgraded = hasUpgraded;
 
         this.classes = effects.stream()
@@ -104,11 +104,10 @@ public final class Charm {
             final var newBudget = computeBudget(upgradedCharmRarity, charmPower, type);
 
             // NOTE: this relies on strict order of effects
-            final var result = new ArrayList<CharmEffectInstance>();
-            final var firstEffect = effects.get(0);
+            final var result = new ArrayList<>(effects);
 
             // Upgrade the first one - this has a guaranteed rarity
-            result.add(firstEffect.withRarity(CharmEffectRarity::upgrade));
+            Util.with(result, 0, firstEffect -> firstEffect.withRarity(CharmEffectRarity::upgrade));
 
             var remainingBudget = newBudget - budget;
 
@@ -118,19 +117,14 @@ public final class Charm {
                 hasUpgrade = false;
 
                 for (int i = 1; i < effects.size(); i++) {
-                    var effect = effects.get(i);
-
-                    var newEffectRarity = effect.getEffectRarity();
+                    var effect = result.get(i);
 
                     if (effect.canUpgrade(upgradedCharmRarity, remainingBudget)) {
                         // perform the upgrade
-                        remainingBudget += newEffectRarity.upgradeDelta();
-                        newEffectRarity = newEffectRarity.upgrade();
+                        remainingBudget += effect.getEffectRarity().upgradeDelta();
+                        Util.with(result, i, e -> e.withRarity(CharmEffectRarity::upgrade));
                         hasUpgrade = true;
                     }
-
-                    // add the new rarity...
-                    result.add(effect.withRarity(newEffectRarity));
                 }
             } while (hasUpgrade);
 
@@ -142,6 +136,13 @@ public final class Charm {
             this.upgradedEffects = null;
             this.upgradedBudget = -1;
             this.upgradedMaxBudget = -1;
+        }
+
+        if (!FMAClient.config().zenith.nbtOrder) {
+            this.effects.sort(Comparator.comparingInt(x -> x.effect().ordinal()));
+            if (upgradedEffects != null) {
+                upgradedEffects.sort(Comparator.comparingInt(x -> x.effect().ordinal()));
+            }
         }
     }
 
@@ -241,6 +242,7 @@ public final class Charm {
         }
         if (hasWarning) {
             target.add(literal("* WARNING - possible bug, report to Flowey *", ChatFormatting.RED));
+            target.add(literal("* Charm display data may be wrong *", ChatFormatting.RED));
         }
     }
 }

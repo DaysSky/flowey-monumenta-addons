@@ -17,6 +17,7 @@ import java.util.stream.Stream;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Font;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 import org.jetbrains.annotations.Nullable;
 
@@ -186,7 +187,8 @@ public final class CharmEffectInstance {
     }
 
     private static List<Component> formatPeli(List<CharmEffectInstance> effects,
-                                              @Nullable List<CharmEffectInstance> upgradedEffects) {
+                                              @Nullable List<CharmEffectInstance> upgradedEffects,
+                                              FMAConfig.Zenith config) {
         return IntStream.range(0, effects.size()).mapToObj(i -> {
             final var effect = effects.get(i);
             final var upgradedEffect = upgradedEffects == null ? null : upgradedEffects.get(i);
@@ -199,7 +201,7 @@ public final class CharmEffectInstance {
                 builder.add(effect.modText(), literal(" -> ", ChatFormatting.GRAY), upgradedEffect.modText());
             }
 
-            return builder.add(
+            return (Component) builder.add(
                 literal(" "),
                 effect.effect().ability.coloredName.copy().withStyle(effect.modText().getStyle()),
                 literal(" "),
@@ -207,20 +209,28 @@ public final class CharmEffectInstance {
                 literal(" [", ChatFormatting.GRAY),
                 effect.rollText(),
                 literal("]", ChatFormatting.GRAY)
-            ).build();
+            ).build().withStyle(x -> {
+                if (config.ignoredAbilities.getOrDefault(effect.effect, false)) {
+                    return x.withStrikethrough(true);
+                }
+
+                return x;
+            });
         }).toList();
     }
 
-    private static List<Component> formatTabular(Font font, List<CharmEffectInstance> effects,
-                                                 @Nullable List<CharmEffectInstance> upgradedEffects,
-                                                 boolean includeAbility, FMAConfig.Zenith config) {
+    @SuppressWarnings("UnstableApiUsage")
+    private static List<MutableComponent> formatTabular(Font font, List<CharmEffectInstance> effects,
+                                                        @Nullable List<CharmEffectInstance> upgradedEffects,
+                                                        boolean includeAbility, FMAConfig.Zenith config) {
+        List<MutableComponent> result;
         if (upgradedEffects == null) {
-            return tabulate(font, Stream.concat(
+            result = tabulate(font, Stream.concat(
                 Stream.of(getHeader(config, includeAbility)),
                 effects.stream().map(entry -> formatParts(config, includeAbility, entry, null))
             ).toList());
         } else {
-            return tabulate(font, Stream.concat(
+            result = tabulate(font, Stream.concat(
                 Stream.of(getHeader(config, includeAbility)),
                 Streams.zip(
                     effects.stream(),
@@ -229,14 +239,28 @@ public final class CharmEffectInstance {
                 )
             ).toList());
         }
+
+        for (int i = 0; i < effects.size(); i++) {
+            int finalI = i;
+            result.get(i + 1).withStyle(x -> {
+                if (config.ignoredAbilities.getOrDefault(effects.get(finalI).effect, false)) {
+                    return x.withStrikethrough(true);
+                }
+
+                return x;
+            });
+        }
+
+        return result;
     }
 
-    public static List<Component> format(Font font, List<CharmEffectInstance> effects,
-                                         @Nullable List<CharmEffectInstance> upgradedEffects, boolean includeAbility) {
+    public static List<? extends Component> format(Font font, List<CharmEffectInstance> effects,
+                                                   @Nullable List<CharmEffectInstance> upgradedEffects,
+                                                   boolean includeAbility) {
         final var config = FMAClient.config().zenith;
 
         if (config.peliCompatibilityMode) {
-            return formatPeli(effects, upgradedEffects);
+            return formatPeli(effects, upgradedEffects, config);
         } else {
             return formatTabular(font, effects, upgradedEffects, includeAbility, config);
         }
