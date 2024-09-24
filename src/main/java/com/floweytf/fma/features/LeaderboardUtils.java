@@ -20,12 +20,6 @@ public class LeaderboardUtils {
     private BiConsumer<Integer, Integer> leaderboardConsumer = null;
     private State state = null;
 
-    private void reset() {
-        currLeaderboard = null;
-        leaderboardConsumer = null;
-        state = null;
-    }
-
     public LeaderboardUtils() {
         ClientReceiveSystemChatEvent.EVENT.register(text -> {
             if (currLeaderboard == null) {
@@ -85,6 +79,12 @@ public class LeaderboardUtils {
 
             return EventResult.CONTINUE;
         });
+    }
+
+    private void reset() {
+        currLeaderboard = null;
+        leaderboardConsumer = null;
+        state = null;
     }
 
     public void beginListen(String leaderboard, BiConsumer<Integer, Integer> handler) {

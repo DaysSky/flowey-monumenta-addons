@@ -39,14 +39,6 @@ public enum CharmEffectRarity {
             .findFirst();
     }
 
-    public CharmEffectRarity upgrade() {
-        if (this == LEGENDARY) {
-            throw new UnsupportedOperationException("cannot upgrade legendary");
-        }
-
-        return values()[ordinal() + 1];
-    }
-
     public static CharmEffectRarity byCharmRarity(CharmRarity rarity) {
         return switch (rarity) {
             case COMMON -> COMMON;
@@ -55,6 +47,14 @@ public enum CharmEffectRarity {
             case EPIC -> EPIC;
             case LEGENDARY -> LEGENDARY;
         };
+    }
+
+    public CharmEffectRarity upgrade() {
+        if (this == LEGENDARY) {
+            throw new UnsupportedOperationException("cannot upgrade legendary");
+        }
+
+        return values()[ordinal() + 1];
     }
 
     public int upgradeDelta() {

@@ -21,6 +21,9 @@ import net.minecraft.world.InteractionResult;
 
 @Config(name = "fma")
 public class FMAConfig implements ConfigData {
+    public @interface Hidden {
+    }
+
     public static class InventoryOverlayToggles {
         public boolean enable = true;
         public boolean enableRarity = false;
@@ -40,7 +43,6 @@ public class FMAConfig implements ConfigData {
     }
 
     public static class FeatureToggles {
-        public boolean enableChatChannels = false;
         public boolean enableHpIndicators = true;
         public boolean enableTimerAndStats = true;
         public boolean enableVanillaEffectInUMMHud = false;
@@ -52,6 +54,8 @@ public class FMAConfig implements ConfigData {
         public SidebarToggles sidebarToggles = new SidebarToggles();
         public boolean enableDebug = SharedConstants.IS_RUNNING_IN_IDE;
         public boolean suppressDebugWarning = !SharedConstants.IS_RUNNING_IN_IDE;
+        public boolean recordChestBreak = false;
+        public boolean versionCheck = false;
     }
 
     public static class Appearance {
@@ -180,15 +184,6 @@ public class FMAConfig implements ConfigData {
     @ConfigEntry.Gui.TransitiveObject
     public Zenith zenith = new Zenith();
 
-    @Override
-    public void validatePostLoad() {
-        if (hpIndicator.mediumHpPercent > hpIndicator.goodHpPercent)
-            hpIndicator.mediumHpPercent = hpIndicator.goodHpPercent;
-
-        if (hpIndicator.lowHpPercent > hpIndicator.mediumHpPercent)
-            hpIndicator.lowHpPercent = hpIndicator.mediumHpPercent;
-    }
-
     @SuppressWarnings("rawtypes")
     private static AbstractConfigListEntry buildEntryToggle(CharmEffectType x, ConfigEntryBuilder builder,
                                                             EnumMap<CharmEffectType, Boolean> config) {
@@ -247,6 +242,11 @@ public class FMAConfig implements ConfigData {
             EnumMap.class
         );
 
+        AutoConfig.getGuiRegistry(FMAConfig.class).registerAnnotationProvider(
+            (s, f, o, o1, a) -> List.of(),
+            Hidden.class
+        );
+
         holder.registerSaveListener((configHolder, config) -> {
             config.validatePostLoad();
             FMAClient.reload();
@@ -254,5 +254,14 @@ public class FMAConfig implements ConfigData {
         });
 
         return holder;
+    }
+
+    @Override
+    public void validatePostLoad() {
+        if (hpIndicator.mediumHpPercent > hpIndicator.goodHpPercent)
+            hpIndicator.mediumHpPercent = hpIndicator.goodHpPercent;
+
+        if (hpIndicator.lowHpPercent > hpIndicator.mediumHpPercent)
+            hpIndicator.lowHpPercent = hpIndicator.mediumHpPercent;
     }
 }

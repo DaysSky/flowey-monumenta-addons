@@ -28,6 +28,7 @@ repositories {
     maven("https://maven.shedaniel.me/")
     maven("https://maven.terraformersmc.com/releases/")
     maven("https://jitpack.io/")
+    maven("https://cursemaven.com")
     mavenLocal()
     mavenCentral()
 }
@@ -57,6 +58,8 @@ dependencies {
     modApi("maven.modrinth:unofficial-monumenta-mod:1.9.9.2-fabric,1.19.4")
     // Janky, obtained from UMM jar
     modApi(files("libs/MCUIFramework-mc1.19.4-SNAPSHOT.jar"))
+
+    modApi("curse.maven:xaeros-minimap-fair-play-edition-263466:5548203")
 }
 
 tasks {

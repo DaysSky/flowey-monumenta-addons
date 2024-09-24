@@ -43,12 +43,9 @@ public class RuinStateTracker implements StateTracker {
     }
 
     private final long startTime;
-
+    private final Data data;
     private long startBossSplit;
     private long daggersSplit;
-
-    private final Data data;
-
     private boolean hasWon = false;
 
     public RuinStateTracker() {
@@ -58,6 +55,20 @@ public class RuinStateTracker implements StateTracker {
 
     private int logTime(String key, boolean send, long start, long deltaBegin, long deltaEnd, long... entries) {
         return StatsUtil.logTime("timer.fma.ruin." + key, send, start, deltaBegin, deltaEnd, entries);
+    }
+
+    @Override
+    public void onLeave() {
+        if (!FMAClient.features().enableTimerAndStats) {
+            return;
+        }
+
+        FMAClient.SIDEBAR.setAdditionalText(List.of());
+
+        if (!hasWon) {
+            ChatUtil.send(Component.translatable("stat.fma.ruin.fail"));
+            data.send();
+        }
     }
 
     @Override
@@ -98,20 +109,6 @@ public class RuinStateTracker implements StateTracker {
             hasWon = true;
             data.send();
             break;
-        }
-    }
-
-    @Override
-    public void onLeave() {
-        if (!FMAClient.features().enableTimerAndStats) {
-            return;
-        }
-
-        FMAClient.SIDEBAR.setAdditionalText(List.of());
-
-        if (!hasWon) {
-            ChatUtil.send(Component.translatable("stat.fma.ruin.fail"));
-            data.send();
         }
     }
 

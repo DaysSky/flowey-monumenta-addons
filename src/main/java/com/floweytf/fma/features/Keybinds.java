@@ -5,10 +5,8 @@ import com.floweytf.fma.util.ChatUtil;
 import com.mojang.blaze3d.platform.InputConstants;
 import de.siphalor.amecs.api.AmecsKeyBinding;
 import de.siphalor.amecs.api.KeyModifiers;
-import de.siphalor.amecs.api.PriorityKeyBinding;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screens.ChatScreen;
 import net.minecraft.world.entity.player.Player;
 import org.lwjgl.glfw.GLFW;
 

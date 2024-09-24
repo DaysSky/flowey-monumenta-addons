@@ -380,13 +380,21 @@ public enum CharmEffectType {
     WIND_WALK_LEVITATION_DURATION("Levitation Duration", WIND_WALK, true, false, 0.25, 4.0, 0.5, 0.75, 1.0, 1.25, 1.5),
     WIND_WALK_STUN_DURATION("Stun Duration", WIND_WALK, true, false, 0.25, 2.0, 0.25, 0.5, 0.75, 1.0, 1.25);
 
+    static {
+        final var l = Arrays.stream(values()).filter(x -> !x.name().startsWith(x.ability.name())).toList();
+        if (!l.isEmpty()) {
+            FMAClient.LOGGER.error(l);
+            throw new IllegalStateException("bad data");
+        }
+    }
+
     public final String modifier;
     public final ZenithAbility ability;
     public final boolean isOnlyPositive;
     public final double variance;
-    private final double[] rarityValues;
     public final boolean isPercent;
     public final double effectCap; // Uncapped if 0
+    private final double[] rarityValues;
 
     CharmEffectType(String effectName, ZenithAbility ability, boolean isOnlyPositive, boolean isPercent,
                     double variance, double effectCap, double... rarityValues) {
@@ -411,13 +419,5 @@ public enum CharmEffectType {
 
     public double rarityValue(CharmRarity rarity) {
         return rarityValues[rarity.ordinal()];
-    }
-
-    static {
-        final var l = Arrays.stream(values()).filter(x -> !x.name().startsWith(x.ability.name())).toList();
-        if (!l.isEmpty()) {
-            FMAClient.LOGGER.error(l);
-            throw new IllegalStateException("bad data");
-        }
     }
 }
