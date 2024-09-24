@@ -7,6 +7,7 @@ import java.util.function.UnaryOperator;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Font;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.HoverEvent;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
@@ -24,6 +25,7 @@ public class FormatUtil {
             return join(Component.empty(), elements);
         }
     }
+    private static final ResourceLocation SPACING = new ResourceLocation("fma:formatting/spacing");
 
     public static ComponentJoiner joiner() {
         return new ComponentJoiner();
@@ -68,6 +70,10 @@ public class FormatUtil {
 
     public static MutableComponent withColor(String component, int color) {
         return withColor(Component.literal(component), color);
+    }
+
+    public static MutableComponent withHover(MutableComponent component, Component hover) {
+        return component.withStyle(s -> s.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, hover)));
     }
 
     public static MutableComponent colored(int color) {
@@ -136,8 +142,6 @@ public class FormatUtil {
             return prefix + d;
         }
     }
-
-    private static final ResourceLocation SPACING = new ResourceLocation("fma:formatting/spacing");
 
     public static Component pad(int pixels) {
         var res = Component.empty();

@@ -39,36 +39,6 @@ public final class Charm {
     private final boolean hasUpgraded;
     private final boolean hasWarning;
 
-    private static int computeBudget(CharmRarity rarity, int cp, CharmType type) {
-        return (int) (BUDGET_BY_CP[cp - 1] * rarity.budgetMultiplier * type.factor());
-    }
-
-    private boolean selfTest(List<String> monumentaLore) {
-        var hasWarning = false;
-
-        // We try to guess the max budget, to check
-        final var computedBudget = computeBudget(rarity, charmPower, type);
-        if (computedBudget != maxBudget) {
-            hasWarning = true;
-            FMAClient.LOGGER.error("Budget algo is likely bugged: flowey={}, monumenta={}", computedBudget, maxBudget);
-        }
-
-        final var loreSet = monumentaLore.stream().map(NBTUtil::jsonToRaw).collect(Collectors.toSet());
-
-        for (final var effect : effects) {
-            final var text = effect.monumentaText();
-            if (!loreSet.contains(text)) {
-                hasWarning = true;
-                FMAClient.LOGGER.error("not found: {}", text);
-            }
-        }
-        return hasWarning;
-    }
-
-    private boolean canUpgrade() {
-        return !hasUpgraded && rarity != CharmRarity.LEGENDARY;
-    }
-
     public Charm(final int charmPower, final long uuid, final CharmRarity rarity,
                  final List<CharmEffectInstance> effects,
                  final int budget, final int maxBudget, final int typeId, final boolean hasUpgraded,
@@ -144,6 +114,36 @@ public final class Charm {
                 upgradedEffects.sort(Comparator.comparingInt(x -> x.effect().ordinal()));
             }
         }
+    }
+
+    private static int computeBudget(CharmRarity rarity, int cp, CharmType type) {
+        return (int) (BUDGET_BY_CP[cp - 1] * rarity.budgetMultiplier * type.factor());
+    }
+
+    private boolean selfTest(List<String> monumentaLore) {
+        var hasWarning = false;
+
+        // We try to guess the max budget, to check
+        final var computedBudget = computeBudget(rarity, charmPower, type);
+        if (computedBudget != maxBudget) {
+            hasWarning = true;
+            FMAClient.LOGGER.error("Budget algo is likely bugged: flowey={}, monumenta={}", computedBudget, maxBudget);
+        }
+
+        final var loreSet = monumentaLore.stream().map(NBTUtil::jsonToRaw).collect(Collectors.toSet());
+
+        for (final var effect : effects) {
+            final var text = effect.monumentaText();
+            if (!loreSet.contains(text)) {
+                hasWarning = true;
+                FMAClient.LOGGER.error("not found: {}", text);
+            }
+        }
+        return hasWarning;
+    }
+
+    private boolean canUpgrade() {
+        return !hasUpgraded && rarity != CharmRarity.LEGENDARY;
     }
 
     public void buildLore(Font font, List<Component> target, boolean showUpgrade) {

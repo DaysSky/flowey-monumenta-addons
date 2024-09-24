@@ -5,6 +5,8 @@ import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
+import com.mojang.brigadier.suggestion.SuggestionProvider;
+import java.util.function.Predicate;
 import net.minecraft.commands.CommandSourceStack;
 
 public class CommandUtil {
@@ -26,6 +28,12 @@ public class CommandUtil {
     }
 
     @SafeVarargs
+    public static <A, T> RequiredArgumentBuilder<A, T> arg(String k, ArgumentType<T> a, Command<A> f,
+                                                           SuggestionProvider<A> suggest, ArgumentBuilder<A, ?>... t) {
+        return arg(k, a, t).executes(f).suggests(suggest);
+    }
+
+    @SafeVarargs
     public static <A> LiteralArgumentBuilder<A> lit(String n, ArgumentBuilder<A, ?>... t) {
         final var inst = LiteralArgumentBuilder.<A>literal(n);
         for (var callback : t) {
@@ -36,26 +44,18 @@ public class CommandUtil {
         return inst;
     }
 
+
     @SafeVarargs
     public static <A> LiteralArgumentBuilder<A> lit(String key, Command<A> execute,
                                                     ArgumentBuilder<A, ?>... callbacks) {
         return lit(key, callbacks).executes(execute);
     }
 
-
     @SafeVarargs
-    public static <T> RequiredArgumentBuilder<CommandSourceStack, T> mcArg(
-        String key, ArgumentType<T> arg, ArgumentBuilder<CommandSourceStack, ?>... callbacks
-    ) {
-        return arg(key, arg, callbacks);
-    }
-
-    @SafeVarargs
-    public static <T> RequiredArgumentBuilder<CommandSourceStack, T> mcArg(
-        String key, ArgumentType<T> arg, Command<CommandSourceStack> execute,
-        ArgumentBuilder<CommandSourceStack, ?>... callbacks
-    ) {
-        return arg(key, arg, execute, callbacks);
+    public static <A> LiteralArgumentBuilder<A> lit(String key, Command<A> execute,
+                                                    Predicate<A> cond,
+                                                    ArgumentBuilder<A, ?>... callbacks) {
+        return lit(key, callbacks).executes(execute).requires(cond);
     }
 
     @SafeVarargs

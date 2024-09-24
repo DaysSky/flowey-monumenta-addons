@@ -17,9 +17,8 @@ public class TickScheduler {
             return (int) (targetTick - task.targetTick);
         }
     }
-
-    private long tick;
     private final PriorityQueue<Task> taskQueue = new PriorityQueue<>();
+    private long tick;
 
     public TickScheduler() {
         ClientTickEvents.START_CLIENT_TICK.register(client -> {

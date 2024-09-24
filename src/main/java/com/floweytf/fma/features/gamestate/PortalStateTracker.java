@@ -60,14 +60,11 @@ public class PortalStateTracker implements StateTracker {
     }
 
     private final long startTime;
-
+    private final Data data;
     private long nodesSplit;
     private long startBossSplit;
     private long phase1Split;
     private long phase2Split;
-
-    private final Data data;
-
     private boolean enteredBoss = false;
     private boolean isCubeAlive = false;
     private boolean hasWon = false;
@@ -87,6 +84,20 @@ public class PortalStateTracker implements StateTracker {
         parts.add(Component.translatable("hud.fma.sidebar.portal.chests", FormatUtil.numeric(data.chestCount)));
         parts.add(Component.translatable("hud.fma.sidebar.portal.souls", FormatUtil.numeric(data.soulCount)));
         FMAClient.SIDEBAR.setAdditionalText(parts);
+    }
+
+    @Override
+    public void onLeave() {
+        if (!FMAClient.features().enableTimerAndStats) {
+            return;
+        }
+
+        FMAClient.SIDEBAR.setAdditionalText(List.of());
+
+        if (!hasWon) {
+            ChatUtil.send(Component.translatable("stat.fma.portal.fail"));
+            data.send();
+        }
     }
 
     @Override
@@ -137,20 +148,6 @@ public class PortalStateTracker implements StateTracker {
             hasWon = true;
             data.send();
             break;
-        }
-    }
-
-    @Override
-    public void onLeave() {
-        if (!FMAClient.features().enableTimerAndStats) {
-            return;
-        }
-
-        FMAClient.SIDEBAR.setAdditionalText(List.of());
-
-        if (!hasWon) {
-            ChatUtil.send(Component.translatable("stat.fma.portal.fail"));
-            data.send();
         }
     }
 

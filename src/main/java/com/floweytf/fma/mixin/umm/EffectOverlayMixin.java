@@ -33,9 +33,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
     remap = false
 )
 public abstract class EffectOverlayMixin extends HudElement {
-    @Shadow
-    @Final
-    private ArrayList<Effect> effects;
     @Unique
     private static final Set<MobEffect> BAD_EFFECTS = Set.of(
         MobEffects.MOVEMENT_SLOWDOWN,
@@ -49,6 +46,9 @@ public abstract class EffectOverlayMixin extends HudElement {
         MobEffects.UNLUCK,
         MobEffects.BAD_OMEN
     );
+    @Shadow
+    @Final
+    private ArrayList<Effect> effects;
 
     @Unique
     private void fma$renderLine(Font font, PoseStack matrix, Component text, boolean rAlign, int width,

@@ -1,10 +1,7 @@
 package com.floweytf.fma.mixin;
 
 import com.floweytf.fma.FMAClient;
-import com.floweytf.fma.events.ClientReceiveSystemChatEvent;
-import com.floweytf.fma.events.ClientReceiveTabListCustomizationEvent;
-import com.floweytf.fma.events.ClientSetTitleEvent;
-import com.floweytf.fma.events.EventResult;
+import com.floweytf.fma.events.*;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.network.protocol.game.*;
 import org.spongepowered.asm.mixin.Mixin;
@@ -93,5 +90,13 @@ public class ClientPacketListenerMixin {
         if (ClientReceiveSystemChatEvent.EVENT.invoker().onMessage(packet.content()) != EventResult.CONTINUE) {
             ci.cancel();
         }
+    }
+
+    @Inject(
+        method = "handleLogin",
+        at = @At("TAIL")
+    )
+    private void onJoinServer(ClientboundLoginPacket packet, CallbackInfo ci) {
+        ClientJoinServerEvent.EVENT.invoker().onJoin();
     }
 }

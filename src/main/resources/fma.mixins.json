@@ -4,13 +4,12 @@
     "package": "com.floweytf.fma.mixin",
     "compatibilityLevel": "JAVA_17",
     "client": [
-        "ChatScreenMixin",
         "ClientPacketListenerMixin",
-        "CommandSuggestionsMixin",
         "EntityRenderDispatcherMixin",
         "GuiMixin",
         "ItemRendererMixin",
         "LevelRendererMixin",
+        "MultiPlayerGameModeMixin",
         "SplashManagerMixin",
         "umm.EffectOverlayMixin"
     ],
