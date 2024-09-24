@@ -38,6 +38,8 @@
     "text.autoconfig.fma.option.features.inventoryOverlay.enableLoomFirmCount": "Firm/loom block count overlay",
     "text.autoconfig.fma.option.features.enableDebug": "Debugging mode",
     "text.autoconfig.fma.option.features.suppressDebugWarning": "Silence debugging warnings",
+    "text.autoconfig.fma.option.features.recordChestBreak": "Record chest breaks",
+    "text.autoconfig.fma.option.features.versionCheck": "Version checks",
     // Chat appearance
     "text.autoconfig.fma.option.appearance.bracketColor": "Tag bracket color",
     "text.autoconfig.fma.option.appearance.tagColor": "Tag text color",
