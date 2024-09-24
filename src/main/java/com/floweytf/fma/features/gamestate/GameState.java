@@ -29,37 +29,6 @@ public class GameState {
     @Nullable
     private StateTracker currentStateTracker = null;
 
-    private void updateLevel(ClientLevel level) {
-        if (level == null)
-            return;
-
-        final var newDimensionName = level.dimension().location().toString();
-
-        // Edge-triggered
-        if (Objects.equals(dimensionName, newDimensionName)) {
-            return;
-        }
-
-        // Trigger leave event...
-        if (currentStateTracker != null) {
-            currentStateTracker.onLeave();
-            currentStateTracker = null;
-        }
-
-        dimensionName = newDimensionName;
-
-        final var worldFilterRes = GAME_STATE_BY_DIMENSION.stream()
-            .filter(entry -> dimensionName.startsWith(entry.first()))
-            .findFirst();
-
-        if (worldFilterRes.isEmpty()) {
-            ChatUtil.sendDebug("unknown dimension '" + newDimensionName + "'");
-            return;
-        }
-
-        currentStateTracker = worldFilterRes.get().second().get();
-    }
-
     public GameState() {
         ClientTickEvents.END_CLIENT_TICK.register(mc -> {
             updateLevel(mc.level);
@@ -119,5 +88,36 @@ public class GameState {
 
             currentStateTracker = null;
         });
+    }
+
+    private void updateLevel(ClientLevel level) {
+        if (level == null)
+            return;
+
+        final var newDimensionName = level.dimension().location().toString();
+
+        // Edge-triggered
+        if (Objects.equals(dimensionName, newDimensionName)) {
+            return;
+        }
+
+        // Trigger leave event...
+        if (currentStateTracker != null) {
+            currentStateTracker.onLeave();
+            currentStateTracker = null;
+        }
+
+        dimensionName = newDimensionName;
+
+        final var worldFilterRes = GAME_STATE_BY_DIMENSION.stream()
+            .filter(entry -> dimensionName.startsWith(entry.first()))
+            .findFirst();
+
+        if (worldFilterRes.isEmpty()) {
+            ChatUtil.sendDebug("unknown dimension '" + newDimensionName + "'");
+            return;
+        }
+
+        currentStateTracker = worldFilterRes.get().second().get();
     }
 }

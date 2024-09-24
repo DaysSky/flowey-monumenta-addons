@@ -1,5 +1,6 @@
 package com.floweytf.fma;
 
+import com.floweytf.fma.compat.WaypointHandler;
 import com.floweytf.fma.debug.Debug;
 import com.floweytf.fma.features.Commands;
 import com.floweytf.fma.features.Keybinds;
@@ -10,6 +11,7 @@ import com.floweytf.fma.features.gamestate.GameState;
 import com.floweytf.fma.util.TickScheduler;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Consumer;
 import me.shedaniel.autoconfig.ConfigHolder;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
@@ -37,14 +39,19 @@ public class FMAClient implements ClientModInitializer {
     public static final TickScheduler SCHEDULER = new TickScheduler();
     public static final LeaderboardUtils LEADERBOARD = new LeaderboardUtils();
     public final static GameState GAME_STATE = new GameState();
-    public static Commands COMMANDS;
-    public static SideBarManager SIDEBAR;
     public final static ModContainer MOD = FabricLoader.getInstance().getModContainer("fma").orElseThrow();
-
+    public static SideBarManager SIDEBAR;
     public static ConfigHolder<FMAConfig> CONFIG;
 
     public static Player player() {
         return Objects.requireNonNull(Minecraft.getInstance().player);
+    }
+
+    public static void withPlayer(Consumer<Player> consumer) {
+        final var player = Minecraft.getInstance().player;
+        if (player != null) {
+            consumer.accept(player);
+        }
     }
 
     public static ClientLevel level() {
@@ -55,25 +62,8 @@ public class FMAClient implements ClientModInitializer {
         return player().getScoreboardName();
     }
 
-    @Override
-    public void onInitializeClient() {
-        CONFIG = FMAConfig.register();
-
-        // stupid ass hack
-        ClientLifecycleEvents.CLIENT_STARTED.register(this::initializeAfterMC);
-        ClientTickEvents.END_CLIENT_TICK.register(mc -> SIDEBAR.onTick(mc));
-        Keybinds.init();
-        Debug.init();
-        CharmItemManager.init();
-    }
-
-    private void initializeAfterMC(Minecraft minecraft) {
-        reload();
-    }
-
     public static void reload() {
         final var config = CONFIG.get();
-        COMMANDS = new Commands(config);
         SIDEBAR = new SideBarManager(config);
     }
 
@@ -87,5 +77,25 @@ public class FMAClient implements ClientModInitializer {
 
     public static FMAConfig.FeatureToggles features() {
         return CONFIG.get().features;
+    }
+
+    @Override
+    public void onInitializeClient() {
+        CONFIG = FMAConfig.register();
+
+        // stupid ass hack
+        ClientLifecycleEvents.CLIENT_STARTED.register(this::initializeAfterMC);
+        ClientTickEvents.END_CLIENT_TICK.register(mc -> SIDEBAR.onTick(mc));
+        Keybinds.init();
+        Debug.init();
+        Commands.init();
+        CharmItemManager.init();
+        WaypointHandler.loadImpl();
+
+        new VersionChecker(CONFIG.get()).registerEvent();
+    }
+
+    private void initializeAfterMC(Minecraft minecraft) {
+        reload();
     }
 }

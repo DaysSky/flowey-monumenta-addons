@@ -11,10 +11,6 @@ public enum CharmType {
         this.factor = factor;
     }
 
-    public double factor() {
-        return factor;
-    }
-
     public static CharmType byId(int typeId) {
         if (typeId < 4) {
             return ABILITY;
@@ -25,5 +21,9 @@ public enum CharmType {
         }
 
         return WILDCARD;
+    }
+
+    public double factor() {
+        return factor;
     }
 }

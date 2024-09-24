@@ -75,55 +75,6 @@ public final class CharmEffectInstance {
         this.value = value;
     }
 
-    public CharmEffectInstance withRarity(UnaryOperator<CharmEffectRarity> rarityMod) {
-        return new CharmEffectInstance(rollValue, effect, rarityMod.apply(effectRarity));
-    }
-
-    public CharmEffectInstance withRarity(CharmEffectRarity rarity) {
-        return new CharmEffectInstance(rollValue, effect, rarity);
-    }
-
-    public CharmEffectRarity getEffectRarity() {
-        return effectRarity;
-    }
-
-    private String unit() {
-        return effect.isPercent ? "%" : "";
-    }
-
-    private String fmt(double value) {
-        return FormatUtil.fmtDouble(value) + unit();
-    }
-
-    private Component effectText() {
-        return literal(effect.modifier, rarityColor);
-    }
-
-    private Component modText() {
-        return literal(fmt(value), rarityColor);
-    }
-
-    public String monumentaText() {
-        return fmt(value) + " " + effect().ability.displayName + " " + effect.modifier;
-    }
-
-    private Component modDetailText() {
-        return join(
-            literal(fmt(baseValue), rarityColor),
-            effect.variance == 0 ?
-                literal("+0" + unit(), ChatFormatting.DARK_GRAY) :
-                literal(fmtDoubleDelta(twoDecimal(delta)) + unit(), rollColor)
-        );
-    }
-
-    private Component rarityText() {
-        return literal(effectRarity.getShorthand(), rarityColor);
-    }
-
-    private Component rollText() {
-        return literal(fmtDouble(twoDecimal(displayRollValue * 100), false) + "%", rollColor);
-    }
-
     private static List<Component> formatParts(FMAConfig.Zenith config, boolean includeAbility,
                                                CharmEffectInstance self, @Nullable CharmEffectInstance upgrade) {
         final var parts = new ArrayList<Component>();
@@ -264,6 +215,55 @@ public final class CharmEffectInstance {
         } else {
             return formatTabular(font, effects, upgradedEffects, includeAbility, config);
         }
+    }
+
+    public CharmEffectInstance withRarity(UnaryOperator<CharmEffectRarity> rarityMod) {
+        return new CharmEffectInstance(rollValue, effect, rarityMod.apply(effectRarity));
+    }
+
+    public CharmEffectInstance withRarity(CharmEffectRarity rarity) {
+        return new CharmEffectInstance(rollValue, effect, rarity);
+    }
+
+    public CharmEffectRarity getEffectRarity() {
+        return effectRarity;
+    }
+
+    private String unit() {
+        return effect.isPercent ? "%" : "";
+    }
+
+    private String fmt(double value) {
+        return FormatUtil.fmtDouble(value) + unit();
+    }
+
+    private Component effectText() {
+        return literal(effect.modifier, rarityColor);
+    }
+
+    private Component modText() {
+        return literal(fmt(value), rarityColor);
+    }
+
+    public String monumentaText() {
+        return fmt(value) + " " + effect().ability.displayName + " " + effect.modifier;
+    }
+
+    private Component modDetailText() {
+        return join(
+            literal(fmt(baseValue), rarityColor),
+            effect.variance == 0 ?
+                literal("+0" + unit(), ChatFormatting.DARK_GRAY) :
+                literal(fmtDoubleDelta(twoDecimal(delta)) + unit(), rollColor)
+        );
+    }
+
+    private Component rarityText() {
+        return literal(effectRarity.getShorthand(), rarityColor);
+    }
+
+    private Component rollText() {
+        return literal(fmtDouble(twoDecimal(displayRollValue * 100), false) + "%", rollColor);
     }
 
     public CharmEffectType effect() {

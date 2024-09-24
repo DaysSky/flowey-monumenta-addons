@@ -27,11 +27,11 @@ public class SideBarManager {
     private static final Pattern MATCH_ANGLE_BRACKET = Pattern.compile("<([a-z0-9-]+)>");
 
     private final Component title;
-    private List<Component> builtinText = List.of();
-    private List<Component> additionalText = List.of();
     private final int textColor;
     private final int altColor;
     private final int errorColor;
+    private List<Component> builtinText = List.of();
+    private List<Component> additionalText = List.of();
 
     public SideBarManager(FMAConfig config) {
         title = join(
