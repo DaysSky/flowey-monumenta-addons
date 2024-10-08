@@ -148,8 +148,6 @@ public class Commands {
             }));
 
             dispatcher.register(CommandUtil.<FabricClientCommandSource>lit("lb").redirect(fma.getChild("lb")));
-            // Macro alias, maybe customizable?
-            dispatcher.register(alias("gg", "g " + FMAClient.config().chat.ggText));
         });
     }
 }

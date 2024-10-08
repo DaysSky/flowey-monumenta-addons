@@ -152,7 +152,6 @@ public class FMAConfig implements ConfigData {
     public static class Chat {
         public String meowingChannel = "wc";
         public String meowingText = "meow";
-        public String ggText = "gg";
     }
 
     @ConfigEntry.Category("features")

@@ -130,7 +130,7 @@
     "stat.fma.ruin.soulTime": "Masked kill requirement took %s",
     "stat.fma.ruin.startBossSplit": "Activate boss took %s",
     "stat.fma.ruin.bossSplit": "Kill boss took %s",
-    "stat.fma.ruin.daggerSplit": "Boss daggers took %s",
+    "stat.fma.ruin.daggersSplit": "Boss daggers took %s",
     "stat.fma.ruin.dpsSplit": "Boss DPS took %s",
     "hud.fma.sidebar.ruin.souls": "Masked killed %s/450",
     "hud.fma.sidebar.ruin.chests": "Chests %s/118",
