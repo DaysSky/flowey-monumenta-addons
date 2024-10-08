@@ -197,33 +197,6 @@ public class PortalStateTracker implements StateTracker {
         }
 
         isCubeAlive = false;
-
-        // Stupid IOTA bug!
-        // I'm sure this code will work perfectly fine, right?!
-        FMAClient.level().entitiesForRendering().forEach(entity -> {
-            if (FMAClient.config().portal.enableIotaFix &&
-                entity.getName().getString().contains("Iota") &&
-                !entity.isInvisible() &&
-                entity.getPosition(0).y < 88
-            ) {
-                entity.moveTo(entity.getX(), 89, entity.getZ());
-            }
-
-            if (entity instanceof ArmorStand armorStand) {
-                final var slot = armorStand.getItemBySlot(EquipmentSlot.HEAD);
-                if (slot.isEmpty()) {
-                    return;
-                }
-
-                if (slot.getItem() != Items.PLAYER_HEAD) {
-                    return;
-                }
-
-                if (slot.getOrCreateTag().toString().contains("eyJ0ZXh0dXJlcyI")) {
-                    isCubeAlive = true;
-                }
-            }
-        });
     }
 
     // Render a box around buttons
