@@ -76,7 +76,6 @@
     "text.autoconfig.fma.option.chat.channels.color": "Color",
     // Portal strike
     "text.autoconfig.fma.option.portal": "Portal Strike",
-    "text.autoconfig.fma.option.portal.enableIotaFix": "Iota fix",
     "text.autoconfig.fma.option.portal.enablePortalButtonIndicator": "Portal button/cube indicator",
     "text.autoconfig.fma.option.portal.nodeSplit": "Send nodes split message",
     "text.autoconfig.fma.option.portal.soulsSplit": "Send souls split message",

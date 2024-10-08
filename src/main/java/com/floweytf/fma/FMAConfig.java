@@ -130,7 +130,6 @@ public class FMAConfig implements ConfigData {
     }
 
     public static class Portal {
-        public boolean enableIotaFix = true;
         public boolean enablePortalButtonIndicator = true;
 
         public boolean nodeSplit = true;
