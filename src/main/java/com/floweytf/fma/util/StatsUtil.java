@@ -25,6 +25,11 @@ public class StatsUtil {
     public @interface Detail {
     }
 
+    @Target(ElementType.FIELD)
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface Custom {
+    }
+
     public static int logTime(String key, boolean send, long start, long deltaBegin, long deltaEnd, long... entries) {
         List<Component> tooltipLines = new ArrayList<>();
 

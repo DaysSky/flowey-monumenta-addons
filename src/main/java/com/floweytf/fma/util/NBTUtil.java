@@ -1,13 +1,14 @@
 package com.floweytf.fma.util;
 
 import it.unimi.dsi.fastutil.ints.IntIntPair;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
 public class NBTUtil {
@@ -16,6 +17,7 @@ public class NBTUtil {
     public static final String DISPLAY_KEY = "display";
     public static final String LORE_KEY = "Lore";
     public static final String NAME_KEY = "Name";
+    public static final String STOCK = "Stock";
     public static final String MONUMENTA_TIER_KEY = "Tier";
     public static final String MONUMENTA_CHARM_POWER_KEY = "CharmPower";
     public static final String PLAYER_MODIFIED = "PlayerModified";
@@ -62,6 +64,25 @@ public class NBTUtil {
 
     public static Optional<CompoundTag> getPlayerModified(ItemStack stack) {
         return getMonumenta(stack).flatMap(tag -> getCompound(tag, PLAYER_MODIFIED));
+    }
+
+    public static Optional<CompoundTag> getStock(ItemStack stack) {
+        return getMonumenta(stack).flatMap(tag -> getCompound(tag, STOCK));
+    }
+
+    public static Optional<CompoundTag> getEnchantsTag(ItemStack stack) {
+        return getStock(stack).flatMap(tag -> getCompound(tag, "Enchantments"));
+    }
+
+    public static Map<String, Integer> getEnchants(ItemStack stack) {
+        return getEnchantsTag(stack)
+            .map(v -> v.entries().entrySet().stream().collect(
+                    Collectors.toMap(
+                        Map.Entry::getKey,
+                        (entry) -> ((CompoundTag) entry.getValue()).getInt("Level"))
+                )
+            )
+            .orElse(Map.of());
     }
 
     public static Optional<String> getTier(ItemStack stack) {
@@ -125,5 +146,12 @@ public class NBTUtil {
 
     public static String jsonToRaw(String name) {
         return Objects.requireNonNull(Component.Serializer.fromJson(name)).getString();
+    }
+
+    public static int getEnchantLevel(Player player, String name) {
+        return Arrays.stream(EquipmentSlot.values())
+            .map(player::getItemBySlot)
+            .map(item -> getEnchants(item).getOrDefault(name, 0))
+            .reduce(0, Integer::sum);
     }
 }

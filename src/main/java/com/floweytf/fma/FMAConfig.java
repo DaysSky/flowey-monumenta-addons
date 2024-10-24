@@ -40,6 +40,7 @@ public class FMAConfig implements ConfigData {
         public boolean enableShard = true;
         public boolean enableIp = true;
         public boolean enableIpElision = true;
+        public boolean situationals = true;
     }
 
     public static class FeatureToggles {

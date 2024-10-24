@@ -78,7 +78,7 @@ public class FMAClient implements ClientModInitializer {
     public static FMAConfig.FeatureToggles features() {
         return CONFIG.get().features;
     }
-
+    
     @Override
     public void onInitializeClient() {
         CONFIG = FMAConfig.register();

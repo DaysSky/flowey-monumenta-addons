@@ -13,7 +13,7 @@
     "text.autoconfig.fma.category.appearance": "Appearance",
     "text.autoconfig.fma.category.hpIndicator": "HP Indicator",
     "text.autoconfig.fma.category.chat": "Chat",
-    "text.autoconfig.fma.category.strikes": "Strikes",
+    "text.autoconfig.fma.category.strikes": "Strikes/Raids",
     "text.autoconfig.fma.category.zenith": "Zenith (experimental)",
     // Feature toggles
     "text.autoconfig.fma.option.features.enableChatChannels": "Chat channel prompt (experimental)",
@@ -164,14 +164,30 @@
     "hud.fma.sidebar.ip": "IP %s",
     "hud.fma.ummEffects.vanillaCategory": "- Vanilla -",
     "hud.fma.ummEffects.monumentaCategory": "- Monumenta -",
-
+    "hud.fma.sidebar.second_wind_active": "Second Wind: %s%% DR",
+    "hud.fma.sidebar.second_wind_inactive": "Second wind: %s",
+    "hud.fma.sidebar.poise_active": "Poise: %s%% Armor",
+    "hud.fma.sidebar.poise_inactive": "Poise: %s",
+    "hud.fma.sidebar.ethereal_active": "Ethereal: %s%% Agility",
+    "hud.fma.sidebar.ethereal_inactive": "Ethereal: %s",
+    "hud.fma.sidebar.tempo_active": "Tempo: %s%% Agility",
+    "hud.fma.sidebar.tempo_inactive": "Tempo: %s",
+    "hud.fma.sidebar.reflexes_active": "Reflexes: %s%% Agility",
+    "hud.fma.sidebar.reflexes_inactive": "Reflexes: %s",
+    "hud.fma.sidebar.cloaked_active": "Cloaked: %s%% Agility",
+    "hud.fma.sidebar.cloaked_inactive": "Cloaked: %s",
+    // update checker & misc
+    "text.fma.version.1_6_2.situationals": "Situational HUD: displays active situationals (that can be evaluated client-side).",
     "text.fma.version.1_6_0.update_checker": "Update checker is now available! Enable this feature via /fma config.",
     "text.fma.version.1_6_0.update_checker.hover": "I don't like network requests without user permission, so this is disabled by default.",
     "text.fma.version.1_6_0.chest_tracker": "Save chest locations feature with Xaero waypoints (beta)",
     "text.fma.version.common.updated": "Flowey mod updated to %s.",
-    "text.fma.version.common.header.0": "Hint: supression for this message can be enabled in config",
+    "text.fma.version.common.header.0": "Hint: suppression for this message can be enabled in config",
     "text.fma.version.common.header.1": "Changelog notes:",
     "text.fma.version.common.update_check_timeout": "Update check timed out",
     "text.fma.version.common.update_check_fail": "Update check failed: %s",
-    "text.fma.version.common.new_version": "A new version is available: %s"
+    "text.fma.version.common.new_version": "A new version is available: %s",
+    "text.fma.timer_start": "Started timer!",
+    "text.fma.timer_end": "Timer: %s",
+    "hud.fma.sidebar.steadfast_active": "Steadfast: %s%% Armor"
 }
