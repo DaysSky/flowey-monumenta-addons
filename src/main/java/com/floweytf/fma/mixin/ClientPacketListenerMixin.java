@@ -12,6 +12,17 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(ClientPacketListener.class)
 public class ClientPacketListenerMixin {
     @Inject(
+        method = "handleRespawn",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/network/protocol/game/ClientboundRespawnPacket;getDimension()Lnet/minecraft/resources/ResourceKey;"
+        )
+    )
+    private void onRecvRespawn(ClientboundRespawnPacket packet, CallbackInfo ci) {
+        ClientRespawnEvent.EVENT.invoker().onRespawn();
+    }
+
+    @Inject(
         method = "setTitleText",
         at = @At(
             value = "INVOKE",
