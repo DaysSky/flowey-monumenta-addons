@@ -51,8 +51,12 @@ public class VersionChecker {
                 translatable("text.fma.version.1_6_0.update_checker.hover")
             ),
             translatable("text.fma.version.1_6_0.chest_tracker")
+        )),
+        new VersionChangelogInfo("1.6.2", List.of(
+            translatable("text.fma.version.1_6_2.situationals")
         ))
     );
+
     private static final String VERSION_URL =
         "https://raw.githubusercontent.com/Floweynt/flowey-monumenta-addons/refs/heads/master/versions.json";
     private final Version previousVersion;

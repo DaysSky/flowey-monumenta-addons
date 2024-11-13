@@ -36,7 +36,8 @@ public class LeaderboardUtils {
                         reset();
                         return EventResult.CONTINUE;
                     }
-                } else if (raw.equals(" Leaderboard - " + currLeaderboard)) {
+                // Assume the leaderboard is correct because why not?
+                } else if (raw.startsWith(" Leaderboard - ")) {
                     if (state != State.WAIT_START) {
                         ChatUtil.sendDebug("illegal state (" + state + ", START_TOKEN)");
                         state = State.WAIT_END;

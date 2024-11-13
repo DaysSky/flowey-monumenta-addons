@@ -40,6 +40,7 @@ public class FMAConfig implements ConfigData {
         public boolean enableShard = true;
         public boolean enableIp = true;
         public boolean enableIpElision = true;
+        public boolean situationals = true;
     }
 
     public static class FeatureToggles {
@@ -139,6 +140,7 @@ public class FMAConfig implements ConfigData {
         public boolean phase2Split = false;
         public boolean phase3Split = false;
         public boolean bossSplit = true;
+        public boolean enableIotaFix = true;
     }
 
     public static class Ruin {
@@ -148,11 +150,9 @@ public class FMAConfig implements ConfigData {
         public boolean dpsSplit = false;
         public boolean bossSplit = true;
     }
-
     public static class Chat {
         public String meowingChannel = "wc";
         public String meowingText = "meow";
-        public String ggText = "gg";
     }
 
     @ConfigEntry.Category("features")
