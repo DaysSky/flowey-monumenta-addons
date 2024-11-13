@@ -140,6 +140,7 @@ public class FMAConfig implements ConfigData {
         public boolean phase2Split = false;
         public boolean phase3Split = false;
         public boolean bossSplit = true;
+        public boolean enableIotaFix = true;
     }
 
     public static class Ruin {

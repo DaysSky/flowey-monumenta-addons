@@ -54,6 +54,7 @@ public class SideBarManager {
     private final int altColor;
     private final int errorColor;
     private List<Component> builtinText = List.of();
+    private List<Component> situationalText = new ArrayList<>();
     private List<Component> additionalText = List.of();
 
     private static float lastTickHp;
@@ -118,12 +119,12 @@ public class SideBarManager {
 
         if(reflexesLevel > 0) {
             if(countEnemyInRadius(player, 8) >= 4) {
-                builtinText.add(translatable(
+                situationalText.add(translatable(
                     "hud.fma.sidebar.reflexes_active",
                     numeric(20 * etherealLevel)
                 ));
             } else {
-                builtinText.add(translatable(
+                situationalText.add(translatable(
                     "hud.fma.sidebar.reflexes_inactive",
                     withColor("Inactive", errorColor)
                 ));
@@ -132,12 +133,12 @@ public class SideBarManager {
 
         if(etherealLevel > 0) {
             if (lastHitTicks < 2 * 20) {
-                builtinText.add(translatable(
+                situationalText.add(translatable(
                     "hud.fma.sidebar.ethereal_active",
                     numeric(20 * etherealLevel)
                 ));
             } else {
-                builtinText.add(translatable(
+                situationalText.add(translatable(
                     "hud.fma.sidebar.ethereal_inactive",
                     withColor("Inactive", errorColor)
                 ));
@@ -146,12 +147,12 @@ public class SideBarManager {
 
         if(tempoLevel > 0) {
             if (lastHitTicks > 4 * 20 ) {
-                builtinText.add(translatable(
+                situationalText.add(translatable(
                     "hud.fma.sidebar.tempo_active",
                     numeric(20 * tempoLevel)
                 ));
             } else {
-                builtinText.add(translatable(
+                situationalText.add(translatable(
                     "hud.fma.sidebar.tempo_inactive",
                     withColor("Inactive", errorColor)
                 ));
@@ -160,17 +161,17 @@ public class SideBarManager {
 
         if (poiseLevel > 0) {
             if (player.getHealth() > 0.9 * player.getMaxHealth()) {
-                builtinText.add(translatable(
+                situationalText.add(translatable(
                     "hud.fma.sidebar.poise_active",
                     numeric(20 * poiseLevel)
                 ));
             } else if (player.getHealth() > 0.7 * player.getMaxHealth()) {
-                builtinText.add(translatable(
+                situationalText.add(translatable(
                     "hud.fma.sidebar.poise_active",
                     numeric(10 * poiseLevel)
                 ));
             } else {
-                builtinText.add(translatable(
+                situationalText.add(translatable(
                     "hud.fma.sidebar.poise_inactive",
                     withColor("Inactive", errorColor)
                 ));
@@ -178,7 +179,7 @@ public class SideBarManager {
         }
 
         if (steadFastLevel > 0) {
-            builtinText.add(translatable(
+            situationalText.add(translatable(
                 "hud.fma.sidebar.steadfast_active",
                 numeric(String.format("%.3f", Mth.clamp((1 - playerHpPerc) * 0.33, 0, 20)))
             ));
@@ -186,12 +187,12 @@ public class SideBarManager {
 
         if (secondWindLevel > 0) {
             if (player.getHealth() < 0.5 * player.getMaxHealth()) {
-                builtinText.add(translatable(
+                situationalText.add(translatable(
                     "hud.fma.sidebar.second_wind_active",
                     numeric(String.format("%.3f", 100 - 100 * Math.pow(0.9, secondWindLevel)))
                 ));
             } else {
-                builtinText.add(translatable(
+                situationalText.add(translatable(
                     "hud.fma.sidebar.second_wind_inactive",
                     withColor("Inactive", errorColor)
                 ));
@@ -200,12 +201,12 @@ public class SideBarManager {
 
         if(cloakedLevel > 0) {
             if(countEnemyInRadius(player, 5) <= 2) {
-                builtinText.add(translatable(
+                situationalText.add(translatable(
                     "hud.fma.sidebar.cloaked_active",
                     numeric(20 * etherealLevel)
                 ));
             } else {
-                builtinText.add(translatable(
+                situationalText.add(translatable(
                     "hud.fma.sidebar.cloaked_inactive",
                     withColor("Inactive", errorColor)
                 ));
@@ -214,18 +215,22 @@ public class SideBarManager {
     }
 
     public void onTick(Minecraft mc) {
+        final var config = FMAClient.features();
+
         if(mc.player != null) {
             updateHitTimer(mc.player);
+            situationalText.clear();
+            if (config.sidebarToggles.situationals) {
+                updateSituational(mc.player);
+            }
         }
 
-        final var config = FMAClient.features();
         builtinText = new ArrayList<>();
 
         final var raw = Optional.ofNullable(mc.gui.getTabList().header).map(Component::getString).orElse("");
         final var parts = Util.match(MATCH_ANGLE_BRACKET, raw, 1);
 
         final var shard = parts.size() >= 2 ? parts.get(1) : null;
-        final var player = FMAClient.player();
 
         if (config.sidebarToggles.enableProxy) {
             final var text = parts.isEmpty() ? withColor("unknown", errorColor) : withColor(parts.get(0), altColor);
@@ -250,10 +255,6 @@ public class SideBarManager {
                 builtinText.add(translatable("hud.fma.sidebar.ip", withColor(ip, altColor)));
             }
         }
-
-        if (config.sidebarToggles.situationals) {
-            updateSituational(player);
-        }
     }
 
     public void setAdditionalText(List<Component> additionalText) {
@@ -262,10 +263,11 @@ public class SideBarManager {
 
     public void render(Minecraft mc, PoseStack stack) {
         final var font = mc.fontFilterFishy;
-        final var lines = Stream.concat(
+        final var lines = Stream.of(
             builtinText.stream(),
+            situationalText.stream(),
             additionalText.stream()
-        ).toList();
+        ).flatMap(x -> x).toList();
 
         final var width = Math.max(font.width(title), lines.stream().mapToInt(font::width).max().orElse(0));
         // okay render everything, very stupid blah blah blah
