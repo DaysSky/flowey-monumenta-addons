@@ -216,13 +216,16 @@ public class SideBarManager {
     }
 
     public void onTick(Minecraft mc) {
-        situationalText.clear();
+        final var config = FMAClient.features();
+
         if(mc.player != null) {
             updateHitTimer(mc.player);
-            updateSituational(mc.player);
+            situationalText.clear();
+            if (config.sidebarToggles.situationals) {
+                updateSituational(mc.player);
+            }
         }
 
-        final var config = FMAClient.features();
         builtinText = new ArrayList<>();
 
         final var raw = Optional.ofNullable(mc.gui.getTabList().header).map(Component::getString).orElse("");
