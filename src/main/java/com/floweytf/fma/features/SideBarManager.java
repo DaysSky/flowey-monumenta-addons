@@ -133,7 +133,7 @@ public class SideBarManager {
         }
 
         if(etherealLevel > 0) {
-            if (lastHitTicks < 2 * 20) {
+            if (lastHitTicks < 30) {
                 situationalText.add(translatable(
                     "hud.fma.sidebar.ethereal_active",
                     numeric(20 * etherealLevel)
@@ -151,6 +151,11 @@ public class SideBarManager {
                 situationalText.add(translatable(
                     "hud.fma.sidebar.tempo_active",
                     numeric(20 * tempoLevel)
+                ));
+            } else if (lastHitTicks > 2 * 20) {
+                situationalText.add(translatable(
+                    "hud.fma.sidebar.tempo_active",
+                    numeric(10 * tempoLevel)
                 ));
             } else {
                 situationalText.add(translatable(
@@ -182,7 +187,7 @@ public class SideBarManager {
         if (steadFastLevel > 0) {
             situationalText.add(translatable(
                 "hud.fma.sidebar.steadfast_active",
-                numeric(String.format("%.3f", Mth.clamp((1 - playerHpPerc) * 0.33, 0, 20)))
+                numeric(String.format("%.0f",steadFastLevel * Math.min((1 - playerHpPerc) * 33, 20)))
             ));
         }
 
@@ -204,7 +209,7 @@ public class SideBarManager {
             if(countEnemyInRadius(player, 5) <= 2) {
                 situationalText.add(translatable(
                     "hud.fma.sidebar.cloaked_active",
-                    numeric(20 * etherealLevel)
+                    numeric(20 * cloakedLevel)
                 ));
             } else {
                 situationalText.add(translatable(
