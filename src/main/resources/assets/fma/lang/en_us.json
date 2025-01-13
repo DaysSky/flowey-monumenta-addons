@@ -135,7 +135,6 @@
     "stat.fma.ruin.dpsSplit": "Boss DPS took %s",
     "hud.fma.sidebar.ruin.souls": "Masked killed %s/450",
     "hud.fma.sidebar.ruin.chests": "Chests %s/118",
-
     // CZ
     "text.autoconfig.fma.option.zenith.enableCustomCharmInfo.@PrefixText": "WARNING: features may be buggy, please report all warnings!",
     "text.autoconfig.fma.option.zenith.enableCustomCharmInfo": "Enable enhanced charm stat",
@@ -178,6 +177,8 @@
     "hud.fma.sidebar.reflexes_inactive": "Reflexes: %s",
     "hud.fma.sidebar.cloaked_active": "Cloaked: %s%% Agility",
     "hud.fma.sidebar.cloaked_inactive": "Cloaked: %s",
+    "hud.fma.sidebar.guard_active": "Guard: %s%% Armor",
+    "hud.fma.sidebar.guard_inactive": "Guard: %s",
     // update checker & misc
     "text.fma.version.1_6_2.situationals": "Situational HUD: displays active situationals (that can be evaluated client-side).",
     "text.fma.version.1_6_0.update_checker": "Update checker is now available! Enable this feature via /fma config.",

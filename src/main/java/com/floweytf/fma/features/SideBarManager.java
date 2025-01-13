@@ -14,13 +14,12 @@ import java.util.regex.Pattern;
 import java.util.stream.Stream;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import static net.minecraft.network.chat.Component.translatable;
-import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.Nullable;
 
@@ -61,12 +60,23 @@ public class SideBarManager {
     private static float lastTickHp;
     private static float lastTickAbsorb;
     private static int lastHitTicks;
+    private static int lastBlockedTicks;
+
+    public static void updateGuardTimer(Player player) {
+        if (player.getMainHandItem().getItem().equals(Items.SHIELD)) {
+            lastBlockedTicks = 6 * 20;
+        } else if (player.getOffhandItem().getItem().equals(Items.SHIELD)) {
+            lastBlockedTicks = 4 * 20;
+        }
+    }
 
     private void updateHitTimer(@Nullable Player player) {
         if(player == null) {
             lastHitTicks = 0;
+            lastBlockedTicks = 0;
         } else {
             lastHitTicks++;
+            lastBlockedTicks--;
 
             if(lastTickAbsorb > player.getAbsorptionAmount() || lastTickHp > player.getHealth()) {
                 lastHitTicks = 0;
@@ -115,6 +125,7 @@ public class SideBarManager {
         final var steadFastLevel = NBTUtil.getEnchantLevel(player, "Steadfast");
         final var secondWindLevel = NBTUtil.getEnchantLevel(player, "Second Wind");
         final var cloakedLevel = NBTUtil.getEnchantLevel(player, "Cloaked");
+        final var guardLevel = NBTUtil.getEnchantLevel(player, "Guard");
 
         final var playerHpPerc = player.getHealth() / player.getMaxHealth();
 
@@ -214,6 +225,20 @@ public class SideBarManager {
             } else {
                 situationalText.add(translatable(
                     "hud.fma.sidebar.cloaked_inactive",
+                    withColor("Inactive", errorColor)
+                ));
+            }
+        }
+
+        if (guardLevel > 0) {
+            if (lastBlockedTicks > 0) {
+                situationalText.add(translatable(
+                    "hud.fma.sidebar.guard_active",
+                    numeric(guardLevel * 20)
+                ));
+            } else {
+                situationalText.add(translatable(
+                    "hud.fma.sidebar.guard_inactive",
                     withColor("Inactive", errorColor)
                 ));
             }

@@ -11,7 +11,8 @@
         "LevelRendererMixin",
         "MultiPlayerGameModeMixin",
         "SplashManagerMixin",
-        "umm.EffectOverlayMixin"
+        "umm.EffectOverlayMixin",
+        "LocalPlayerMixin"
     ],
     "plugin": "com.floweytf.fma.MixinConfigPlugin",
     "injectors": {
